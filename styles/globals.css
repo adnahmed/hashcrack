@@ -4,6 +4,8 @@
   --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
     'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
     'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
+
+  --border--color--default: black;
 }
 
 * {
@@ -27,4 +29,20 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+.bottomBorderMd {
+  border-bottom: 0.2rem solid var(--border--color--default);
+}
+
+.paddingBottomMd {
+  padding-bottom: 0.2rem;
+}
+
+.animationXs {
+  transition: 50ms;
+}
+
+.opaque {
+  opacity: 0;
 }
