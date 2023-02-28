@@ -33,11 +33,11 @@ export default function Home() {
   );
 }
 
-enum GPUState {
-  IDLE = "IDLE",
-  OFFLINE = "OFFLINE",
-  ONLINE = "ONLINE",
-}
+export default Home;
+
+Home.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
+};
 
 function Stats() {
   return (
