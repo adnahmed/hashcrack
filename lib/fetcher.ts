@@ -28,7 +28,7 @@ export class FetchError extends Error {
     }
 }
 
-export default async function fetchJson<JSON = unknown>(
+export default async function fetchJson<JSON = any>(
     input: RequestInfo,
     init?: RequestInit
 ): Promise<JSON> {
@@ -41,12 +41,14 @@ export default async function fetchJson<JSON = unknown>(
     // response.ok is true when res.status is 2xx
     // https://developer.mozilla.org/en-US/docs/Web/API/Response/ok
     if (response.ok) {
-        return data
+        return data as any
     }
 
     throw new FetchError({
-        message: response.statusText,
         response,
-        data,
+        message: response.statusText,
+        data: {
+            message: JSON.stringify(data)
+        }
     })
 }
