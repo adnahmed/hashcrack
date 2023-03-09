@@ -1,4 +1,3 @@
-/** @type {import('').} */
 {
   "extends": [
     "plugin:@typescript-eslint/recommended",
@@ -7,6 +6,9 @@
     "next/core-web-vitals"
   ],
   "parser": "@typescript-eslint/parser",
+  "ignorePatterns": [
+    "jest.config.js"
+  ],
   "parserOptions": {
     "project": [
       "./tsconfig.json"
