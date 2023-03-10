@@ -1,11 +1,11 @@
 import { captchaKv } from '@/lib/cache';
 import getClientIp from '@/lib/getClientIp';
 import runMiddleware from '@/lib/runMiddleware';
+import { setCookie } from '@/utils/cookies';
 import { IsNotEmpty, MinLength } from 'class-validator';
 import Cors from 'cors';
 import type { NextApiRequest, NextApiResponse, PageConfig } from 'next';
 import { Body, HttpCode, Post, Req, Res, UnauthorizedException, UnprocessableEntityException, ValidationPipe, createHandler } from 'next-api-decorators';
-import { setCookie } from '../../../utils/cookies';
 
 const cors = Cors({
     methods: ['POST']
