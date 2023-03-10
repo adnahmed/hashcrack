@@ -1,5 +1,6 @@
 import Layout from "@/components/Layout";
 import Stats from "@/components/Stats";
+import NewTask from "@/features/NewTask/NewTask";
 import styles from "@/styles/Home.module.css";
 import { Inter } from "@next/font/google";
 import Head from "next/head";
@@ -18,6 +19,7 @@ const Home: NextPageWithLayout = () => {
       <main className={styles.main}>
         <Stats />
         <TaskQueue />
+        <NewTask />
       </main>
     </>
   );
@@ -30,5 +32,5 @@ Home.getLayout = function getLayout(page) {
 };
 
 function TaskQueue() {
-  return <div>TAAASSSKKKS</div>;
+  return <div></div>;
 }
