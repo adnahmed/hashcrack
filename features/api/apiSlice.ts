@@ -13,13 +13,12 @@ export interface ListResponse<T> {
 
 // Define our single API slice object
 export const apiSlice = createApi({
-    // The cache reducer expects to be added at `state.api` (already default - this is optional)
-    reducerPath: 'api',
     extractRehydrationInfo(action, { reducerPath }) {
         if (action.type === HYDRATE) return action.payload[reducerPath]
     },
     tagTypes: [],
-    baseQuery: fetchBaseQuery({ baseUrl: process.env.NODE_ENV === 'development' ? 'localhost' : process.env.APP_URL }), // TODO: check and verify proper envs
+    baseQuery: fetchBaseQuery(), // TODO: check and verify proper envs
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     endpoints: builder => ({
         /* Global Endpoints */
     })
