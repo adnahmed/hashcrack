@@ -93,10 +93,9 @@ describe("<NewTask />", () => {
         screen.queryByLabelText(
           /Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or click to browse/i
         )
-      ).toBeNull();
-
-      expect(screen.queryByLabelText(/ESSID/i)).toBeNull();
-      expect(screen.queryByLabelText(/BSSID/i)).toBeNull();
+      ).not.toBeInTheDocument();
+      expect(screen.queryByLabelText(/ESSID/i)).not.toBeInTheDocument();
+      expect(screen.queryByLabelText(/BSSID/i)).not.toBeInTheDocument();
 
       expect(await screen.findByLabelText(opts.label)).toBeInTheDocument();
       expect(
