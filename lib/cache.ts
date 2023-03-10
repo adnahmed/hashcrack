@@ -11,8 +11,8 @@ export function keyvStoreFactory() {
 }
 
 const cache = keyvStoreFactory()
-export const geo = keyvStoreFactory()
-export const captcha = keyvStoreFactory()
+export const geoKv = keyvStoreFactory()
+export const captchaKv = keyvStoreFactory()
 export default cache;
 
 /*
