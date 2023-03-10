@@ -3,17 +3,22 @@ import "@/styles/globals.css";
 import { NextUIProvider } from "@nextui-org/react";
 import "@total-typescript/ts-reset";
 import { NextPage } from "next";
-import type { AppProps } from "next/app";
+import type { AppProps, NextWebVitalsMetric } from "next/app";
 import { ReactElement, ReactNode } from "react";
 import { Provider } from "react-redux";
 import ErrorBoundary from "../components/ErrorBoundary";
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+
+export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
+
+export function reportWebVitals(metric: NextWebVitalsMetric) {
+  console.log(metric);
+}
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available

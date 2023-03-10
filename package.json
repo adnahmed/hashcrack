@@ -23,6 +23,7 @@
     "cookie": "^0.5.0",
     "cookies-next": "^2.1.1",
     "cors": "^2.8.5",
+    "isomorphic-fetch": "^3.0.0",
     "maxmind": "^4.3.8",
     "next": "13.1.6",
     "next-api-decorators": "^2.0.2",
@@ -35,9 +36,12 @@
     "react-hot-toast": "^2.4.0",
     "react-redux": "^8.0.5",
     "request-ip": "^3.3.0",
-    "svg-captcha": "^1.4.0"
+    "svg-captcha": "^1.4.0",
+    "web-vitals": "^3.1.1"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.21.0",
+    "@babel/plugin-syntax-decorators": "^7.21.0",
     "@babel/plugin-transform-modules-commonjs": "^7.21.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
@@ -65,11 +69,5 @@
     "ts-jest": "^29.0.5",
     "typescript": "^4.9.5"
   },
-  "babel": {
-    "env": {
-      "plugins": [
-        "@babel/plugin-transform-modules-commonjs"
-      ]
-    }
-  }
+  "babel": {}
 }
