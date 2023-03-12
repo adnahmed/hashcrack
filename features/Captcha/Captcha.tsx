@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import toast from "react-hot-toast";
+import { isFetchBaseQueryError } from "../../lib/error";
 import {
   captchaVerified,
   useGetCaptchaQuery,
@@ -36,11 +37,12 @@ function useAnswer({
             dispatch(captchaVerified({ result }));
           }
         } catch (error) {
-          // this error is internal only
-          const { data } = error;
-          toast.error(`${getErrorMessage(data)}`, {
-            duration: 5000,
-          });
+          if (isFetchBaseQueryError(error)) {
+            const { data } = error;
+            toast.error(`${getErrorMessage(data)}`, {
+              duration: 5000,
+            });
+          }
           refetch();
         }
         setAnswer("");
