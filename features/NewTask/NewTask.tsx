@@ -2,9 +2,13 @@ import hashTypes from "@/data/hash-types.json";
 import HashInput from "@/features/HashInput/HashInput";
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { selectCaptchaVerified } from "../Captcha/captchaSlice";
+import VerifyTask from "../VerifyTask/VerifyTask";
 
 export default function NewTask() {
   const { optgroups } = hashTypes;
+  const captchaVerified = useSelector(selectCaptchaVerified);
   const [hashType, setHashType] = useState<string | undefined>();
   return (
     <>
@@ -27,6 +31,7 @@ export default function NewTask() {
       {hashType !== undefined && hashType !== "-1" && (
         <HashInput hashType={hashType} />
       )}
+      {captchaVerified && <VerifyTask />}
       <Toaster />
     </>
   );
