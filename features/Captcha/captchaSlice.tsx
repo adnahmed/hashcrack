@@ -15,7 +15,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
-    verifyCaptcha: builder.mutation<{ result: CaptchaState }, string>({
+    verifyCaptcha: builder.mutation<CaptchaState, string>({
       query: (answer) => ({
         url: `/api/captcha/verify`,
         method: "POST",
