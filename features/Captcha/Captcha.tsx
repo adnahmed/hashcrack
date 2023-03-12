@@ -1,52 +1,63 @@
+import { useAppDispatch } from "@/hooks/useApp";
 import { getErrorMessage } from "@/lib/error";
-import {
-  UnauthorizedException,
-  UnprocessableEntityException,
-} from "next-api-decorators";
 import Image from "next/image";
-import { ChangeEventHandler, useEffect, useState } from "react";
+import {
+  ChangeEventHandler,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 import {
+  captchaVerified,
   useGetCaptchaQuery,
   useVerifyCaptchaMutation,
-} from "../NewTask/newTaskSlice";
-
-export default function Captcha() {
-  const { data, isLoading, isFetching, isSuccess, isError, error, refetch } =
-    useGetCaptchaQuery(null, { refetchOnReconnect: true });
-
-  const [
-    verifyCaptcha,
-    { isLoading: isVerifying, data: verificationResponse },
-  ] = useVerifyCaptchaMutation();
-  const [answer, setAnswer] = useState("");
-
-  const setAnswerValue: ChangeEventHandler<HTMLInputElement> = (e) =>
-    setAnswer(e.target.value);
-
+} from "./captchaSlice";
+interface useAnswerProps {
+  setAnswer: Dispatch<SetStateAction<string>>;
+  answer: string;
+  refetch: ReturnType<typeof useGetCaptchaQuery>["refetch"];
+  verifyCaptcha: ReturnType<typeof useVerifyCaptchaMutation>["0"];
+}
+function useAnswer({
+  setAnswer,
+  answer,
+  refetch,
+  verifyCaptcha,
+}: useAnswerProps) {
+  const dispatch = useAppDispatch();
   useEffect(() => {
     (async () => {
       if (answer.length == parseInt(process.env.CAPTCHA_LETTER_NUM)) {
         try {
-          await verifyCaptcha(answer).unwrap();
-          // setCaptchaVerified(!!verificationResponse?.result); // dispatch verified captcha
+          const { result } = await verifyCaptcha(answer).unwrap();
+          if (result.verified) {
+            dispatch(captchaVerified({ result }));
+          }
         } catch (error) {
           // this error is internal only
-          if (
-            error instanceof UnprocessableEntityException ||
-            error instanceof UnauthorizedException
-          ) {
-            const { message } = error;
-            toast.error(`${getErrorMessage(message)}`, {
-              duration: 2000,
-            });
-          }
+          const { data } = error;
+          toast.error(`${getErrorMessage(data)}`, {
+            duration: 5000,
+          });
+          refetch();
         }
         setAnswer("");
-        refetch();
       }
     })();
-  }, [answer, refetch, verificationResponse?.result, verifyCaptcha]);
+  }, [answer, dispatch, refetch, setAnswer, verifyCaptcha]);
+}
+
+export default function Captcha() {
+  const [answer, setAnswer] = useState("");
+  const { data, isLoading, isFetching, isSuccess, isError, error, refetch } =
+    useGetCaptchaQuery(null, { refetchOnReconnect: true });
+  const setAnswerValue: ChangeEventHandler<HTMLInputElement> = (e) =>
+    setAnswer(e.target.value);
+  const [verifyCaptcha, { isLoading: isVerifying }] =
+    useVerifyCaptchaMutation();
+  useAnswer({ answer, setAnswer, refetch, verifyCaptcha });
   return (
     <>
       {isLoading || isFetching ? (
