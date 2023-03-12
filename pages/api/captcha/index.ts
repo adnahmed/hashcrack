@@ -23,7 +23,7 @@ class GetCaptchaHandler {
         // TODO: Improve Performance
         const captcha = svgCaptcha.create({
             size: parseInt(process.env.CAPTCHA_LETTER_NUM),
-            noise: 20
+            // noise: 20
         });
         const clientIp = await getClientIp(req);
         if (clientIp === null) throw new UnprocessableEntityException('Could not determine ip address')
