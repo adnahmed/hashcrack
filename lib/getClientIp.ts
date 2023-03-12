@@ -5,8 +5,9 @@ async function getClientIp(req: NextApiRequest) {
     let clientIp = requestIp.getClientIp(req);
     if (clientIp !== null) {
         // remove localhost addr
-        clientIp = clientIp.split(':')[1]
-        clientIp = clientIp.replace('::ffff', '').replace('127.0.0.1', '')
+        clientIp = clientIp.replace('::ffff', '').replace('127.0.0.1', '').replace('::1', '')
+        if (clientIp.includes(':'))
+            clientIp = clientIp.split(':')[1]
         try {
             if (clientIp.length === 0) clientIp = await publicIpv4()
         } catch (error) {
