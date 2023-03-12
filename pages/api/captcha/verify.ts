@@ -1,3 +1,4 @@
+import { CaptchaState } from '@/features/Captcha/captchaSlice';
 import { captchaKv } from '@/lib/cache';
 import getClientIp from '@/lib/getClientIp';
 import runMiddleware from '@/lib/runMiddleware';
@@ -28,7 +29,7 @@ class CaptchaVerifyHandler {
         const ground = await captchaKv.get(clientIp)
         if (answer == ground) {
             setCookie(res, 'CAPTCHA_VERIFY_TOKEN', 'token', { maxAge: captchaTimeout, sameSite: 'lax' })
-            return res.status(200).json({ result: true, token: null }) // TODO: Return a JWT Token
+            return res.status(200).json({ verified: true, token: null } as CaptchaState) // TODO: Return a JWT Token
         }
         throw new UnauthorizedException('Invalid Captcha Provided.')
     }
