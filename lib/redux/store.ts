@@ -1,12 +1,13 @@
+import { captcha } from '@/features/Captcha/captchaSlice';
 import { apiSlice } from '@/features/api/apiSlice';
 import { Action, ThunkAction, configureStore } from '@reduxjs/toolkit';
 import { rtkQueryErrorLogger } from './errorLoggerMiddleware';
 
 export function makeStore() {
     return configureStore({
-        reducer: { [apiSlice.reducerPath]: apiSlice.reducer },
+        reducer: { [apiSlice.reducerPath]: apiSlice.reducer, captcha: captcha.reducer },
+        middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware, rtkQueryErrorLogger),
         devTools: process.env.NODE_ENV === 'development',
-        middleware: getDefaultMiddleware => getDefaultMiddleware().concat([apiSlice.middleware, rtkQueryErrorLogger])
     })
 }
 const store = makeStore();
