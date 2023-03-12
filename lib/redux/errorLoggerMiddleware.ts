@@ -7,8 +7,6 @@ import { toast } from 'react-hot-toast'
  */
 export const rtkQueryErrorLogger: Middleware = (api: MiddlewareAPI) => (next) => (action) => {
     if (isRejectedWithValue(action)) {
-        console.warn('We got a rejected action!')
-        toast.error(action.error.message, { icon: "⚠️" }) // TODO: Improve Error Message
     }
 
     return next(action)
