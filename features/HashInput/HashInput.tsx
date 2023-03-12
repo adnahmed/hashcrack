@@ -1,5 +1,7 @@
 import hashTypes from "@/data/hash-types.json";
 import Captcha from "@/features/Captcha/Captcha";
+import { useSelector } from "react-redux";
+import { selectCaptchaVerified } from "../Captcha/captchaSlice";
 interface HashInputProps {
   hashType: string;
 }
@@ -9,15 +11,17 @@ export default function HashInput({ hashType }: HashInputProps) {
   const wirelessNetworkGroup = optgroups.find((p) =>
     /wireless networks/i.test(p["@label"])
   );
-
   const isWireless = wirelessNetworkGroup?.options.find(
     (p) => p["@value"] === hashType
   );
+  const isEAPOL = isWireless && /EAPOL/i.test(isWireless["#text"]);
+  const isPMKID = isWireless && /PMKID/i.test(isWireless["#text"]);
+  const captchaVerified = useSelector(selectCaptchaVerified);
   return (
     <>
       {isWireless ? (
         <>
-          {/EAPOL/i.test(isWireless["#text"]) ? (
+          {isEAPOL ? (
             <>
               <label>
                 <input type="file" name="capFile" />
@@ -36,7 +40,7 @@ export default function HashInput({ hashType }: HashInputProps) {
           ) : (
             <label>
               <input type="text" name="hashlist" />
-              {/PMKID/i.test(isWireless["#text"])
+              {isPMKID
                 ? "Paste your WPA PMKID here, multiple APs not allowed"
                 : "Paste your WPA hash (-m 22000) here, only one hash per task allowed"}
             </label>
@@ -56,7 +60,7 @@ export default function HashInput({ hashType }: HashInputProps) {
         </>
       )}
       <HashInputInstructions wireless={isWireless !== undefined} />
-      <Captcha />
+      {!captchaVerified && <Captcha />}
     </>
   );
 }
