@@ -31,7 +31,7 @@ function useAnswer({
     (async () => {
       if (answer.length == parseInt(process.env.CAPTCHA_LETTER_NUM)) {
         try {
-          const { result } = await verifyCaptcha(answer).unwrap();
+          const result = await verifyCaptcha(answer).unwrap();
           if (result.verified) {
             dispatch(captchaVerified({ result }));
           }
