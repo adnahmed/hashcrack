@@ -1,19 +1,17 @@
 import Keyv from "@keyvhq/core";
 import KeyvPostgres from "@keyvhq/postgres";
-export function keyvStoreFactory() {
-    const cache = new Keyv({
-        store: new KeyvPostgres(process.env.DATABASE_URL || process.env.DEFAULT_DB_URL)
-    }) // in-memory, by default
-
-    // Handle database connection errors
-    cache.on('error', err => console.log('Connection Error', err)) // TODO: Improve Error Handling
-    return cache
+const db_url = {
+    captcha: process.env.CAPTCHA_DB_URL || process.env.dCAPTCHA_DB_URL,
+    geo: process.env.GEO_DB_URL || process.env.dGEO_DB_URL
+}
+export function keyvStoreFactory(url: string) {
+    return new Keyv({
+        store: new KeyvPostgres(url)
+    }).on('error', err => console.warn('Connection Error', err)) // TODO: Improve Error Handling 
 }
 
-const cache = keyvStoreFactory()
-export const geoKv = keyvStoreFactory()
-export const captchaKv = keyvStoreFactory()
-export default cache;
+export const geoKv = keyvStoreFactory(db_url.geo)
+export const captchaKv = keyvStoreFactory(db_url.captcha)
 
 /*
 USAGE: 
