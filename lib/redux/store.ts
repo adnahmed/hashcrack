@@ -6,7 +6,7 @@ import { rtkQueryErrorLogger } from './errorLoggerMiddleware';
 export function makeStore() {
     return configureStore({
         reducer: { [apiSlice.reducerPath]: apiSlice.reducer, captcha: captcha.reducer },
-        middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware, rtkQueryErrorLogger),
+        middleware: getDefaultMiddleware => [...getDefaultMiddleware(), apiSlice.middleware, rtkQueryErrorLogger] as const,
         devTools: process.env.NODE_ENV === 'development',
     })
 }

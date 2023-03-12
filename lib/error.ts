@@ -12,6 +12,7 @@ export function isErrorWithMessage(
         typeof error === 'object' &&
         error != null &&
         'message' in error &&
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         typeof (error as any).message === 'string'
     )
 }
@@ -41,5 +42,6 @@ export function getErrorMessage(error: unknown) {
     return toErrorWithMessage(error).message
 }
 export const reportError = ({ message }: { message: string }) => {
+    console.warn(message)
     // send the error to our logging service...
 }
