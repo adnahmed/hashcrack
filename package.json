@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "cross-env ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest"
@@ -13,6 +13,7 @@
     "@keyvhq/core": "^1.6.26",
     "@keyvhq/postgres": "^1.6.28",
     "@maxmind/geoip2-node": "^3.5.0",
+    "@next/bundle-analyzer": "^13.2.4",
     "@next/font": "13.1.6",
     "@nextui-org/react": "^1.0.0-beta.12",
     "@reduxjs/toolkit": "^1.9.3",
@@ -27,6 +28,7 @@
     "maxmind": "^4.3.8",
     "next": "13.1.6",
     "next-api-decorators": "^2.0.2",
+    "next-compose-plugins": "^2.2.1",
     "next-redux-wrapper": "^8.1.0",
     "path-to-regexp": "^6.2.1",
     "prisma": "^4.10.1",
@@ -57,6 +59,7 @@
     "@types/request-ip": "^0.0.37",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.34.0",
     "eslint-config-next": "13.1.6",
     "eslint-plugin-jest-dom": "^4.0.3",
