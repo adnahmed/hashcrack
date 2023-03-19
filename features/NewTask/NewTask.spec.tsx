@@ -41,7 +41,7 @@ describe("<NewTask />", () => {
     ).toBeInTheDocument();
 
     expect(
-      await document.getElementById("hashlist_instructions")
+      document.getElementById("hashlist_instructions")
     ).toBeInTheDocument();
   });
 
