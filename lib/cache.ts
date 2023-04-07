@@ -7,7 +7,7 @@ const db_url = {
 export function keyvStoreFactory(url: string) {
     return new Keyv({
         store: new KeyvPostgres(url)
-    }).on('error', err => console.warn('Connection Error', err)) // TODO: Improve Error Handling 
+    }).on('error', err => console.warn(err)) // TODO: Improve Error Handling 
 }
 
 export const geoKv = keyvStoreFactory(db_url.geo)
