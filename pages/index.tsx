@@ -2,10 +2,8 @@ import Layout from "@/components/Layout";
 import Stats from "@/components/Stats";
 import NewTask from "@/features/NewTask/NewTask";
 import styles from "@/styles/Home.module.css";
-import { Inter } from "@next/font/google";
 import Head from "next/head";
 import { NextPageWithLayout } from "./_app";
-const inter = Inter({ subsets: ["latin"] });
 
 const Home: NextPageWithLayout = () => {
   return (
