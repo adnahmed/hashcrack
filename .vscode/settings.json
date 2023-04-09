@@ -1,4 +1,8 @@
 {
     "jest.jestCommandLine": "jest",
-    "jest.rootPath": "."
+    "jest.rootPath": ".",
+    "launch": {
+        "configurations": [],
+        "compounds": []
+    }
 }

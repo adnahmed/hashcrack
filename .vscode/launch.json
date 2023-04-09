@@ -9,7 +9,7 @@
             "serverReadyAction": {
                 "pattern": "started server on .+, url: (https?://.+)",
                 "uriFormat": "%s",
-                "action": "debugWithEdge"
+                "action": "openExternally"
             }
         },
         {
