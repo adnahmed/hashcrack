@@ -1,6 +1,10 @@
 {
     "jest.jestCommandLine": "jest",
     "jest.rootPath": ".",
+    "eslint.enable": true,
+    "eslint.codeActionsOnSave.mode": "problems",
+    "editor.formatOnSave": true,
+    "prettier.enable": true,
     "launch": {
         "configurations": [],
         "compounds": []
