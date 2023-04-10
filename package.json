@@ -28,6 +28,7 @@
     "cookies-next": "^2.1.1",
     "cors": "^2.8.5",
     "isomorphic-fetch": "^3.0.0",
+    "level": "^8.0.0",
     "maxmind": "^4.3.8",
     "msw": "^1.2.1",
     "next": "13.1.6",
