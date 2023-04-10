@@ -17,6 +17,7 @@ const cors = Cors({
   methods: ["GET"],
 });
 
+// TODO: Replace with ReCaptcha
 type GetCaptchaResponse = {
   captcha?: string;
   error?: string;
