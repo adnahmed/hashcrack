@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AppState } from "../../lib/redux/store";
-import { apiSlice } from "../api/apiSlice";
+import { AppState } from "@/lib/redux/store";
+import { apiSlice } from "@/features/api/apiSlice";
 
 export type CaptchaState = {
   verified: boolean;
