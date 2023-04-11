@@ -22,8 +22,6 @@ const nextConfig = {
   },
   reactStrictMode: true,
   env: {
-    dCAPTCHA_DB_URL: "postgresql://postgres:@localhost:5432/crackq.me_captcha",
-    dGEO_DB_URL: "postgresql://postgres:@localhost:5432/crackq.me_geo",
     CAPTCHA_LETTER_NUM: 4,
     CAPTCHA_VERIFY_MAXAGE: 60 * 6 * 24,
   },
