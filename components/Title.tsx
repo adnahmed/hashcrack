@@ -17,7 +17,7 @@ export default function Title() {
           animationXs: true,
         })}
       >
-        HashCrack
+        crackq.me
       </h1>
     </div>
   );

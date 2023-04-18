@@ -6,7 +6,7 @@ export default function NotFound() {
     <>
       <Head>
         <title>404 Not Found</title>
-        <meta name="description" content="HashCrack: Page Not Found" />
+        <meta name="description" content="crackq.me: Page Not Found" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

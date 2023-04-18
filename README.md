@@ -1,9 +1,8 @@
-# HASHCRACK
+# crackq.me
 
-Description
-----
+## Description
 
-Hashcrack is built with hashcat and Next.js.
+crackq.me is built with hashcat and Next.js.
 
 ## Requirements
 
@@ -28,6 +27,7 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000).
 
 Developed By
- ------------
+
+---
 
 [Adnan Ahmed Khan](mailto:adnanahmedkhan01@gmail.com)
