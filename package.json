@@ -12,6 +12,7 @@
   "dependencies": {
     "@keyvhq/core": "^1.6.26",
     "@keyvhq/postgres": "^1.6.28",
+    "@kodingdotninja/use-tailwind-breakpoint": "^0.0.5",
     "@maxmind/geoip2-node": "^3.5.0",
     "@next/bundle-analyzer": "^13.2.4",
     "@next/font": "13.1.6",
