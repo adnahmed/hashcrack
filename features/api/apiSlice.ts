@@ -1,4 +1,5 @@
 // Import the RTK Query methods from the React-specific entry point
+import { CAPTCHA_HEADER_TOKEN } from "@/data/constants";
 import { AppState } from "@/lib/redux/store";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { HYDRATE } from "next-redux-wrapper";
@@ -18,16 +19,16 @@ export const apiSlice = createApi({
     if (action.type === HYDRATE) return action.payload[reducerPath];
   },
   tagTypes: [],
-  // TODO: check and verify proper envs
+  reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl: "/",
+    credentials: "include",
     prepareHeaders: (headers, { getState }) => {
-      // By default, if we have a token in the store, let's use that for authenticated requests
       const state = getState() as AppState;
-      // state.api
-      // if (token) {
-      // headers.set('captcha_token', token)
-      // }
+      // Add Captcha Token if present.
+      if (state.captcha.token) {
+        headers.set(CAPTCHA_HEADER_TOKEN, state.captcha.token);
+      }
       return headers;
     },
   }),
