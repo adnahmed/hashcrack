@@ -1,6 +1,6 @@
 import getClientIp from "@/lib/getClientIp";
 import runMiddleware from "@/lib/runMiddleware";
-import type { TurnstileServerValidationResponse } from "@marsidev/react-turnstile";
+import { TurnstileServerValidationResponse } from "@marsidev/react-turnstile";
 import { IsNotEmpty } from "class-validator";
 import Cors from "cors";
 import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
@@ -14,6 +14,10 @@ import {
   ValidationPipe,
   createHandler,
 } from "next-api-decorators";
+import os from "os";
+
+const verifyEndpoint =
+  "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
 const cors = Cors({
   origin: "crackq.me",
@@ -26,7 +30,7 @@ class TokenValidateInput {
 
 class TokenValidateHandler {
   @Post()
-  @HttpCode(403)
+  @HttpCode(200)
   async verify(
     @Req() req: NextApiRequest,
     @Res() res: NextApiResponse,
@@ -34,20 +38,17 @@ class TokenValidateHandler {
   ) {
     await runMiddleware(req, res, cors);
     const { token } = body;
-    // Turnstile injects a token in "cf-turnstile-response".
-    /*
-    const token = body.get("cf-turnstile-response");
-    const ip = request.headers.get("CF-Connecting-IP");
-
-    // Validate the token by calling the
-    // "/siteverify" API endpoint.
-    const formData = new FormData();
-    formData.append("secret", SECRET_KEY);
-    formData.append("response", token);
-    formData.append("remoteip", ip);
-*/
-    const verifyEndpoint =
-      "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+    if (process.env.NODE_ENV === "development") {
+      if (token === "XXXX.DUMMY.TOKEN.XXXX") {
+        // Allow DUMMY TOKEN IN DEVELOPMENT
+        const res: TurnstileServerValidationResponse = {
+          success: true,
+          hostname: os.hostname(),
+        };
+        return res;
+      }
+      // TODO: REPORT DUMMY TOKEN IN PRODUCTION
+    }
     const clientIp = await getClientIp(req);
     if (clientIp === null)
       throw new UnprocessableEntityException("Could not determine ip address");
@@ -55,20 +56,14 @@ class TokenValidateHandler {
       method: "POST",
       body: `secret=${encodeURIComponent(
         process.env.CFSECRET_KEY
-      )}&response=${encodeURIComponent(token)}`,
+      )}&response=${encodeURIComponent(token)}&remoteip=${encodeURIComponent(
+        clientIp
+      )}`,
       headers: {
         "content-type": "application/x-www-form-urlencoded",
       },
     });
-
-    const data =
-      (await validationRes.json()) as TurnstileServerValidationResponse;
-    return new Response(JSON.stringify(data), {
-      status: data.success ? 200 : 400,
-      headers: {
-        "content-type": "application/json",
-      },
-    });
+    return (await validationRes.json()) as TurnstileServerValidationResponse;
   }
 }
 
