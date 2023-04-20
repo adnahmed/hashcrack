@@ -83,7 +83,7 @@ export default function Captcha({
             const res = await validateToken(token).unwrap();
             if (res.success) dispatch(tokenValidated(token));
             // Error encountered validating Captcha
-            if (res["error-codes"]) {
+            if (res["error-codes"] && res["error-codes"].length > 0) {
               dispatch(captchaFailed(res["error-codes"]));
             }
           } catch (error) {
