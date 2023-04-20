@@ -31,3 +31,7 @@ Developed By
 ---
 
 [Adnan Ahmed Khan](mailto:adnanahmedkhan01@gmail.com)
+
+### TODO
+
+* CSP-HEADER Validations, <https://csp-evaluator.withgoogle.com/>, <https://nextjs.org/docs/advanced-features/security-headers>;';
