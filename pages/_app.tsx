@@ -17,6 +17,7 @@ type AppPropsWithLayout = AppProps & {
 };
 
 export function reportWebVitals(metric: NextWebVitalsMetric) {
+  // TODO: Report metrics to Analytics.
   console.log(metric);
 }
 
