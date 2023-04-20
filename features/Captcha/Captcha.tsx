@@ -6,8 +6,12 @@ import type {
 import { Turnstile } from "@marsidev/react-turnstile";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
+import { Detector, Offline } from "react-detect-offline";
+import { useSelector } from "react-redux";
 import {
   captchaFailed,
+  selectCaptchaErrors,
+  selectCaptchaValidated,
   tokenValidated,
   useValidateTokenMutation,
 } from "./captchaSlice";
@@ -40,28 +44,49 @@ export default function Captcha({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [siteTheme]);
-
+  const captchaErrors = useSelector(selectCaptchaErrors);
   const turnstileRef = useRef<TurnstileInstance>(null);
   const [validateToken, { isError, isSuccess, error, isLoading }] =
     useValidateTokenMutation();
+  const captchaValidated = useSelector(selectCaptchaValidated);
   const dispatch = useAppDispatch();
   return (
     <>
-      <Turnstile
-        {...props}
-        ref={turnstileRef}
-        siteKey={
-          process.env.NODE_ENV === "development"
-            ? // Always pass on dev
-              "1x00000000000000000000AA"
-            : process.env.CFSITE_KEY
-        }
-        onSuccess={async (token) => {
-          const res = await validateToken(token).unwrap();
-          if (res.success) dispatch(tokenValidated(token));
-          // Error encountered validating Captcha
-          if (res["error-codes"]) {
-            dispatch(captchaFailed(res["error-codes"]));
+      <Offline>You are Offline!</Offline>
+      <Detector
+        render={({ online }) => {
+          // Captcha Invalid Token Provided
+          if (captchaErrors?.includes("invalid-input-response")) {
+            return <p>Invalid Captcha Provided!</p>;
+          } else if (!online) return null;
+          // We are online and captcha has not been validated!
+          else if (!captchaValidated)
+            return (
+              <Turnstile
+                {...props}
+                ref={turnstileRef}
+                siteKey={
+                  process.env.NODE_ENV === "development"
+                    ? // Always pass on dev
+                      "1x00000000000000000000AA"
+                    : process.env.CFSITE_KEY
+                }
+                onSuccess={async (token) => {
+                  try {
+                    const res = await validateToken(token).unwrap();
+                    if (res.success) dispatch(tokenValidated(token));
+                    // Error encountered validating Captcha
+                    if (res["error-codes"]) {
+                      dispatch(captchaFailed(res["error-codes"]));
+                    }
+                  } catch (error) {
+                    console.log("error:", JSON.stringify(error));
+                  }
+                }}
+              />
+            );
+          else {
+            return <p>Captcha Validated!!!</p>;
           }
         }}
       />
