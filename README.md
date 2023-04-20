@@ -34,4 +34,6 @@ Developed By
 
 ### TODO
 
-* CSP-HEADER Validations, <https://csp-evaluator.withgoogle.com/>, <https://nextjs.org/docs/advanced-features/security-headers>;';
+- CSP-HEADER Validations, <https://csp-evaluator.withgoogle.com/>, <https://nextjs.org/docs/advanced-features/security-headers>;';
+
+- React-Tracking
