@@ -1,11 +1,12 @@
-import Layout from "@/components/Layout";
-import Stats from "@/components/Stats";
-import NewTask from "@/features/NewTask/NewTask";
+import Captcha from "@/features/Captcha/Captcha";
+import { selectCaptchaValidated } from "@/features/Captcha/captchaSlice";
 import styles from "@/styles/Home.module.css";
 import Head from "next/head";
+import { useSelector } from "react-redux";
 import { NextPageWithLayout } from "./_app";
 
 const Home: NextPageWithLayout = () => {
+  const captchaValidated = useSelector(selectCaptchaValidated);
   return (
     <>
       <Head>
@@ -15,20 +16,10 @@ const Home: NextPageWithLayout = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <Stats />
-        <TaskQueue />
-        <NewTask />
+        {!captchaValidated ? <Captcha /> : <>Welcome to CrackQ!</>}
       </main>
     </>
   );
 };
 
 export default Home;
-
-Home.getLayout = function getLayout(page) {
-  return <Layout>{page}</Layout>;
-};
-
-function TaskQueue() {
-  return <div></div>;
-}

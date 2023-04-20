@@ -1,9 +1,7 @@
-import { CaptchaState } from "@/features/Captcha/captchaSlice";
-import { captcha } from "@/lib/cache";
 import getClientIp from "@/lib/getClientIp";
 import runMiddleware from "@/lib/runMiddleware";
-import { setCookie } from "@/utils/cookies";
-import { IsNotEmpty, MinLength } from "class-validator";
+import { TurnstileServerValidationResponse } from "@marsidev/react-turnstile";
+import { IsNotEmpty } from "class-validator";
 import Cors from "cors";
 import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
 import {
@@ -12,46 +10,60 @@ import {
   Post,
   Req,
   Res,
-  UnauthorizedException,
   UnprocessableEntityException,
   ValidationPipe,
   createHandler,
 } from "next-api-decorators";
+import os from "os";
+
+const verifyEndpoint =
+  "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
 const cors = Cors({
+  origin: "crackq.me",
   methods: ["POST"],
 });
-class CaptchaVerifyInput {
+class TokenValidateInput {
   @IsNotEmpty()
-  @MinLength(parseInt(process.env.CAPTCHA_LETTER_NUM || "4")) // 4 is the default length for captcha.create()
-  answer!: string;
+  token!: string;
 }
 
-class CaptchaVerifyHandler {
+class TokenValidateHandler {
   @Post()
-  @HttpCode(403)
+  @HttpCode(200)
   async verify(
     @Req() req: NextApiRequest,
     @Res() res: NextApiResponse,
-    @Body(ValidationPipe) body: CaptchaVerifyInput
+    @Body(ValidationPipe) body: TokenValidateInput
   ) {
-    const captchaTimeout = parseInt(process.env.CAPTCHA_VERIFY_MAXAGE);
     await runMiddleware(req, res, cors);
-    const { answer } = body;
+    const { token } = body;
+    if (process.env.NODE_ENV === "development") {
+      if (token === "XXXX.DUMMY.TOKEN.XXXX") {
+        // Allow DUMMY TOKEN IN DEVELOPMENT
+        const res: TurnstileServerValidationResponse = {
+          success: true,
+          hostname: os.hostname(),
+        };
+        return res;
+      }
+      // TODO: REPORT DUMMY TOKEN IN PRODUCTION
+    }
     const clientIp = await getClientIp(req);
     if (clientIp === null)
       throw new UnprocessableEntityException("Could not determine ip address");
-    const ground = await captcha.get(clientIp);
-    if (answer == ground) {
-      setCookie(res, "CAPTCHA_VERIFY_TOKEN", "token", {
-        maxAge: captchaTimeout,
-        sameSite: "lax",
-      });
-      return res
-        .status(200)
-        .json({ verified: true, token: null } as CaptchaState); // TODO: Return a JWT Token
-    }
-    throw new UnauthorizedException("Invalid Captcha Provided.");
+    const validationRes = await fetch(verifyEndpoint, {
+      method: "POST",
+      body: `secret=${encodeURIComponent(
+        process.env.CFSECRET_KEY
+      )}&response=${encodeURIComponent(token)}&remoteip=${encodeURIComponent(
+        clientIp
+      )}`,
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+    });
+    return (await validationRes.json()) as TurnstileServerValidationResponse;
   }
 }
 
@@ -63,4 +75,4 @@ export const config: PageConfig = {
   },
 };
 
-export default createHandler(CaptchaVerifyHandler);
+export default createHandler(TokenValidateHandler);

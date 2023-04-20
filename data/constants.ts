@@ -1,0 +1,1 @@
+export const CAPTCHA_HEADER_TOKEN = "X-CF-CAPTCHA-TOKEN";

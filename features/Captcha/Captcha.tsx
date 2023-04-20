@@ -1,95 +1,97 @@
 import { useAppDispatch } from "@/hooks/useApp";
-import { getErrorMessage } from "@/lib/error";
-import Image from "next/image";
+import type {
+  TurnstileInstance,
+  TurnstileProps,
+} from "@marsidev/react-turnstile";
+import { Turnstile } from "@marsidev/react-turnstile";
+import { useTheme } from "next-themes";
+import { useEffect, useRef, useState } from "react";
+import { Detector, Offline } from "react-detect-offline";
+import { useSelector } from "react-redux";
 import {
-  ChangeEventHandler,
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useState,
-} from "react";
-import toast from "react-hot-toast";
-import { isFetchBaseQueryError } from "../../lib/error";
-import {
-  captchaVerified,
-  useGetCaptchaQuery,
-  useVerifyCaptchaMutation,
+  captchaFailed,
+  selectCaptchaErrors,
+  selectCaptchaValidated,
+  tokenValidated,
+  useValidateTokenMutation,
 } from "./captchaSlice";
-interface useAnswerProps {
-  setAnswer: Dispatch<SetStateAction<string>>;
-  answer: string;
-  refetch: ReturnType<typeof useGetCaptchaQuery>["refetch"];
-  verifyCaptcha: ReturnType<typeof useVerifyCaptchaMutation>["0"];
-}
-function useAnswer({
-  setAnswer,
-  answer,
-  refetch,
-  verifyCaptcha,
-}: useAnswerProps) {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    (async () => {
-      if (answer.length == parseInt(process.env.CAPTCHA_LETTER_NUM)) {
-        try {
-          const result = await verifyCaptcha(answer).unwrap();
-          if (result.verified) {
-            dispatch(captchaVerified({ result }));
-          }
-        } catch (error) {
-          if (isFetchBaseQueryError(error)) {
-            const { data } = error;
-            toast.error(`${getErrorMessage(data)}`, {
-              duration: 5000,
-            });
-          }
-          refetch();
-        }
-        setAnswer("");
-      }
-    })();
-  }, [answer, dispatch, refetch, setAnswer, verifyCaptcha]);
+import { Lang, Theme, WidgetSize, WidgetStatus } from "./types";
+
+interface Props extends Omit<TurnstileProps, "siteKey"> {
+  initialTheme?: Theme;
+  initialSize?: WidgetSize;
+  initialLang?: Lang;
 }
 
-export default function Captcha() {
-  const [answer, setAnswer] = useState("");
-  const { data, isLoading, isFetching, isSuccess, isError, error, refetch } =
-    useGetCaptchaQuery(null, { refetchOnReconnect: true });
-  const setAnswerValue: ChangeEventHandler<HTMLInputElement> = (e) =>
-    setAnswer(e.target.value);
-  const [verifyCaptcha, { isLoading: isVerifying }] =
-    useVerifyCaptchaMutation();
-  useAnswer({ answer, setAnswer, refetch, verifyCaptcha });
+export default function Captcha({
+  initialTheme,
+  initialSize,
+  initialLang,
+  ...props
+}: Props) {
+  const siteTheme = useTheme().resolvedTheme as Theme | undefined;
+  const [theme, setTheme] = useState<Theme | undefined>(
+    initialTheme ?? siteTheme
+  );
+  const [size, setSize] = useState<WidgetSize>(initialSize ?? "normal");
+  const [lang, setLang] = useState<Lang>(initialLang ?? "auto");
+  const [status, setStatus] = useState<WidgetStatus>(null);
+  const [token, setToken] = useState<string>();
+
+  useEffect(() => {
+    if (siteTheme && !theme) {
+      setTheme(siteTheme as Theme);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [siteTheme]);
+  const captchaErrors = useSelector(selectCaptchaErrors);
+  const turnstileRef = useRef<TurnstileInstance>(null);
+  const [validateToken, { isError, isSuccess, error, isLoading }] =
+    useValidateTokenMutation();
+  const captchaValidated = useSelector(selectCaptchaValidated);
+  const dispatch = useAppDispatch();
+  const siteKey =
+    process.env.NODE_ENV === "development"
+      ? // Always pass on dev
+        "1x00000000000000000000AA"
+      : process.env.NEXT_PUBLIC_CFSITE_KEY;
+  const [cData, setCData] = useState(Date.now().toString());
   return (
     <>
-      {isLoading || isFetching ? (
-        <div>...</div>
-      ) : isError ? (
-        <div>
-          error loading captcha {JSON.stringify(error)}{" "}
-          {/* TODO: improve error handling*/}
-        </div>
-      ) : (
-        isSuccess &&
-        data && (
-          <>
-            <Image
-              unoptimized
-              width="200"
-              height="72"
-              alt="captcha"
-              src={`data:image/png;base64,${data.captcha}`}
-            />
-            <input
-              value={answer}
-              disabled={isVerifying}
-              type="text"
-              onChange={setAnswerValue}
-            />
-          </>
-        )
-      )}
-      <button onClick={refetch}>retry</button>
+      <Offline>You are Offline!</Offline>
+      <Detector
+        render={({ online }) => {
+          // Captcha Invalid Token Provided
+          if (captchaErrors?.includes("invalid-input-response")) {
+            return <p>Invalid Captcha Provided!</p>;
+          } else if (!online) return null;
+          // We are online and captcha has not been validated!
+          else if (!captchaValidated) return null;
+          else {
+            return <p>Captcha Validated!!!</p>;
+          }
+        }}
+      />
+      <Turnstile
+        {...props}
+        id="cf-challenge"
+        options={{ cData }}
+        ref={turnstileRef}
+        siteKey={siteKey}
+        onSuccess={async (token) => {
+          try {
+            const res = await validateToken(token).unwrap();
+            if (res.success) dispatch(tokenValidated(token));
+            // Error encountered validating Captcha
+            if (res["error-codes"] && res["error-codes"].length > 0) {
+              dispatch(captchaFailed(res["error-codes"]));
+            }
+          } catch (error) {
+            // TODO: Report Error for analytics
+            console.log("error:", JSON.stringify(error));
+          }
+        }}
+      />
     </>
   );
 }

@@ -1,43 +1,56 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { AppState } from "../../lib/redux/store";
-import { apiSlice } from "../api/apiSlice";
-
-export type CaptchaState = {
-  verified: boolean;
-  token: string | null;
-};
+import { apiSlice } from "@/features/api/apiSlice";
+import { AppState } from "@/lib/redux/store";
+import { TurnstileServerValidationResponse } from "@marsidev/react-turnstile";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    getCaptcha: builder.query<{ captcha: string }, null>({
-      query: () => ({
-        url: "/api/captcha",
-        method: "GET",
-      }),
-    }),
-    verifyCaptcha: builder.mutation<CaptchaState, string>({
-      query: (answer) => ({
+    validateToken: builder.mutation<TurnstileServerValidationResponse, string>({
+      query: (token) => ({
         url: `/api/captcha/verify`,
         method: "POST",
-        body: { answer },
+        body: { token },
       }),
     }),
   }),
 });
 
-export const captcha = createSlice({
+export type CaptchaState = {
+  token?: string;
+  validated: boolean;
+  errors: TurnstileServerValidationResponse["error-codes"];
+  canRetry: boolean;
+};
+
+const captcha = createSlice({
   name: "captcha",
-  initialState: { result: { verified: false, token: null } as CaptchaState },
+  initialState: {
+    validated: false,
+    canRetry: true,
+  } as CaptchaState,
   reducers: {
-    captchaVerified(state, action) {
-      (state.result.verified = true),
-        (state.result.token = action.payload.token);
+    tokenValidated: (state, action: PayloadAction<string>) => {
+      state.token = action.payload;
+      state.validated = true;
+    },
+    captchaFailed: (
+      state,
+      action: PayloadAction<TurnstileServerValidationResponse["error-codes"]>
+    ) => {
+      state.validated = false;
+      if (action.payload) {
+        state.errors = action.payload;
+        if (action.payload.includes("invalid-input-response"))
+          state.canRetry = false;
+      }
     },
   },
 });
 
-export const { captchaVerified } = captcha.actions;
-export const selectCaptchaVerified = (state: AppState) =>
-  state.captcha.result.verified;
-export const { useGetCaptchaQuery, useVerifyCaptchaMutation } =
-  extendedApiSlice;
+export default captcha;
+export const selectCaptchaToken = (state: AppState) => state.captcha.token;
+export const selectCaptchaErrors = (state: AppState) => state.captcha.errors;
+export const selectCaptchaValidated = (state: AppState) =>
+  state.captcha.validated;
+export const { tokenValidated, captchaFailed } = captcha.actions;
+export const { useValidateTokenMutation } = extendedApiSlice;
