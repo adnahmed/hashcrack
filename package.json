@@ -61,6 +61,7 @@
     "@types/jest-in-case": "^1.0.6",
     "@types/node": "18.14.0",
     "@types/react": "18.0.28",
+    "@types/react-detect-offline": "^2.4.1",
     "@types/react-dom": "18.0.11",
     "@types/react-redux": "^7.1.25",
     "@types/request-ip": "^0.0.37",
