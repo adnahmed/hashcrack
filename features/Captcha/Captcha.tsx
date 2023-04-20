@@ -50,6 +50,12 @@ export default function Captcha({
     useValidateTokenMutation();
   const captchaValidated = useSelector(selectCaptchaValidated);
   const dispatch = useAppDispatch();
+  const siteKey =
+    process.env.NODE_ENV === "development"
+      ? // Always pass on dev
+        "1x00000000000000000000AA"
+      : process.env.NEXT_PUBLIC_CFSITE_KEY;
+  const [cData, setCData] = useState(Date.now().toString());
   return (
     <>
       <Offline>You are Offline!</Offline>
@@ -60,33 +66,29 @@ export default function Captcha({
             return <p>Invalid Captcha Provided!</p>;
           } else if (!online) return null;
           // We are online and captcha has not been validated!
-          else if (!captchaValidated)
-            return (
-              <Turnstile
-                {...props}
-                ref={turnstileRef}
-                siteKey={
-                  process.env.NODE_ENV === "development"
-                    ? // Always pass on dev
-                      "1x00000000000000000000AA"
-                    : process.env.CFSITE_KEY
-                }
-                onSuccess={async (token) => {
-                  try {
-                    const res = await validateToken(token).unwrap();
-                    if (res.success) dispatch(tokenValidated(token));
-                    // Error encountered validating Captcha
-                    if (res["error-codes"]) {
-                      dispatch(captchaFailed(res["error-codes"]));
-                    }
-                  } catch (error) {
-                    console.log("error:", JSON.stringify(error));
-                  }
-                }}
-              />
-            );
+          else if (!captchaValidated) return null;
           else {
             return <p>Captcha Validated!!!</p>;
+          }
+        }}
+      />
+      <Turnstile
+        {...props}
+        id="cf-challenge"
+        options={{ cData }}
+        ref={turnstileRef}
+        siteKey={siteKey}
+        onSuccess={async (token) => {
+          try {
+            const res = await validateToken(token).unwrap();
+            if (res.success) dispatch(tokenValidated(token));
+            // Error encountered validating Captcha
+            if (res["error-codes"]) {
+              dispatch(captchaFailed(res["error-codes"]));
+            }
+          } catch (error) {
+            // TODO: Report Error for analytics
+            console.log("error:", JSON.stringify(error));
           }
         }}
       />

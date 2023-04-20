@@ -5,7 +5,7 @@ namespace NodeJS {
     dCAPTCHA_DB_URL: string;
     GEO_DB_URL?: string;
     CAPTCHA_DB_URL?: string;
-    CFSITE_KEY: string;
+    NEXT_PUBLIC_CFSITE_KEY: string;
     CFSECRET_KEY: string;
   }
 }
