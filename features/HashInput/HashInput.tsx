@@ -1,7 +1,7 @@
 import hashTypes from "@/data/hash-types.json";
 import Captcha from "@/features/Captcha/Captcha";
 import { useSelector } from "react-redux";
-import { selectCaptchaVerified } from "../Captcha/captchaSlice";
+import { selectCaptchaValidated } from "../Captcha/captchaSlice";
 interface HashInputProps {
   hashType: string;
 }
@@ -16,7 +16,7 @@ export default function HashInput({ hashType }: HashInputProps) {
   );
   const isEAPOL = isWireless && /EAPOL/i.test(isWireless["#text"]);
   const isPMKID = isWireless && /PMKID/i.test(isWireless["#text"]);
-  const captchaVerified = useSelector(selectCaptchaVerified);
+  const captchaVerified = useSelector(selectCaptchaValidated);
   return (
     <>
       {isWireless ? (
