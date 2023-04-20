@@ -50,20 +50,20 @@ class TokenValidateHandler {
       // TODO: REPORT DUMMY TOKEN IN PRODUCTION
     }
     const clientIp = await getClientIp(req);
-    if (clientIp === null)
-      throw new UnprocessableEntityException("Could not determine ip address");
-    const validationRes = await fetch(verifyEndpoint, {
-      method: "POST",
-      body: `secret=${encodeURIComponent(
-        process.env.CFSECRET_KEY
-      )}&response=${encodeURIComponent(token)}&remoteip=${encodeURIComponent(
-        clientIp
-      )}`,
-      headers: {
-        "content-type": "application/x-www-form-urlencoded",
-      },
-    });
-    return (await validationRes.json()) as TurnstileServerValidationResponse;
+    // TODO: replace with captcha token approach.
+    // if (clientIp === null)
+    //   throw new UnprocessableEntityException("Could not determine ip address");
+    // const ground = await captcha.get(clientIp);
+    // if (answer == ground) {
+    //   setCookie(res, "CAPTCHA_VERIFY_TOKEN", "token", {
+    //     maxAge: captchaTimeout,
+    //     sameSite: "lax",
+    //   });
+    //   return res
+    //     .status(200)
+    //     .json({ verified: true, token: null } as CaptchaState); // TODO: Return a JWT Token
+    // }
+    // throw new UnauthorizedException("Invalid Captcha Provided.");
   }
 }
 
