@@ -9,3 +9,92 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Customer {
+  id        String        @id @default(cuid())
+  email     String?       @unique
+  isHidden  Boolean       @default(false)
+  // TODO: Add Terms & Condition Fields
+  jobs      CustomerJob[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+enum AttackConfiguration {
+  Basic
+  Advanced
+  ProHash
+  NeuralHash
+  CustomMask
+}
+
+enum HashlistType {
+  WPA
+  PDF
+  Wallet
+  SHA1
+}
+
+model Hashlist {
+  id        String       @id @default(cuid())
+  type      HashlistType
+  path      String
+  digests   Int
+  job       CustomerJob?
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @default(now())
+}
+
+enum Status {
+  waitingApproval
+  waitingPayment
+  waitingBatch
+  queued
+  working
+  stopped
+  completed
+}
+
+enum JobResult {
+  PASS
+  FAIL
+}
+
+model CustomerJob {
+  id                  String              @id @default(cuid())
+  Customer            Customer            @relation(fields: [customerId], references: [id])
+  customerId          String
+  description         String
+  priority            Int
+  status              Status
+  timeSpent           String
+  attackConfiguration AttackConfiguration
+  result              JobResult
+
+  // has the job started and when
+  isStarted            Boolean   @default(false)
+  startedAt            DateTime
+  // is Payment Confirmed and how much and when?
+  isPaymentReceived    Boolean   @default(false)
+  paymentRecieveDate   DateTime
+  totalPayment         Decimal // TODO: unsure if its safe to use Decimal.
+  // is it complete and when
+  isComplete           Boolean   @default(false)
+  completedAt          DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  // has the email notification sent for job completion
+  isNotifiedCompletion Boolean   @default(false)
+  Hashlist             Hashlist  @relation(fields: [hashlistId], references: [id], onUpdate: Cascade)
+  hashlistId           String    @unique
+}
+
+model Message {
+  id                 String   @id @default(cuid())
+  name               String
+  email              String?
+  jobIdOrDescription String?
+  message            String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
