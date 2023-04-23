@@ -34,6 +34,8 @@ Developed By
 
 ### TODO
 
-- CSP-HEADER Validations, <https://csp-evaluator.withgoogle.com/>, <https://nextjs.org/docs/advanced-features/security-headers>;';
+- CSP-HEADER Validations, [Evaluator](https://csp-evaluator.withgoogle.com/), [Nextjs Sec Headers](https://nextjs.org/docs/advanced-features/security-headers);
 
-- React-Tracking
+- React-Tracking, Analytics.js
+
+- [Fingerprint.js](https://github.com/fingerprintjs/fingerprintj)
