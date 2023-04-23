@@ -1,12 +1,11 @@
 import { useAppDispatch } from "@/hooks/useApp";
-import type {
+import {
+  Turnstile,
   TurnstileInstance,
   TurnstileProps,
 } from "@marsidev/react-turnstile";
-import { Turnstile } from "@marsidev/react-turnstile";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
-import { Detector, Offline } from "react-detect-offline";
 import { useSelector } from "react-redux";
 import {
   captchaFailed,
@@ -15,7 +14,7 @@ import {
   tokenValidated,
   useValidateTokenMutation,
 } from "./captchaSlice";
-import { Lang, Theme, WidgetSize, WidgetStatus } from "./types";
+import { Lang, Theme, WidgetSize } from "./types";
 
 interface Props extends Omit<TurnstileProps, "siteKey"> {
   initialTheme?: Theme;
@@ -33,10 +32,6 @@ export default function Captcha({
   const [theme, setTheme] = useState<Theme | undefined>(
     initialTheme ?? siteTheme
   );
-  const [size, setSize] = useState<WidgetSize>(initialSize ?? "normal");
-  const [lang, setLang] = useState<Lang>(initialLang ?? "auto");
-  const [status, setStatus] = useState<WidgetStatus>(null);
-  const [token, setToken] = useState<string>();
 
   useEffect(() => {
     if (siteTheme && !theme) {
@@ -55,43 +50,34 @@ export default function Captcha({
       ? // Always pass on dev
         "1x00000000000000000000AA"
       : process.env.NEXT_PUBLIC_CFSITE_KEY;
+  // Useful for analytics
   const [cData, setCData] = useState(Date.now().toString());
   return (
     <>
-      <Offline>You are Offline!</Offline>
-      <Detector
-        render={({ online }) => {
-          // Captcha Invalid Token Provided
-          if (captchaErrors?.includes("invalid-input-response")) {
-            return <p>Invalid Captcha Provided!</p>;
-          } else if (!online) return null;
-          // We are online and captcha has not been validated!
-          else if (!captchaValidated) return null;
-          else {
-            return <p>Captcha Validated!!!</p>;
-          }
-        }}
-      />
-      <Turnstile
-        {...props}
-        id="cf-challenge"
-        options={{ cData }}
-        ref={turnstileRef}
-        siteKey={siteKey}
-        onSuccess={async (token) => {
-          try {
-            const res = await validateToken(token).unwrap();
-            if (res.success) dispatch(tokenValidated(token));
-            // Error encountered validating Captcha
-            if (res["error-codes"] && res["error-codes"].length > 0) {
-              dispatch(captchaFailed(res["error-codes"]));
+      {captchaErrors?.includes("invalid-input-response") ? (
+        <p>Invalid Captcha Provided!</p>
+      ) : (
+        <Turnstile
+          {...props}
+          id="cf-challenge"
+          options={{ cData }}
+          ref={turnstileRef}
+          siteKey={siteKey}
+          onSuccess={async (token) => {
+            try {
+              const res = await validateToken(token).unwrap();
+              if (res.success) dispatch(tokenValidated(token));
+              // Error encountered validating Captcha
+              if (res["error-codes"] && res["error-codes"].length > 0) {
+                dispatch(captchaFailed(res["error-codes"]));
+              }
+            } catch (error) {
+              // TODO: Report Error for analytics
+              console.log("error:", JSON.stringify(error));
             }
-          } catch (error) {
-            // TODO: Report Error for analytics
-            console.log("error:", JSON.stringify(error));
-          }
-        }}
-      />
+          }}
+        />
+      )}
     </>
   );
 }
