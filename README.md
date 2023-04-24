@@ -39,3 +39,15 @@ Developed By
 - React-Tracking, Analytics.js
 
 - [Fingerprint.js](https://github.com/fingerprintjs/fingerprintj)
+
+### Backend
+
+> WORDLISTS
+
+- [WeakPass](https://weakpass.com/wordlist)
+
+> Infra
+
+- [Fitcrack](https://fitcrack.fit.vutbr.cz/)
+
+- [Crackq](https://github.com/f0cker/crackq/)
