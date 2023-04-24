@@ -1,5 +1,6 @@
 import store from "@/lib/redux/store";
 import "@/styles/globals.css";
+import { Inter } from "@next/font/google";
 import { NextUIProvider } from "@nextui-org/react";
 import "@total-typescript/ts-reset";
 import { NextPage } from "next";
@@ -8,6 +9,7 @@ import { ReactElement, ReactNode } from "react";
 import { Provider } from "react-redux";
 import ErrorBoundary from "../components/ErrorBoundary";
 
+const inter = Inter({ subsets: ["latin"], variable: "--inter-font" });
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -27,7 +29,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <Provider store={store}>
       <NextUIProvider>
-        <ErrorBoundary>{getLayout(<Component {...pageProps} />)}</ErrorBoundary>
+        <ErrorBoundary>
+          {getLayout(
+            <main className={inter.className}>
+              <Component {...pageProps} />
+            </main>
+          )}
+        </ErrorBoundary>
       </NextUIProvider>
     </Provider>
   );
