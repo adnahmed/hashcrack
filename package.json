@@ -10,8 +10,6 @@
     "test": "jest --watch"
   },
   "dependencies": {
-    "@keyvhq/core": "^1.6.26",
-    "@keyvhq/postgres": "^1.6.28",
     "@kodingdotninja/use-tailwind-breakpoint": "^0.0.5",
     "@marsidev/react-turnstile": "^0.2.0",
     "@maxmind/geoip2-node": "^3.5.0",
@@ -39,9 +37,7 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.0",
     "react-redux": "^8.0.5",
-    "redis": "^4.6.5",
     "request-ip": "^3.3.0",
-    "svg-captcha": "^1.4.0",
     "web-vitals": "^3.1.1"
   },
   "devDependencies": {
