@@ -21,10 +21,7 @@ const nextConfig = {
     return config;
   },
   reactStrictMode: true,
-  env: {
-    dCAPTCHA_DB_URL: "postgresql://postgres:@localhost:5432/hashcrack_captcha",
-    dGEO_DB_URL: "postgresql://postgres:@localhost:5432/hashcrack_geo",
-  },
+  env: {},
 };
 
 module.exports =
