@@ -1,4 +1,4 @@
-import Title from "@/components/Title";
+import MainPage from "@/components/MainPage";
 import IntialCheck from "@/components/ui/IntialCheck";
 import styles from "@/styles/Home.module.css";
 import Head from "next/head";
@@ -15,11 +15,10 @@ const Home: NextPageWithLayout = () => {
 
       <main className={styles.main}>
         <IntialCheck>
-          <Title text="CrackQ.me" />
+          <MainPage />
         </IntialCheck>
       </main>
     </>
   );
 };
-
 export default Home;
