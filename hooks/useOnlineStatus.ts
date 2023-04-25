@@ -3,7 +3,9 @@ function getSnapshot() {
   return navigator.onLine;
 }
 
-function subscribe(callback) {
+function subscribe(
+  callback: Parameters<(typeof window)["addEventListener"]>["1"]
+) {
   window.addEventListener("online", callback);
   window.addEventListener("offline", callback);
   return () => {
