@@ -15,7 +15,7 @@ const Home: NextPageWithLayout = () => {
 
       <main className={styles.main}>
         <IntialCheck>
-          <Title />
+          <Title text="CrackQ.me" />
         </IntialCheck>
       </main>
     </>
