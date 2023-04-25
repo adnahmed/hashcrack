@@ -1,7 +1,6 @@
 import store from "@/lib/redux/store";
 import "@/styles/globals.css";
 import { Inter } from "@next/font/google";
-import { NextUIProvider } from "@nextui-org/react";
 import "@total-typescript/ts-reset";
 import { NextPage } from "next";
 import type { AppProps, NextWebVitalsMetric } from "next/app";
@@ -28,15 +27,13 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
   return (
     <Provider store={store}>
-      <NextUIProvider>
-        <ErrorBoundary>
-          {getLayout(
-            <main className={inter.className}>
-              <Component {...pageProps} />
-            </main>
-          )}
-        </ErrorBoundary>
-      </NextUIProvider>
+      <ErrorBoundary>
+        {getLayout(
+          <main className={inter.className}>
+            <Component {...pageProps} />
+          </main>
+        )}
+      </ErrorBoundary>
     </Provider>
   );
 }
