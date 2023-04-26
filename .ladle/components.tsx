@@ -2,7 +2,7 @@ import type { GlobalProvider } from "@ladle/react";
 import React from "react";
 import { Provider as ReduxProvider } from "react-redux";
 import store from "../lib/redux/store";
-
+import "../styles/globals.css";
 export const Provider: GlobalProvider = ({
   children,
   globalState,
