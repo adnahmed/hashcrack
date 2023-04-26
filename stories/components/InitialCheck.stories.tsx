@@ -1,12 +1,16 @@
-import InitialCheck from "@/components/ui/IntialCheck";
+import InitialCheck from "@/components/ui/InitialCheck";
+import type { Story, StoryDefault } from "@ladle/react";
+
+export const InitialCheckPage: Story = () => (
+  <>
+    <InitialCheck>
+      <>Help</>
+    </InitialCheck>
+  </>
+);
+
+InitialCheckPage.storyName = "InitialCheck";
 
 export default {
-  title: "Components/InitialCheck",
-  component: InitialCheck,
-};
-
-export const InitialCheckPage = () => (
-  <InitialCheck>
-    <></>
-  </InitialCheck>
-);
+  title: "Pages/InitialCheck",
+} satisfies StoryDefault;
