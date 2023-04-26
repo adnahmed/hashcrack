@@ -1,0 +1,49 @@
+.main {
+    display: grid;
+    grid-template-areas: ". lo lo ." 
+                         ". ca ca ."
+                         ". pl pl ."
+                         ". pr pr ."
+                         ". co st .";
+    justify-self: center;
+    align-self: center;
+    margin-top:auto;
+    padding: 1rem;
+}
+
+.main > *   {
+    align-self: center;
+    justify-self: center;
+}
+
+.logo {
+    grid-area: lo;
+}
+
+.captcha {
+    grid-area: ca;
+
+}
+
+.waitmessage {
+    grid-area: pl
+}
+
+.connectionquery {
+    grid-area: pr;
+}
+
+.contactus {
+    grid-area: co;
+    padding: 0.5rem;
+    justify-self: right;
+}
+
+.status {
+    grid-area: st;
+    padding: 0.5rem;
+    justify-self: left;
+}
+
+
+
