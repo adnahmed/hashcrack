@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import {
   captchaFailed,
   selectCaptchaErrors,
-  selectCaptchaValidated,
   tokenValidated,
   useValidateTokenMutation,
 } from "./captchaSlice";
@@ -43,7 +42,6 @@ export default function Captcha({
   const turnstileRef = useRef<TurnstileInstance>(null);
   const [validateToken, { isError, isSuccess, error, isLoading }] =
     useValidateTokenMutation();
-  const captchaValidated = useSelector(selectCaptchaValidated);
   const dispatch = useAppDispatch();
   const siteKey =
     process.env.NODE_ENV === "development"
@@ -52,6 +50,19 @@ export default function Captcha({
       : process.env.NEXT_PUBLIC_CFSITE_KEY;
   // Useful for analytics
   const [cData, setCData] = useState(Date.now().toString());
+  const onSuccess: TurnstileProps["onSuccess"] = async (token) => {
+    try {
+      const res = await validateToken(token).unwrap();
+      if (res.success) dispatch(tokenValidated(token));
+      // Error encountered validating Captcha
+      if (res["error-codes"] && res["error-codes"].length > 0) {
+        dispatch(captchaFailed(res["error-codes"]));
+      }
+    } catch (error) {
+      // TODO: Report Error for analytics
+      console.log("error:", JSON.stringify(error));
+    }
+  };
   return (
     <>
       {captchaErrors?.includes("invalid-input-response") ? (
@@ -63,19 +74,7 @@ export default function Captcha({
           options={{ cData }}
           ref={turnstileRef}
           siteKey={siteKey}
-          onSuccess={async (token) => {
-            try {
-              const res = await validateToken(token).unwrap();
-              if (res.success) dispatch(tokenValidated(token));
-              // Error encountered validating Captcha
-              if (res["error-codes"] && res["error-codes"].length > 0) {
-                dispatch(captchaFailed(res["error-codes"]));
-              }
-            } catch (error) {
-              // TODO: Report Error for analytics
-              console.log("error:", JSON.stringify(error));
-            }
-          }}
+          onSuccess={onSuccess}
         />
       )}
     </>
