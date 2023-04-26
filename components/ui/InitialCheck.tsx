@@ -1,10 +1,7 @@
 import Captcha from "@/features/Captcha/Captcha";
-import { selectCaptchaValidated } from "@/features/Captcha/captchaSlice";
-import { useSelector } from "react-redux";
 
-function IntialCheck({ children }: { children: JSX.Element }) {
-  const captchaValidated = useSelector(selectCaptchaValidated);
-  return !captchaValidated ? (
+function IntialCheck() {
+  return (
     <div>
       <div>
         <span>Please wait while we are checking your browser...</span>
@@ -17,8 +14,6 @@ function IntialCheck({ children }: { children: JSX.Element }) {
       </div>
       <Captcha />
     </div>
-  ) : (
-    children
   );
 }
 
