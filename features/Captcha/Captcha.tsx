@@ -64,7 +64,7 @@ export default function Captcha({
     }
   };
   return (
-    <>
+    <div {...props}>
       {captchaErrors?.includes("invalid-input-response") ? (
         <p>Invalid Captcha Provided!</p>
       ) : (
@@ -77,6 +77,6 @@ export default function Captcha({
           onSuccess={onSuccess}
         />
       )}
-    </>
+    </div>
   );
 }
