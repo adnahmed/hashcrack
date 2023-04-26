@@ -6,8 +6,8 @@ function IntialCheck() {
     <div className={style.main}>
       <Image
         alt="Logo"
-        width={300}
-        height={300}
+        width={200}
+        height={200}
         src="/favicon.ico"
         className={style.logo}
       />
@@ -15,11 +15,14 @@ function IntialCheck() {
         Please wait while we are checking your browser...
       </span>
       <Captcha className={style.captcha} />
-      <span className={style.connectionquery}>
-        Connection Problems? Let us Know
-      </span>
-      <a className={style.contactus}>Contact Us</a>{" "}
-      <a className={style.status}> Status</a>
+      <div className={style.status}>
+        <span className={style.connectionquery}>
+          Connection Problems? Let us Know
+        </span>
+        <div>
+          <a>Contact Us</a> <a> Status</a>
+        </div>
+      </div>
     </div>
   );
 }

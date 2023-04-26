@@ -1,9 +1,16 @@
 import type { GlobalProvider } from "@ladle/react";
 import { ThemeProvider } from "next-themes";
+import localFont from "next/font/local";
 import React from "react";
 import { Provider as ReduxProvider } from "react-redux";
 import store from "../lib/redux/store";
-import "../styles/globals.css";
+
+// Font files can be colocated inside of `app`
+export const inter = localFont({
+  src: "../data/inter.woff2",
+  display: "swap",
+});
+
 export const Provider: GlobalProvider = ({
   children,
   globalState,
@@ -20,5 +27,6 @@ export const Provider: GlobalProvider = ({
         {children}
       </div>
     </ThemeProvider>
+    <div className={inter.className}>{children}</div>
   </ReduxProvider>
 );
