@@ -1,2 +1,14 @@
 @import url('../node_modules/modern-normalize/modern-normalize.css');
 
+/* TODO: Change to appropriate colors. add more properties (pallet). */
+
+:root {
+    --fg: #000;
+    --bg: #fff;
+}
+
+[data-theme="dark"] {
+    --fg: #fff;
+    --bg: #000;
+}
+

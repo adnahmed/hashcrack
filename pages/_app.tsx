@@ -3,6 +3,7 @@ import "@/styles/globals.css";
 import { Inter } from "@next/font/google";
 import "@total-typescript/ts-reset";
 import { NextPage } from "next";
+import { ThemeProvider } from "next-themes";
 import type { AppProps, NextWebVitalsMetric } from "next/app";
 import { ReactElement, ReactNode } from "react";
 import { Provider } from "react-redux";
@@ -30,7 +31,9 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
       <ErrorBoundary>
         {getLayout(
           <main className={inter.className}>
-            <Component {...pageProps} />
+            <ThemeProvider>
+              <Component {...pageProps} />
+            </ThemeProvider>
           </main>
         )}
       </ErrorBoundary>
