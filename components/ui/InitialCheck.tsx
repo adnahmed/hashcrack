@@ -6,8 +6,8 @@ function IntialCheck() {
     <div className={style.main}>
       <Image
         alt="Logo"
-        width={200}
-        height={200}
+        width={150}
+        height={150}
         src="/favicon.ico"
         className={style.logo}
       />
