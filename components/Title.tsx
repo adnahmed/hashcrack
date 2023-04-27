@@ -9,6 +9,7 @@ interface TitleProps {
 
 export default function Title(props: TitleProps & HTMLProps<"div">) {
   const { text } = props;
+  /* TODO: Use Splitting: https://splitting.js.org */
   const content = text.split("");
   let letter = 0;
   const animation: AnimeAnimParams = {
