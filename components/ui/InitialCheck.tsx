@@ -15,10 +15,8 @@ function IntialCheck() {
         Please wait while we are checking your browser...
       </span>
       <Captcha className={style.captcha} />
-      <div className={style.status}>
-        <span className={style.connectionquery}>
-          Connection Problems? Let us Know
-        </span>
+      <div className={style.footer}>
+        <span>Connection Problems? Let us Know</span>
         <div>
           <a>Contact Us</a> <a> Status</a>
         </div>

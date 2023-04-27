@@ -1,3 +1,7 @@
+.main > * {
+  border: 1px solid black;
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -8,21 +12,15 @@
   align-items: center;
 }
 
-/*
-.logo {
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  align-items: center;
+  font-size:medium
 }
 
- .captcha {
+.footer>:last-child {
+  font-weight: 100;
+  font-size: small;
 }
-
-.waitmessage {
-}
-
-.connectionquery {
-}
-
-.contactus {
-}
-
-.status > * {
-} */
