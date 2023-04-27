@@ -17,10 +17,35 @@
   flex-direction: column;
   gap: 0.3rem;
   align-items: center;
-  font-size:medium
+  font-size: medium;
 }
 
-.footer>:last-child {
+.captcha::after {
+  content: "";
+  display: block;
+  width: 10%;
+  height: 50%;
+  position: relative;
+  border-spacing: 20px;
+  border-style: dashed;
+  border-color: black;
+  left: 45%;
+  bottom: 75%;
+
+  /* animation: spin 1s linear infinite; */
+}
+
+.footer > :last-child {
   font-weight: 100;
   font-size: small;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(180deg);
+  }
 }
