@@ -1,6 +1,6 @@
 import store from "@/lib/redux/store";
 import "@/styles/globals.css";
-import { Inter } from "@next/font/google";
+import localFont from "@next/font/local";
 import "@total-typescript/ts-reset";
 import { NextPage } from "next";
 import { ThemeProvider } from "next-themes";
@@ -9,7 +9,12 @@ import { ReactElement, ReactNode } from "react";
 import { Provider } from "react-redux";
 import ErrorBoundary from "../components/ErrorBoundary";
 
-const inter = Inter({ subsets: ["latin"], variable: "--inter-font" });
+// Font files can be colocated inside of `app`
+export const inter = localFont({
+  src: "../data/inter.woff2",
+  display: "swap",
+});
+
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
