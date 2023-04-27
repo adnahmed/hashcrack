@@ -69,7 +69,6 @@ export default function Captcha({
         <p>Invalid Captcha Provided!</p>
       ) : (
         <Turnstile
-          {...props}
           id="cf-challenge"
           options={{ cData }}
           ref={turnstileRef}
