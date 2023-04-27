@@ -1,4 +1,5 @@
 import type { GlobalProvider } from "@ladle/react";
+import { ThemeProvider } from "next-themes";
 import React from "react";
 import { Provider as ReduxProvider } from "react-redux";
 import store from "../lib/redux/store";
@@ -10,12 +11,14 @@ export const Provider: GlobalProvider = ({
 }) => (
   <ReduxProvider store={store}>
     <h1>Theme: {globalState.theme}</h1>
-    <div
-      style={{
-        border: "1px solid black",
-      }}
-    >
-      {children}
-    </div>
+    <ThemeProvider>
+      <div
+        style={{
+          border: "1px solid black",
+        }}
+      >
+        {children}
+      </div>
+    </ThemeProvider>
   </ReduxProvider>
 );
