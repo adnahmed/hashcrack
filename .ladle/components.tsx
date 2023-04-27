@@ -1,24 +1,17 @@
 import type { GlobalProvider } from "@ladle/react";
+import "inter-ui/inter.css";
 import { ThemeProvider } from "next-themes";
 import React from "react";
 import { Provider as ReduxProvider } from "react-redux";
 import store from "../lib/redux/store";
-import "../styles/globals.css";
+import "./global.css";
+
 export const Provider: GlobalProvider = ({
   children,
   globalState,
   storyMeta,
 }) => (
   <ReduxProvider store={store}>
-    <h1>Theme: {globalState.theme}</h1>
-    <ThemeProvider>
-      <div
-        style={{
-          border: "1px solid black",
-        }}
-      >
-        {children}
-      </div>
-    </ThemeProvider>
+    <ThemeProvider>{children}</ThemeProvider>
   </ReduxProvider>
 );

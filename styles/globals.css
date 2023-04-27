@@ -1,4 +1,4 @@
-@import url('../node_modules/modern-normalize/modern-normalize.css');
+@import url('node_modules/modern-normalize/modern-normalize.css');
 
 /* TODO: Change to appropriate colors. add more properties (pallet). */
 
@@ -12,3 +12,19 @@
     --bg: #000;
 }
 
+html {
+    box-sizing: border-box;
+}
+  
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+
+main {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+}
