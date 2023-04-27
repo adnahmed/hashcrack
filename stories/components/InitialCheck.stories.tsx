@@ -3,9 +3,7 @@ import type { Story, StoryDefault } from "@ladle/react";
 
 export const InitialCheckPage: Story = () => (
   <>
-    <InitialCheck>
-      <>Help</>
-    </InitialCheck>
+    <InitialCheck />
   </>
 );
 
