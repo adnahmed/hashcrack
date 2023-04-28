@@ -1,0 +1,81 @@
+.load {
+    position:relative;
+    z-index: -1;
+    width: 12px;
+    height: 12px;
+    top: 50%;
+    left: 50%;
+    margin:-6px 0 0 -6px;
+    border-radius: 50%;
+    animation: middledot 2s ease-in-out infinite;
+}
+
+.load::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -25px;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    animation: firstdot 2s ease-in-out infinite;
+}
+
+.load::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 25px;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    animation: lastdot 2s ease-in-out infinite;
+}
+
+@keyframes middledot {
+    0% { background-color: rgb(36 41 44 / 20%); }
+    25% { background-color: rgb(36 41 44 / 20%); }
+    50% { background-color: rgb(36 41 44 / 100%); }
+    75% { background-color: rgb(36 41 44 / 20%); }
+    100% { background-color: rgb(36 41 44 / 20%); }
+}
+
+@keyframes middledot {
+    0% { background-color: rgb(36 41 44 / 20%); }
+    25% { background-color: rgb(36 41 44 / 20%); }
+    50% { background-color: rgb(36 41 44 / 100%); }
+    75% { background-color: rgb(36 41 44 / 20%); }
+    100% { background-color: rgb(36 41 44 / 20%); }
+}
+
+@keyframes firstdot {
+    0% { background-color: rgb(36 41 44 / 20%); }
+    25% { background-color: rgb(36 41 44 / 100%); }
+    50% { background-color: rgb(36 41 44 / 20%); }
+    75% { background-color: rgb(36 41 44 / 20%); }
+    100% { background-color: rgb(36 41 44 / 20%); }
+}
+
+@keyframes firstdot {
+    0% { background-color: rgb(36 41 44 / 20%); }
+    25% { background-color: rgb(36 41 44 / 100%); }
+    50% { background-color: rgb(36 41 44 / 20%); }
+    75% { background-color: rgb(36 41 44 / 20%); }
+    100% { background-color: rgb(36 41 44 / 20%); }
+}
+
+@keyframes lastdot {
+    0% { background-color: rgb(36 41 44 / 20%); }
+    25% { background-color: rgb(36 41 44 / 20%); }
+    50% { background-color: rgb(36 41 44 / 20%); }
+    75% { background-color: rgb(36 41 44 / 100%); }
+    100% { background-color: rgb(36 41 44 / 20%); }
+}
+
+@keyframes lastdot {
+    0% { background-color: rgb(36 41 44 / 20%); }
+    25% { background-color: rgb(36 41 44 / 20%); }
+    50% { background-color: rgb(36 41 44 / 20%); }
+    75% { background-color: rgb(36 41 44 / 100%); }
+    100% { background-color: rgb(36 41 44 / 20%); }
+}
