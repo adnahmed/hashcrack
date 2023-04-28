@@ -1,37 +1,4 @@
 @import url('../node_modules/modern-normalize/modern-normalize.css');
-
-html { font-family: Inter, system-ui; 
-  box-sizing: border-box;
-  color: #555;
-}
-
-@supports (font-variation-settings: normal) {
-  html { font-family: "Inter var", system-ui; }
-}
-
-/* TODO: Change to appropriate colors. add more properties (pallet). */
-
-:root {
-  --fg: #333;
-  --bg: #fff;
-    --theme: #e81c4f
-}
-
-[data-theme="dark"] {
-  --fg: #fff;
-  --bg: #333;
-}
-
-  
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
-a {
-  color: var(--theme);
-}
-
+@import url('../styles/_common.css');
 
 
