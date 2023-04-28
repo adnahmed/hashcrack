@@ -1,5 +1,5 @@
 import store from "@/lib/redux/store";
-import "@/styles/globals.css";
+import "@/styles/globals.scss";
 import localFont from "@next/font/local";
 import "@total-typescript/ts-reset";
 import { NextPage } from "next";
