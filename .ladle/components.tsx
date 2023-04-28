@@ -4,7 +4,7 @@ import { ThemeProvider } from "next-themes";
 import React from "react";
 import { Provider as ReduxProvider } from "react-redux";
 import store from "../lib/redux/store";
-import "./global.css";
+import "./globals.css";
 
 export const Provider: GlobalProvider = ({
   children,
