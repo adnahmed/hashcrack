@@ -4,7 +4,7 @@ import Title from "./Title";
 const MainPage = () => {
   return (
     <div>
-      <Title text="CrackQ.me" />
+      <Title text="Crackq.Me" />
       <Navbar />
     </div>
   );
