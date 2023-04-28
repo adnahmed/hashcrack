@@ -1,11 +1,12 @@
-import MainPage from "@/components/MainPage";
 import IntialCheck from "@/components/ui/InitialCheck";
+import Loading from "@/components/ui/Loading";
 import { selectCaptchaValidated } from "@/features/Captcha/captchaSlice";
 import styles from "@/styles/Home.module.css";
 import Head from "next/head";
-import { Suspense } from "react";
+import { Suspense, lazy } from "react";
 import { useSelector } from "react-redux";
 import { NextPageWithLayout } from "./_app";
+const MainPage = lazy(() => import("@/components/MainPage"));
 const Home: NextPageWithLayout = () => {
   const captchaValidated = useSelector(selectCaptchaValidated);
 
@@ -20,9 +21,13 @@ const Home: NextPageWithLayout = () => {
       <div>
         <div className={styles.main}>
           {/* TODO: Use Spinner */}
-          <Suspense fallback={<div>Loading...</div>}>
-            {!captchaValidated ? <IntialCheck /> : <MainPage />}
-          </Suspense>
+          {!captchaValidated ? (
+            <IntialCheck />
+          ) : (
+            <Suspense fallback={<Loading />}>
+              <MainPage />
+            </Suspense>
+          )}
         </div>
       </div>
     </>
