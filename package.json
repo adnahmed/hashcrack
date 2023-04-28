@@ -26,6 +26,7 @@
     "cookies-next": "^2.1.1",
     "cors": "^2.8.5",
     "csstype": "^3.1.2",
+    "d3-scale": "^4.0.2",
     "isomorphic-fetch": "^3.0.0",
     "maxmind": "^4.3.8",
     "modern-normalize": "^1.1.0",
