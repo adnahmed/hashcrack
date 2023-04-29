@@ -2,6 +2,7 @@
   "eslint.enable": true,
   "eslint.codeActionsOnSave.mode": "problems",
   "editor.formatOnSave": true,
+  "stylelint.configFile": ".stylelintrc.json",
   "prettier.enable": true,
   "launch": {
     "configurations": [],
