@@ -1,0 +1,43 @@
+/* TODO: Change to appropriate colors. add more properties (pallet). */
+
+html { font-family: Inter, system-ui; 
+    box-sizing: border-box;
+    color: #555;
+}
+
+@supports (font-variation-settings: normal) {
+    html { font-family: "Inter var", system-ui; }
+}
+
+:root {
+    --fg: #000;
+    --bg: #fff;
+    --theme: #e81c4f
+}
+
+::selection {
+    background: var(--theme);
+    color: white;
+} 
+
+
+[data-theme="dark"] {
+    --fg: #fff;
+    --bg: #000;
+}
+  
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+
+main {
+    display: block;
+    width: 100vw;
+}
+
+a {
+    color: var(--theme);
+}
