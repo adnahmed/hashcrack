@@ -1,6 +1,6 @@
 .load {
     position:relative;
-    z-index: -1;
+    z-index: 0;
     width: 12px;
     height: 12px;
     top: 50%;
@@ -33,49 +33,49 @@
 }
 
 @keyframes middledot {
-    0% { background-color: rgb(36 41 44 / 20%); }
-    25% { background-color: rgb(36 41 44 / 20%); }
-    50% { background-color: rgb(36 41 44 / 100%); }
-    75% { background-color: rgb(36 41 44 / 20%); }
-    100% { background-color: rgb(36 41 44 / 20%); }
+    0% { background-color: #ff0069 }
+    25% { background-color: #ff0069 }
+    50% { background-color: #de9395 }
+    75% { background-color: #ff0069 }
+    100% { background-color: #ff0069 }
 }
 
 @keyframes middledot {
-    0% { background-color: rgb(36 41 44 / 20%); }
-    25% { background-color: rgb(36 41 44 / 20%); }
-    50% { background-color: rgb(36 41 44 / 100%); }
-    75% { background-color: rgb(36 41 44 / 20%); }
-    100% { background-color: rgb(36 41 44 / 20%); }
+    0% { background-color: #ff0069 }
+    25% { background-color: #ff0069 }
+    50% { background-color: #de9395 }
+    75% { background-color: #ff0069 }
+    100% { background-color: #ff0069 }
 }
 
 @keyframes firstdot {
-    0% { background-color: rgb(36 41 44 / 20%); }
-    25% { background-color: rgb(36 41 44 / 100%); }
-    50% { background-color: rgb(36 41 44 / 20%); }
-    75% { background-color: rgb(36 41 44 / 20%); }
-    100% { background-color: rgb(36 41 44 / 20%); }
+    0% { background-color: #ff0069 }
+    25% { background-color: #de9395 }
+    50% { background-color: #ff0069 }
+    75% { background-color: #ff0069 }
+    100% { background-color: #ff0069 }
 }
 
 @keyframes firstdot {
-    0% { background-color: rgb(36 41 44 / 20%); }
-    25% { background-color: rgb(36 41 44 / 100%); }
-    50% { background-color: rgb(36 41 44 / 20%); }
-    75% { background-color: rgb(36 41 44 / 20%); }
-    100% { background-color: rgb(36 41 44 / 20%); }
+    0% { background-color: #ff0069 }
+    25% { background-color: #de9395 }
+    50% { background-color: #ff0069 }
+    75% { background-color: #ff0069 }
+    100% { background-color: #ff0069 }
 }
 
 @keyframes lastdot {
-    0% { background-color: rgb(36 41 44 / 20%); }
-    25% { background-color: rgb(36 41 44 / 20%); }
-    50% { background-color: rgb(36 41 44 / 20%); }
-    75% { background-color: rgb(36 41 44 / 100%); }
-    100% { background-color: rgb(36 41 44 / 20%); }
+    0% { background-color: #ff0069 }
+    25% { background-color: #ff0069 }
+    50% { background-color: #ff0069 }
+    75% { background-color: #de9395 }
+    100% { background-color: #ff0069 }
 }
 
 @keyframes lastdot {
-    0% { background-color: rgb(36 41 44 / 20%); }
-    25% { background-color: rgb(36 41 44 / 20%); }
-    50% { background-color: rgb(36 41 44 / 20%); }
-    75% { background-color: rgb(36 41 44 / 100%); }
-    100% { background-color: rgb(36 41 44 / 20%); }
+    0% { background-color: #ff0069 }
+    25% { background-color: #ff0069 }
+    50% { background-color: #ff0069 }
+    75% { background-color: #de9395 }
+    100% { background-color: #ff0069 }
 }
