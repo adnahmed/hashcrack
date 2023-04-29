@@ -43,3 +43,8 @@ main {
 a {
   color: var(--theme);
 }
+
+#cf-challenge {
+  position: relative;
+  z-index: 2;
+}
