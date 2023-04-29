@@ -1,4 +1,4 @@
-import styles from "@/styles/Title.module.scss";
+import ThemedStyle from "@/styles/TitleThemed.module.scss";
 import { AnimeAnimParams } from "animejs";
 import { HTMLProps } from "react";
 import ReactAnime from "./Anime";
@@ -26,7 +26,7 @@ export default function Title(props: TitleProps & HTMLProps<"div">) {
       _onClick={[animation]}
       initial={[animation]}
     >
-      <div id="title" className={`${styles.h1}`}>
+      <div id="title" className={`${ThemedStyle.title}`}>
         {content}
       </div>
     </ReactAnime.Anime>
