@@ -16,7 +16,7 @@ const Home: NextPageWithLayout = () => {
         <title>Crackq.Me</title>
         <meta name="description" content="crackq.me: Hashcat as a Service" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" />
       </Head>
       <div>
         <div className={styles.main}>
