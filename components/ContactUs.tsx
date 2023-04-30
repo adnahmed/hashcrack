@@ -25,7 +25,7 @@ export default function ContactUs() {
                 />
               </div>
             </div>
-            <div className="w-full">
+            <div className="py-4 w-full">
               <div className="relative">
                 <label
                   htmlFor="email"
@@ -41,7 +41,7 @@ export default function ContactUs() {
                 />
               </div>
             </div>
-            <div className=" w-full">
+            <div className="w-full">
               <div className="relative">
                 <label
                   htmlFor="email"
@@ -57,12 +57,9 @@ export default function ContactUs() {
                 />
               </div>
             </div>
-            <div className=" w-full">
+            <div className=" py-4 w-full">
               <div className="relative">
-                <label
-                  htmlFor="email"
-                  className="leading-7 text-sm text-gray-600 block"
-                >
+                <label htmlFor="email" className="text-sm text-gray-600 block">
                   Task ID
                 </label>
                 <label className="leading-2 text-xs text-gray-400">
@@ -92,7 +89,7 @@ export default function ContactUs() {
               </div>
             </div>
             <span className="leading-4 py-3 text-xs text-gray-500">
-              Field marked with <span className="text-red-500">*</span> are
+              Fields marked with <span className="text-red-500">*</span> are
               required.
             </span>
             <div className="p-2 w-full">
