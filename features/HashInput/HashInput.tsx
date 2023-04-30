@@ -1,5 +1,6 @@
 import hashTypes from "@/data/hash-types.json";
 import Captcha from "@/features/Captcha/Captcha";
+import { useDropzone } from "react-dropzone";
 import { useSelector } from "react-redux";
 import { selectCaptchaValidated } from "../Captcha/captchaSlice";
 interface HashInputProps {
@@ -11,6 +12,7 @@ export default function HashInput({ hashType }: HashInputProps) {
   const wirelessNetworkGroup = optgroups.find((p) =>
     /wireless networks/i.test(p["@label"])
   );
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
   const isWireless = wirelessNetworkGroup?.options.find(
     (p) => p["@value"] === hashType
   );
@@ -23,11 +25,14 @@ export default function HashInput({ hashType }: HashInputProps) {
         <>
           {isEAPOL ? (
             <>
-              <label>
-                <input type="file" name="capFile" />
-                Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or
-                click to browse
-              </label>
+              <div {...getRootProps({ className: "dropzone" })}>
+                <input name="capFile" {...getInputProps()} />
+
+                <p>
+                  Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or
+                  click to browse
+                </p>
+              </div>
               <label>
                 ESSID (case sensitive, leave blank for autodetect)
                 <input type="text" name="essid" />
@@ -53,10 +58,10 @@ export default function HashInput({ hashType }: HashInputProps) {
             Paste your hashlist here
           </label>
           OR
-          <label>
-            <input type="file" name="hashlistFile" />
-            Drag here hashlist file or click to browse
-          </label>
+          <div {...getRootProps()}>
+            <input name="hashlistFile" {...getInputProps()} />
+            <p>Drag here hashlist file or click to browse</p>
+          </div>
         </>
       )}
       <HashInputInstructions wireless={isWireless !== undefined} />
