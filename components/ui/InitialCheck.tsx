@@ -1,4 +1,3 @@
-/// <reference types="vite-plugin-svgr/client" />
 import Captcha from "@/features/Captcha/Captcha";
 import Logo from "@/public/favicon.svg";
 import style from "@/styles/InitialCheck.module.css";
