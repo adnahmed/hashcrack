@@ -1,10 +1,16 @@
 import NewTask from "@/features/NewTask/NewTask";
+import style from "@/styles/Navbar.module.css";
 import { Tabs } from "flowbite-react";
+import ContactUs from "./ContactUs";
 import TaskQueue from "./TaskQueue";
 export default function Navbar() {
   return (
-    <>
-      <Tabs.Group aria-label="Full width tabs" style="default">
+    <div className={style.navbar}>
+      <Tabs.Group
+        className="!flex !justify-center"
+        aria-label="Full width tabs"
+        style="default"
+      >
         <Tabs.Item title="Tasks Queue">
           <TaskQueue />
         </Tabs.Item>
@@ -13,8 +19,10 @@ export default function Navbar() {
         </Tabs.Item>
         <Tabs.Item title="Get Result">Get Result</Tabs.Item>
         <Tabs.Item title="Verify Service">Verify Service</Tabs.Item>
-        <Tabs.Item title="Contact Us">Contact Us</Tabs.Item>
+        <Tabs.Item title="Contact Us">
+          <ContactUs />
+        </Tabs.Item>
       </Tabs.Group>
-    </>
+    </div>
   );
 }
