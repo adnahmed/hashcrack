@@ -1,10 +1,13 @@
 import NewTask from "@/features/NewTask/NewTask";
 import { Tabs } from "flowbite-react";
+import TaskQueue from "./TaskQueue";
 export default function Navbar() {
   return (
     <>
       <Tabs.Group aria-label="Full width tabs" style="default">
-        <Tabs.Item title="Tasks Queue">Tasks Queue</Tabs.Item>
+        <Tabs.Item title="Tasks Queue">
+          <TaskQueue />
+        </Tabs.Item>
         <Tabs.Item title="Add New Task">
           <NewTask />
         </Tabs.Item>
