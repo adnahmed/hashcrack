@@ -1,10 +1,11 @@
 /** @type {import('next').NextConfig} */
 const path = require("path");
+const withImages = require("next-images");
 const StylelintPlugin = require("stylelint-webpack-plugin");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: [process.env.ANALYZE === "true"],
 });
-const nextConfig = {
+let nextConfig = {
   webpack(config, { dev, isServer }) {
     if (dev && !isServer) {
       const originalEntry = config.entry;
@@ -24,6 +25,6 @@ const nextConfig = {
   reactStrictMode: true,
   env: {},
 };
-
+nextConfig = withImages(nextConfig);
 module.exports =
   process.env.ANALYZE === "true" ? withBundleAnalyzer(nextConfig) : nextConfig;

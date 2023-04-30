@@ -1,15 +1,16 @@
 import Captcha from "@/features/Captcha/Captcha";
+import Logo from "@/public/favicon.svg";
 import style from "@/styles/InitialCheck.module.css";
-import Image from "next/image";
 import DotLoader from "./DotLoader";
+
 function IntialCheck() {
   return (
     <div className={style.main}>
-      <Image
+      <img
+        src={Logo}
         alt="Logo"
         width={150}
         height={150}
-        src="/favicon.ico"
         className={style.logo}
       />
       <span className={style.waitmessage}>
