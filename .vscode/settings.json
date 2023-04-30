@@ -4,6 +4,9 @@
   "editor.formatOnSave": true,
   "stylelint.configFile": ".stylelintrc.json",
   "prettier.enable": true,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "launch": {
     "configurations": [],
     "compounds": []
