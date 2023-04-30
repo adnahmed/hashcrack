@@ -1,3 +1,4 @@
+/// <reference types="next-images" />
 namespace NodeJS {
   interface ProcessEnv {
     REDIS_URL?: string;
