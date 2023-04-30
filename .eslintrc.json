@@ -6,13 +6,8 @@
     "next/core-web-vitals"
   ],
   "parser": "@typescript-eslint/parser",
-  "ignorePatterns": [
-    "jest.config.js",
-    "next.config.js"
-  ],
+  "ignorePatterns": ["jest.config.js", "next.config.js", "tailwind.config.js"],
   "parserOptions": {
-    "project": [
-      "./tsconfig.json"
-    ]
+    "project": ["./tsconfig.json"]
   }
 }

@@ -1,12 +1,17 @@
-import styles from "@/styles/Navbar.module.css";
+import NewTask from "@/features/NewTask/NewTask";
+import { Tabs } from "flowbite-react";
 export default function Navbar() {
   return (
-    <li className={styles.navbar}>
-      <ul>Tasks queue</ul>
-      <ul>Add new task</ul>
-      <ul>Get Result</ul>
-      <ul>Verify Service</ul>
-      <ul>Contact Us</ul>
-    </li>
+    <>
+      <Tabs.Group aria-label="Full width tabs" style="default">
+        <Tabs.Item title="Tasks Queue">Tasks Queue</Tabs.Item>
+        <Tabs.Item title="Add New Task">
+          <NewTask />
+        </Tabs.Item>
+        <Tabs.Item title="Get Result">Get Result</Tabs.Item>
+        <Tabs.Item title="Verify Service">Verify Service</Tabs.Item>
+        <Tabs.Item title="Contact Us">Contact Us</Tabs.Item>
+      </Tabs.Group>
+    </>
   );
 }

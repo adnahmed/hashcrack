@@ -1,0 +1,21 @@
+.main {
+  width: 60vw;
+  margin: 0 auto;
+}
+
+.heading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+  height: 18vh;
+}
+
+.heading:last-child {
+  flex: 1;
+}
+
+.logo {
+  align-self: center;
+  height: 14vh;
+}
