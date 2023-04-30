@@ -1,5 +1,6 @@
 import path from "path";
 import { defineConfig } from "vite";
+import svgr from "vite-plugin-svgr";
 
 export default defineConfig({
   resolve: {
@@ -8,6 +9,7 @@ export default defineConfig({
       "next/link": path.resolve(__dirname, "./.ladle/UnoptimizedLink.tsx"),
     },
   },
+  plugins: [svgr()],
   define: {
     "process.env": process.env,
   },
