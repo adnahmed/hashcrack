@@ -4,6 +4,10 @@
   "editor.formatOnSave": true,
   "stylelint.configFile": ".stylelintrc.json",
   "prettier.enable": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+
   "files.associations": {
     "*.css": "tailwindcss"
   },
