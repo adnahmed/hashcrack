@@ -1,10 +1,8 @@
-import Captcha from '@/features/Captcha/Captcha';
-/// <reference types="" />
-import Logo from '@/public/favicon.svg';
-import style from '@/styles/InitialCheck.module.css';
-import { Toaster } from 'react-hot-toast';
-import Obfuscate from 'react-obfuscate';
-import DotLoader from './DotLoader';
+import Captcha from "@/features/Captcha/Captcha";
+import Logo from "@/public/favicon.svg";
+import style from "@/styles/InitialCheck.module.css";
+import { Toaster } from "react-hot-toast";
+import DotLoader from "./DotLoader";
 
 function IntialCheck() {
   return (
