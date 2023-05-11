@@ -6,6 +6,7 @@ import {
 } from "@marsidev/react-turnstile";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import {
   captchaFailed,
@@ -63,6 +64,13 @@ export default function Captcha({
       console.log("error:", JSON.stringify(error));
     }
   };
+
+  const onError: TurnstileProps["onError"] = () => {
+    toast.error(
+      "Captcha didn't launch due to an error, Please refresh the page."
+    );
+  };
+
   return (
     <div {...props}>
       {captchaErrors?.includes("invalid-input-response") ? (
@@ -74,6 +82,7 @@ export default function Captcha({
           ref={turnstileRef}
           siteKey={siteKey}
           onSuccess={onSuccess}
+          onError={onError}
         />
       )}
     </div>

@@ -1,6 +1,7 @@
 import Captcha from "@/features/Captcha/Captcha";
 import Logo from "@/public/favicon.svg";
 import style from "@/styles/InitialCheck.module.css";
+import { Toaster } from "react-hot-toast";
 import DotLoader from "./DotLoader";
 
 function IntialCheck() {
@@ -26,6 +27,7 @@ function IntialCheck() {
           <a>Contact Us</a> | <a> Status</a>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }
