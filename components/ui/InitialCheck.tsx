@@ -1,8 +1,10 @@
-import Captcha from "@/features/Captcha/Captcha";
-import Logo from "@/public/favicon.svg";
-import style from "@/styles/InitialCheck.module.css";
-import { Toaster } from "react-hot-toast";
-import DotLoader from "./DotLoader";
+import Captcha from '@/features/Captcha/Captcha';
+/// <reference types="" />
+import Logo from '@/public/favicon.svg';
+import style from '@/styles/InitialCheck.module.css';
+import { Toaster } from 'react-hot-toast';
+import Obfuscate from 'react-obfuscate';
+import DotLoader from './DotLoader';
 
 function IntialCheck() {
   return (
@@ -24,7 +26,16 @@ function IntialCheck() {
       <div className={style.footer}>
         <span>Connection Problems? Let us Know</span>
         <div>
-          <a>Contact Us</a> | <a> Status</a>
+          <Obfuscate
+            email="aboody.hammad@gmail.com"
+            headers={{
+              subject: 'CrackQ.Me Support: *Your Issue* ',
+              body: 'Down with the machines!',
+            }}
+            obfuscateChildren={false}
+          >
+            Contact Us
+          </Obfuscate>
         </div>
       </div>
       <Toaster />
