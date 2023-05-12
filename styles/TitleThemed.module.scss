@@ -48,7 +48,7 @@ $palette-length: length($palette);
 }
 
 .title {
-  font-size: 5vw;
+  font-size: 8vh;
   font-family: Intro, sans-serif;
   color: transparent;
   background-clip: text;
@@ -56,7 +56,6 @@ $palette-length: length($palette);
   position: relative;
   transition: transform 0.05s ease-in-out;
   background-color: #ffffe0;
-
   $max: 50;
   $i: 1;
   $per: 0%;
