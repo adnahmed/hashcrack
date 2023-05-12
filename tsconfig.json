@@ -2,8 +2,8 @@
   "compilerOptions": {
     "target": "ESNext",
     "typeRoots": [
-      "typings",
-      "node_modules",
+      "./node_modules/@types",
+      "typings"
     ],
     "lib": [
       "dom",
