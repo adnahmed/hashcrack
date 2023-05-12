@@ -7,12 +7,12 @@
   "eslint.validate": ["javascript", "typescript"],
   "editor.formatOnSave": true,
   "stylelint.configFile": ".stylelintrc.json",
+  "prettier.singleQuote": false,
   "prettier.enable": true,
   "prettier.singleQuote": false,
   "editor.quickSuggestions": {
     "strings": true
   },
-
   "files.associations": {
     "*.css": "tailwindcss"
   },
