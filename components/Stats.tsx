@@ -2,7 +2,7 @@ import styles from "@/styles/Stats.module.css";
 import CountUp from "react-countup";
 export default function Stats() {
   return (
-    <div className={styles.stats}>
+    <div className={`${styles.stats} md:!flex-row`}>
       <p>
         Tasks queued: <CountUp end={0} />{" "}
       </p>
