@@ -6,11 +6,7 @@ import TaskQueue from "./TaskQueue";
 export default function Navbar() {
   return (
     <div className={style.navbar}>
-      <Tabs.Group
-        className="!flex !justify-center"
-        aria-label="Full width tabs"
-        style="default"
-      >
+      <Tabs.Group aria-label="Full width tabs" style="default">
         <Tabs.Item title="Tasks Queue">
           <TaskQueue />
         </Tabs.Item>

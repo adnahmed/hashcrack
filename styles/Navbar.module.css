@@ -1,3 +1,9 @@
-.navbar {
-    display: block;
+[role="tablist"] {
+  flex-direction: row;
+}
+
+@media (max-width: 586px) {
+  [role="tablist"] {
+    flex-direction: column;
+  }
 }
