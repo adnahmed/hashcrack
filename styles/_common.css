@@ -46,8 +46,6 @@ html {
 main {
   display: block;
   width: 100vw;
-  transition-duration: 1s;
-  transition-property: all;
 }
 
 a {
@@ -57,4 +55,8 @@ a {
 #cf-challenge {
   position: relative;
   z-index: 2;
+}
+button {
+  transition-duration: 0.2s;
+  transition-property: all;
 }
