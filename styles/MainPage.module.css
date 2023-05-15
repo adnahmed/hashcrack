@@ -5,15 +5,11 @@
 
 .heading {
   display: flex;
-  gap: 2vh;
   justify-content: center;
   align-items: center;
-  padding: 2em;
-  height: 18vh;
-}
-
-.heading:last-child {
-  flex: 1;
+  padding: 2rem 0;
+  transition: 1s all;
+  transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
 }
 
 .logo {
