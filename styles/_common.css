@@ -57,6 +57,6 @@ a {
   z-index: 2;
 }
 button {
-  transition-duration: 0.2s;
+  transition-duration: 0.5s;
   transition-property: all;
 }

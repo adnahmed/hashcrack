@@ -23,6 +23,7 @@ export default function Title(props: TitleProps & HTMLProps<"div">) {
       animeConfig={{
         easing: "easeInSine",
       }}
+      className={`${ThemedStyle.titleWrapper}`}
       _onClick={[animation]}
       initial={[animation]}
     >
