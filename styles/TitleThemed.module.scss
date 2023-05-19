@@ -47,7 +47,7 @@ $palette-length: length($palette);
   @return unquote($output);
 }
 
-.titleWrapper {
+.title-wrapper {
   width: max(1vh + 10%, min(6rem, 1vh + 5%));
   flex: 0.7;
   text-align: center;
