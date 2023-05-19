@@ -60,3 +60,14 @@ button {
   transition-duration: 0.5s;
   transition-property: all;
 }
+
+[role="tablist"] {
+  padding: 0.5rem 0;
+  flex-direction: row;
+}
+
+@media (max-width <= 768px) {
+  [role="tablist"] {
+    flex-direction: column;
+  }
+}
