@@ -8,6 +8,7 @@ import type { AppProps, NextWebVitalsMetric } from "next/app";
 import { ReactElement, ReactNode } from "react";
 import { Provider } from "react-redux";
 import ErrorBoundary from "../components/ErrorBoundary";
+import '../styles/dist/tailwind.css';
 
 // Font files can be colocated inside of `app`
 export const inter = localFont({
