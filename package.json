@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm-run-all --parallel dev:*",
-    "dev:tailwind": "npx tailwindcss -i ./styles/_common.css -o ./styles/dist/tailwind.css --watch",
+    "dev:tailwind": "npx tailwindcss -i ./styles/_common.css -o ./styles/dist/tailwind.css",
     "dev:run": "next dev",
     "build": "npm-run-all build:*",
     "build:tailwind": "npx tailwindcss -i ./styles/_common.css -o ./styles/dist/tailwind.css",

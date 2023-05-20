@@ -1,3 +1,4 @@
 node_modules
 crackq
-styles/dist/tailwind.css
+/styles/dist/tailwind.css
+/styles/compass.scss

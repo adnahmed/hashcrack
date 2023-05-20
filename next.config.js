@@ -1,12 +1,14 @@
 /** @type {import('next').NextConfig} */
 const path = require("path");
 const withImages = require("next-images");
-const StylelintPlugin = require("stylelint-webpack-plugin");
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: [process.env.ANALYZE === "true"],
 });
 let nextConfig = {
-  webpack(config, { dev, isServer }) {
+  webpack(config, {
+    dev,
+    isServer
+  }) {
     if (dev && !isServer) {
       const originalEntry = config.entry;
       config.entry = async () => {
@@ -18,7 +20,6 @@ let nextConfig = {
         }
         return entries;
       };
-      config.plugins.push(new StylelintPlugin());
     }
 
     return config;

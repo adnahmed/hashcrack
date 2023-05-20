@@ -1,7 +1,7 @@
 {
   "extends": [
     "stylelint-config-recommended",
-    "stylelint-config-tailwindcss",
+    "stylelint-config-tailwindcss/scss",
     "stylelint-config-standard-scss"
   ],
   "rules": {

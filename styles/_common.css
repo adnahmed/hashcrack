@@ -1,20 +1,8 @@
+@import url("./responsiveTable.css");
 @import url("react-dropzone/examples/theme.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-html {
-  font-family: Inter, system-ui;
-  box-sizing: border-box;
-  color: #555;
-}
-
-@supports (font-variation-settings: normal) {
-  html {
-    font-family: "Inter var", system-ui;
-  }
-}
-
 :root {
   --fg: #000;
   --bg: #fff;
@@ -24,6 +12,18 @@ html {
   --lg: 1024px;
   --xl: 1280px;
   --xl2: 1536px;
+}
+html {
+  font-family: Inter, system-ui;
+  box-sizing: border-box;
+  color: #555;
+  min-height: 100%;
+}
+
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: "Inter var", system-ui;
+  }
 }
 
 :not(#title)::selection {
@@ -55,18 +55,59 @@ a {
   position: relative;
   z-index: 2;
 }
-button {
+
+[role="tablist"] [tabindex="0"] {
+color: var(--theme);
+}
+
+[role="tablist"] button {
   transition-duration: 0.5s;
   transition-property: all;
+  border: 1px solid #555;
 }
 
 [role="tablist"] {
-  padding: 0.5rem 0;
+  padding: 0.5rem 0;  
+justify-content: space-around;
+max-width: var(--xl2);
   flex-direction: row;
 }
 
-@media (max-width <= 768px) {
+@media (max-width: 768px) {
   [role="tablist"] {
     flex-direction: column;
   }
+}
+
+/* Table Styles */
+ul li,
+ol li {
+  line-height: 140%;
+}
+table {
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+th,
+td {
+  border: 1px solid #000;
+  padding: var(--p-fl-2xl);
+  text-align: left;
+}
+
+th {
+  font-weight: bold;
+  white-space: nowrap;
+  background: #000;
+  color: #fff;
+}
+
+tr:first-of-type th:not(:last-child) {
+  border-right-color: transparent;
+}
+
+tr:first-child th:first-child,
+tr:not(:first-child):not(:last-child) th {
+  border-bottom-color: transparent !important;
 }
