@@ -17,6 +17,5 @@ module.exports = {
       baseStep: 'base',
     }),
     require("flowbite/plugin"),
-    require("tailwind-fluid-typography"),
   ],
 };
