@@ -19,17 +19,18 @@ export default function Title(props: TitleProps & HTMLProps<"div">) {
     // delay: (el, i) => 10 * i,
   };
   return (
-    <ReactAnime.Anime
-      animeConfig={{
-        easing: "easeInSine",
-      }}
-      className={`${ThemedStyle.titleWrapper}`}
-      _onClick={[animation]}
-      initial={[animation]}
-    >
-      <div id="title" className={`${ThemedStyle.title}`}>
-        {content}
-      </div>
-    </ReactAnime.Anime>
-  );
+<div>
+      <ReactAnime.Anime
+        animeConfig={{
+          easing: "easeInSine",
+        }}
+        _onClick={[animation]}
+        initial={[animation]}
+      >
+        <div id="title" className={` lg:text-fl-4xl md:text-fl-3xl text-fl-2xl ${ThemedStyle.title} `}>
+          {content}
+        </div>
+      </ReactAnime.Anime>
+    </div>
+      );
 }
