@@ -11,20 +11,18 @@ function IntialCheck() {
       <img
         src={Logo}
         alt="Logo"
-        width={150}
-        height={150}
-        className={style.logo}
+        className="w-fl-3xl h-fl-3xl"
       />
-      <span className={style.waitmessage}>
+      <span className={`text-fl-md w-auto text-center`}>
         Please wait while we are checking your browser...
       </span>
       <div>
         <DotLoader />
-        <Captcha className={style.captcha} />
+        <Captcha />
       </div>
-      <div className={style.footer}>
-        <span>Connection Problems? Let us Know</span>
-        <div>
+      <div>
+        <span className="text-fl-xs text-center break-before-all">Connection Problems? Let us Know</span>
+        <div className="text-center text-fl-2xs underline">
           <Obfuscate
             email="aboody.hammad@gmail.com"
             headers={{
