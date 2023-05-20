@@ -9,7 +9,17 @@ const MainPage = () => {
   const { theme, setTheme } = useTheme();
   return (
     <div className={`py-fl-md`}>
-      <div className={`flex md:justify-around justify-evenly items-center`}>
+      <div
+        className={`
+      flex
+      max-h-fl-2xl-3xl
+      items-center 
+      justify-between
+      px-fl-lg
+      md:justify-around
+      xl:justify-evenly
+      `}
+      >
         {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={Logo} alt="Logo" className={`w-fl-xl-3xl`} />
@@ -21,7 +31,7 @@ const MainPage = () => {
             <img
               src={Sun}
               alt={"light-theme"}
-              className={`w-fl-lg h-fl-lg `}
+              className={`h-fl-lg w-fl-lg `}
               onClick={() => setTheme("light")}
             />
           ) : (
@@ -29,7 +39,7 @@ const MainPage = () => {
             <img
               src={Moon}
               alt={"dark-theme"}
-              className={`w-fl-xs h-fl-xs m-fl-3xs`}
+              className={`m-fl-3xs h-fl-xs w-fl-xs`}
               onClick={() => setTheme("dark")}
             />
           )}
