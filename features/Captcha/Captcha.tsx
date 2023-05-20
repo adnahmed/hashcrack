@@ -47,7 +47,7 @@ export default function Captcha({
   const siteKey =
     process.env.NODE_ENV === "development"
       ? // Always pass on dev
-        "1x00000000000000000000AA"
+      "1x00000000000000000000AA"
       : process.env.NEXT_PUBLIC_CFSITE_KEY;
   // Useful for analytics
   const [cData, setCData] = useState(Date.now().toString());
@@ -74,7 +74,7 @@ export default function Captcha({
   return (
     <div {...props}>
       {captchaErrors?.includes("invalid-input-response") ? (
-        <p>Invalid Captcha Provided!</p>
+        <p className="color:[var(--theme)]">Invalid Captcha Provided!</p>
       ) : (
         <Turnstile
           id="cf-challenge"
