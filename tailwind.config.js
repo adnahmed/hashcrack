@@ -1,3 +1,4 @@
+//@ts-check
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -9,8 +10,12 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}",
   ],
-  theme: {
-    extend: {},
-  },
-  plugins: [require("flowbite/plugin")],
+  extend: {},
+  plugins: [
+    require('tailwind-utopia')({
+      useClamp: true,
+      baseStep: 'base',
+    }),
+    require("flowbite/plugin"),
+  ],
 };
