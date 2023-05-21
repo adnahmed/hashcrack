@@ -12,5 +12,6 @@ export default defineConfig({
   plugins: [svgr()],
   define: {
     "process.env": process.env,
+    global: {},
   },
 });
