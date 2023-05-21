@@ -1,15 +1,15 @@
 /* inspired by: https://css-tricks.com/responsive-data-tables/ */
 .responsiveTable {
   width: 100%;
-max-width: calc(var(--xl) * 1.5 );
-margin: 0 auto;
+  max-width: calc(var(--xl) * 1.5 );
+  margin: 0 auto;
 }
 
 .responsiveTable td .tdBefore {
   display: none;
 }
 
-@media screen and (width <= 768px) {
+@media screen and (width <= 940px) {
   /*
     Force table elements to not behave like tables anymore
     Hide table headers (but not display: none;, for accessibility)
@@ -32,7 +32,7 @@ margin: 0 auto;
   }
 
   .responsiveTable tbody tr {
-    border: 1px solid #000;
+    border: 1px solid var(--theme);
     padding: 0.25em;
   }
 
