@@ -1,5 +1,6 @@
 import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import { GetServerSideProps } from "next";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
@@ -10,10 +11,24 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 };
 
 export default function TaskTable() {
+  const [showChild, setShowChild] = useState(false);
+
+  // Wait until after client-side hydration to show
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.global = window;
+      setShowChild(true);
+    }
+  }, []);
+
+  if (!showChild) {
+    // You can show some kind of placeholder UI here
+    return null;
+  }
   return (
-    <Table hoverable={true}>
+    <Table className="border-spacing-fl-3xs " hoverable={true}>
       <Thead>
-        <Tr className="[&>*]:px-fl-2xs [&>*]:py-fl-sm [&>*]:text-center">
+        <Tr className="[&>*]:px-fl-3xs-2xs [&>*]:py-fl-3xs-2xs [&>*]:text-fl-2xs-lg [&>*]:text-center [&>*]:bg-[var(--theme)] ">
           <Th>Task ID</Th>
           <Th>Type</Th>
           <Th>Description</Th>
@@ -27,8 +42,8 @@ export default function TaskTable() {
       <Tbody className="divide-y ">
         {Array.from({ length: 10 }).map((v, i) => (
           <Tr
-            key={i}
-            className="bg-white dark:border-gray-700 dark:bg-gray-800"
+            key={i} dark
+            className="bg-white :border-gray-700 dark:bg-gray-800"
           >
             <Td>Task ID</Td>
             <Td className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
