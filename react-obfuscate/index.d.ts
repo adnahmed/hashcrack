@@ -1,7 +1,7 @@
 // Type definitions for  react-obfuscate 1.0
 // Project: react-obfuscate
 // Definitions by: Adnan Ahmed Khan https://github.com/adnahmed/react-obfuscate
-
+declare module 'react-obfuscate';
 import { CSSProperties } from "@nextui-org/react/types/theme";
 import { FunctionComponent } from "react";
 
