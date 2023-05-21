@@ -1,5 +1,6 @@
 @import url("./responsiveTable.css");
 @import url("react-dropzone/examples/theme.css");
+@import url("./hamburgers.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
