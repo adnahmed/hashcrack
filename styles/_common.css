@@ -71,10 +71,12 @@ color: var(--theme);
   padding: 0.5rem 0;  
 justify-content: space-around;
 max-width: var(--xl2);
+width: 100%;
+align-self: center;
   flex-direction: row;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 940px) {
   [role="tablist"] {
     flex-direction: column;
   }
@@ -86,13 +88,14 @@ ol li {
   line-height: 140%;
 }
 table {
-  border-collapse: collapse;
+  border-collapse: initial;
   background: rgba(255, 255, 255, 0.4);
 }
 
 th,
 td {
-  border: 1px solid #000;
+  background-color: #eee;
+  color: #555;
   padding: var(--p-fl-2xl);
   text-align: left;
 }
