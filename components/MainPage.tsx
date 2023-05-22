@@ -1,13 +1,13 @@
+import { useBreakpoint } from "@/hooks/useBreakpoint";
 import Logo from "@/public/favicon.svg";
 import Moon from "@/public/moon-outline.svg";
 import Sun from "@/public/sunny-outline.svg";
 import style from "@/styles/MainPage.module.css";
+import { TabsRef } from "flowbite-react";
 import { useTheme } from "next-themes";
+import { useEffect, useRef, useState } from "react";
 import Navbar from "./Navbar";
 import Title from "./Title";
-import { useBreakpoint } from "@/hooks/useBreakpoint";
-import { useEffect, useRef, useState } from "react";
-import { TabsRef } from "flowbite-react";
 import { TabLabels, TabsEnum } from "./ui/Tabs";
 const MainPage = () => {
   const { theme, setTheme } = useTheme();
@@ -24,7 +24,9 @@ const MainPage = () => {
     <>
       <div
         className={`
+      m-auto
       grid
+      max-w-3xl
       grid-flow-col
       items-center
     ${style.heading}

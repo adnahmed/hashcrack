@@ -72,11 +72,11 @@ a {
 }
 
 [role="tablist"] {
-  padding: 0.5rem 0;  
-justify-content: space-around;
-max-width: var(--xl2);
-width: 100%;
-align-self: center;
+  padding: 0.5rem 0;
+  justify-content: space-around;
+  max-width: var(--xl2);
+  width: 100%;
+  align-self: center;
   flex-direction: row;
 }
 
