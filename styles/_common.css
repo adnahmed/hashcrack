@@ -3,6 +3,8 @@
 @import url("react-dropzone/examples/theme.css");
 @import url("./hamburgers.css");
 @import url("./react-select-search.css");
+@import url("@patternfly/react-core/dist/styles/base.css");
+@import url("@patternfly/react-styles/css/components/Wizard/wizard.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
