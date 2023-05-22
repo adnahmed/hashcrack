@@ -24,21 +24,17 @@ const MainPage = () => {
     <>
       <div
         className={`
-      flex
-      max-h-fl-2xl-3xl
-      items-center 
-      justify-between
-      md:px-0
-      sm:justify-around
-      xl:justify-center
-      xl:gap-fl-xl
+      grid
+      grid-flow-col
+      items-center
+    ${style.heading}
       `}
       >
         {
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={Logo} alt="Logo" className={`w-fl-xl-3xl`} />
+          <img src={Logo} alt="Logo" className={`m-auto w-fl-xl-3xl`} />
         }
-        <Title text="Crackq.Me" />
+        <Title className="grid-" text="Crackq.Me" />
         <div className={style["theme"]}>
           {theme === "dark" ? (
             // eslint-disable-next-line @next/next/no-img-element

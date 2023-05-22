@@ -8,16 +8,16 @@ interface HashInputProps {
 }
 
 export default function HashInput({ hashType }: HashInputProps) {
-  const { optgroups } = hashTypes;
-  const wirelessNetworkGroup = optgroups.find((p) =>
-    /wireless networks/i.test(p["@label"])
+  const { options } = hashTypes;
+  const wirelessNetworkGroup = options.find((p) =>
+    /wireless networks/i.test(p["name"])
   );
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-  const isWireless = wirelessNetworkGroup?.options.find(
-    (p) => p["@value"] === hashType
+  const isWireless = wirelessNetworkGroup?.items.find(
+    (p) => p["value"] === hashType
   );
-  const isEAPOL = isWireless && /EAPOL/i.test(isWireless["#text"]);
-  const isPMKID = isWireless && /PMKID/i.test(isWireless["#text"]);
+  const isEAPOL = isWireless && /EAPOL/i.test(isWireless["name"]);
+  const isPMKID = isWireless && /PMKID/i.test(isWireless["name"]);
   const captchaVerified = useSelector(selectCaptchaValidated);
   return (
     <>

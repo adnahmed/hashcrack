@@ -1,302 +1,309 @@
 {
-    "optgroups": [
+    "options": [
         {
-            "@label": "Wireless networks",
-            "options": [
+            "name": "Wireless networks",
+            "type": "group",
+            "items": [
                 {
-                    "@value": "2500",
-                    "#text": "WPA/WPA2 EAPOL (legacy cap/hccap/hccapx handshake)"
+                    "value": "2500",
+                    "name": "WPA/WPA2 EAPOL (legacy cap/hccap/hccapx handshake)"
                 },
                 {
-                    "@value": "16800",
-                    "#text": "WPA/WPA2 PMKID (-m 16800)"
+                    "value": "16800",
+                    "name": "WPA/WPA2 PMKID (-m 16800)"
                 },
                 {
-                    "@value": "22000",
-                    "#text": "WPA/WPA2 HASH (-m 22000, WPA*01*..., WPA*02*...)"
+                    "value": "22000",
+                    "name": "WPA/WPA2 HASH (-m 22000, WPA*01*..., WPA*02*...)"
                 }
             ]
         },
         {
-            "@label": "Raw and salted hashes",
-            "options": [
+            "name": "Raw and salted hashes",
+            "type": "group",
+            "items": [
                 {
-                    "@value": "0",
-                    "#text": "MD5"
+                    "value": "0",
+                    "name": "MD5"
                 },
                 {
-                    "@value": "10",
-                    "#text": "MD5($pass.$salt)"
+                    "value": "10",
+                    "name": "MD5($pass.$salt)"
                 },
                 {
-                    "@value": "20",
-                    "#text": "MD5($salt.$pass)"
+                    "value": "20",
+                    "name": "MD5($salt.$pass)"
                 },
                 {
-                    "@value": "30",
-                    "#text": "MD5(utf16l($pass).$salt)"
+                    "value": "30",
+                    "name": "MD5(utf16l($pass).$salt)"
                 },
                 {
-                    "@value": "40",
-                    "#text": "MD5($salt.utf16le($pass))"
+                    "value": "40",
+                    "name": "MD5($salt.utf16le($pass))"
                 },
                 {
-                    "@value": "2600",
-                    "#text": "MD5(MD5($pass))"
+                    "value": "2600",
+                    "name": "MD5(MD5($pass))"
                 },
                 {
-                    "@value": "11900",
-                    "#text": "PBKDF2-HMAC-MD5"
+                    "value": "11900",
+                    "name": "PBKDF2-HMAC-MD5"
                 },
                 {
-                    "@value": "100",
-                    "#text": "SHA1"
+                    "value": "100",
+                    "name": "SHA1"
                 },
                 {
-                    "@value": "110",
-                    "#text": "SHA1($pass.$salt)"
+                    "value": "110",
+                    "name": "SHA1($pass.$salt)"
                 },
                 {
-                    "@value": "120",
-                    "#text": "SHA1($salt.$pass)"
+                    "value": "120",
+                    "name": "SHA1($salt.$pass)"
                 },
                 {
-                    "@value": "130",
-                    "#text": "SHA1(utf16le($pass).$salt)"
+                    "value": "130",
+                    "name": "SHA1(utf16le($pass).$salt)"
                 },
                 {
-                    "@value": "140",
-                    "#text": "SHA1($salt.utf16le($pass))"
+                    "value": "140",
+                    "name": "SHA1($salt.utf16le($pass))"
                 },
                 {
-                    "@value": "220",
-                    "#text": "SHA1(--$salt--$pass--), sha1DASH, 8track"
+                    "value": "220",
+                    "name": "SHA1(--$salt--$pass--), sha1DASH, 8track"
                 },
                 {
-                    "@value": "12000",
-                    "#text": "PBKDF2-HMAC-SHA1"
+                    "value": "12000",
+                    "name": "PBKDF2-HMAC-SHA1"
                 },
                 {
-                    "@value": "1400",
-                    "#text": "SHA256"
+                    "value": "1400",
+                    "name": "SHA256"
                 },
                 {
-                    "@value": "1410",
-                    "#text": "SHA256($pass.$salt)"
+                    "value": "1410",
+                    "name": "SHA256($pass.$salt)"
                 },
                 {
-                    "@value": "1420",
-                    "#text": "SHA256($salt.$pass)"
+                    "value": "1420",
+                    "name": "SHA256($salt.$pass)"
                 },
                 {
-                    "@value": "1430",
-                    "#text": "SHA256(utf16le($pass).$salt)"
+                    "value": "1430",
+                    "name": "SHA256(utf16le($pass).$salt)"
                 },
                 {
-                    "@value": "1440",
-                    "#text": "SHA256($salt.utf16le($pass))"
+                    "value": "1440",
+                    "name": "SHA256($salt.utf16le($pass))"
                 },
                 {
-                    "@value": "10900",
-                    "#text": "PBKDF2-HMAC-SHA256"
+                    "value": "10900",
+                    "name": "PBKDF2-HMAC-SHA256"
                 },
                 {
-                    "@value": "1700",
-                    "#text": "SHA512"
+                    "value": "1700",
+                    "name": "SHA512"
                 },
                 {
-                    "@value": "1710",
-                    "#text": "SHA512($pass.$salt)"
+                    "value": "1710",
+                    "name": "SHA512($pass.$salt)"
                 },
                 {
-                    "@value": "1720",
-                    "#text": "SHA512($salt.$pass)"
+                    "value": "1720",
+                    "name": "SHA512($salt.$pass)"
                 },
                 {
-                    "@value": "1730",
-                    "#text": "SHA512(utf16le($pass).$salt)"
+                    "value": "1730",
+                    "name": "SHA512(utf16le($pass).$salt)"
                 },
                 {
-                    "@value": "1740",
-                    "#text": "SHA512($salt.utf16le($pass))"
+                    "value": "1740",
+                    "name": "SHA512($salt.utf16le($pass))"
                 },
                 {
-                    "@value": "12100",
-                    "#text": "PBKDF2-HMAC-SHA512"
+                    "value": "12100",
+                    "name": "PBKDF2-HMAC-SHA512"
                 }
             ]
         },
         {
-            "@label": "Database passwords",
-            "options": [
+            "name": "Database passwords",
+            "type": "group",
+            "items": [
                 {
-                    "@value": "200",
-                    "#text": "MySQL 3.23"
+                    "value": "200",
+                    "name": "MySQL 3.23"
                 },
                 {
-                    "@value": "300",
-                    "#text": "MySQL 4.1/5+"
+                    "value": "300",
+                    "name": "MySQL 4.1/5+"
                 }
             ]
         },
         {
-            "@label": "OS and system passwords",
-            "options": [
+            "name": "OS and system passwords",
+            "type": "group",
+            "items": [
                 {
-                    "@value": "111",
-                    "#text": "nsldaps, SSHA-1(Base64), Netscape LDAP SSHA"
+                    "value": "111",
+                    "name": "nsldaps, SSHA-1(Base64), Netscape LDAP SSHA"
                 },
                 {
-                    "@value": "500",
-                    "#text": "MD5(Unix), md5crypt, FreeBSD MD5, Cisco-IOS MD5"
+                    "value": "500",
+                    "name": "MD5(Unix), md5crypt, FreeBSD MD5, Cisco-IOS MD5"
                 },
                 {
-                    "@value": "1000",
-                    "#text": "NTLM"
+                    "value": "1000",
+                    "name": "NTLM"
                 },
                 {
-                    "@value": "5500",
-                    "#text": "NetNTLMv1"
+                    "value": "5500",
+                    "name": "NetNTLMv1"
                 },
                 {
-                    "@value": "5600",
-                    "#text": "NetNTLMv2"
+                    "value": "5600",
+                    "name": "NetNTLMv2"
                 },
                 {
-                    "@value": "1500",
-                    "#text": "descrypt, DES(Unix)"
+                    "value": "1500",
+                    "name": "descrypt, DES(Unix)"
                 },
                 {
-                    "@value": "7400",
-                    "#text": "SHA256(Unix), sha256crypt"
+                    "value": "7400",
+                    "name": "SHA256(Unix), sha256crypt"
                 },
                 {
-                    "@value": "1800",
-                    "#text": "SHA512(Unix), sha512crypt"
+                    "value": "1800",
+                    "name": "SHA512(Unix), sha512crypt"
                 },
                 {
-                    "@value": "1600",
-                    "#text": "Apache portable MD5 (APR MD5, $apr1$)"
+                    "value": "1600",
+                    "name": "Apache portable MD5 (APR MD5, $apr1$)"
                 },
                 {
-                    "@value": "3200",
-                    "#text": "bcrypt, Blowfish(Unix)"
+                    "value": "3200",
+                    "name": "bcrypt, Blowfish(Unix)"
                 }
             ]
         },
         {
-            "@label": "Forum and CMS software",
-            "options": [
+            "name": "Forum and CMS software",
+            "type": "group",
+            "items": [
                 {
-                    "@value": "400",
-                    "#text": "phpass, MD5(Wordpress, Joomla, phpBB3)"
+                    "value": "400",
+                    "name": "phpass, MD5(Wordpress, Joomla, phpBB3)"
                 },
                 {
-                    "@value": "2611",
-                    "#text": "vBulletin < v3.8.5"
+                    "value": "2611",
+                    "name": "vBulletin < v3.8.5"
                 },
                 {
-                    "@value": "2711",
-                    "#text": "vBulletin ≥ v3.8.5"
+                    "value": "2711",
+                    "name": "vBulletin ≥ v3.8.5"
                 },
                 {
-                    "@value": "2811",
-                    "#text": "Invision Power Board 2.x.x, MyBB 1.2+"
+                    "value": "2811",
+                    "name": "Invision Power Board 2.x.x, MyBB 1.2+"
                 },
                 {
-                    "@value": "121",
-                    "#text": "SMF > 1.1"
+                    "value": "121",
+                    "name": "SMF > 1.1"
                 },
                 {
-                    "@value": "7900",
-                    "#text": "Drupal 7 ($S$...)"
+                    "value": "7900",
+                    "name": "Drupal 7 ($S$...)"
                 },
                 {
-                    "@value": "10000",
-                    "#text": "Django (PBKDF2-SHA256)"
+                    "value": "10000",
+                    "name": "Django (PBKDF2-SHA256)"
                 }
             ]
         },
         {
-            "@label": "Crypto wallets",
-            "options": [
+            "name": "Crypto wallets",
+            "type": "group",
+            "items": [
                 {
-                    "@value": "11300",
-                    "#text": "BTC/LTC wallet (Bitcoin Core wallet.dat hash $bitcoin$96$)"
+                    "value": "11300",
+                    "name": "BTC/LTC wallet (Bitcoin Core wallet.dat hash $bitcoin$96$)"
                 },
                 {
-                    "@value": "15600",
-                    "#text": "Ethereum wallet (PBKDF2, $ethereum$p*)"
+                    "value": "15600",
+                    "name": "Ethereum wallet (PBKDF2, $ethereum$p*)"
                 },
                 {
-                    "@value": "15700",
-                    "#text": "Ethereum wallet (SCRYPT, $ethereum$s*)"
+                    "value": "15700",
+                    "name": "Ethereum wallet (SCRYPT, $ethereum$s*)"
                 },
                 {
-                    "@value": "16600",
-                    "#text": "Electrum wallet (Electrum salt type 1-3 hash $electrum$1*)"
+                    "value": "16600",
+                    "name": "Electrum wallet (Electrum salt type 1-3 hash $electrum$1*)"
                 }
             ]
         },
         {
-            "@label": "Office, PDF, RAR, ZIP, etc",
-            "options": [
+            "name": "Office, PDF, RAR, ZIP, etc",
+            "type": "group",
+            "items": [
                 {
-                    "@value": "9700",
-                    "#text": "MS Office ≤ 2003 (MD4+RC4: $oldoffice$0, $oldoffice$1)"
+                    "value": "9700",
+                    "name": "MS Office ≤ 2003 (MD4+RC4: $oldoffice$0, $oldoffice$1)"
                 },
                 {
-                    "@value": "9800",
-                    "#text": "MS Office ≤ 2003 (SHA1+RC4: $oldoffice$3, $oldoffice$4)"
+                    "value": "9800",
+                    "name": "MS Office ≤ 2003 (SHA1+RC4: $oldoffice$3, $oldoffice$4)"
                 },
                 {
-                    "@value": "9400",
-                    "#text": "MS Office 2007 ($office$*2007*)"
+                    "value": "9400",
+                    "name": "MS Office 2007 ($office$*2007*)"
                 },
                 {
-                    "@value": "9500",
-                    "#text": "MS Office 2010 ($office$*2010*)"
+                    "value": "9500",
+                    "name": "MS Office 2010 ($office$*2010*)"
                 },
                 {
-                    "@value": "9600",
-                    "#text": "MS Office 2013 ($office$*2013*)"
+                    "value": "9600",
+                    "name": "MS Office 2013 ($office$*2013*)"
                 },
                 {
-                    "@value": "10400",
-                    "#text": "PDF 1.1-1.3 (Acrobat 2-4, $pdf$1*2*)"
+                    "value": "10400",
+                    "name": "PDF 1.1-1.3 (Acrobat 2-4, $pdf$1*2*)"
                 },
                 {
-                    "@value": "10500",
-                    "#text": "PDF 1.4-1.6 (Acrobat 5-8, $pdf$2*3*, $pdf$4*4*)"
+                    "value": "10500",
+                    "name": "PDF 1.4-1.6 (Acrobat 5-8, $pdf$2*3*, $pdf$4*4*)"
                 },
                 {
-                    "@value": "10600",
-                    "#text": "PDF 1.7 Level 3 (Acrobat 9, $pdf$5*5*)"
+                    "value": "10600",
+                    "name": "PDF 1.7 Level 3 (Acrobat 9, $pdf$5*5*)"
                 },
                 {
-                    "@value": "10700",
-                    "@disabled": "",
-                    "#text": "PDF 1.7 Level 8 (Acrobat 10-11, $pdf$5*6*)"
+                    "value": "10700",
+                    "disabled": true,
+                    "name": "PDF 1.7 Level 8 (Acrobat 10-11, $pdf$5*6*)"
                 },
                 {
-                    "@value": "12500",
-                    "@disabled": "",
-                    "#text": "RAR3 ($RAR3$)"
+                    "value": "12500",
+                    "disabled": true,
+                    "name": "RAR3 ($RAR3$)"
                 },
                 {
-                    "@value": "13000",
-                    "@disabled": "",
-                    "#text": "RAR5 ($rar5$)"
+                    "value": "13000",
+                    "disabled": true,
+                    "name": "RAR5 ($rar5$)"
                 },
                 {
-                    "@value": "11600",
-                    "@disabled": "",
-                    "#text": "7Zip ($7z$)"
+                    "value": "11600",
+                    "disabled": true,
+                    "name": "7Zip ($7z$)"
                 },
                 {
-                    "@value": "13600",
-                    "@disabled": "",
-                    "#text": "WinZip ($zip2$)"
+                    "value": "13600",
+                    "disabled": true,
+                    "name": "WinZip ($zip2$)"
                 }
             ]
         }

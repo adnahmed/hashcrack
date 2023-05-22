@@ -27,7 +27,7 @@ export default function Title(props: TitleProps & HTMLProps<"div">) {
         _onClick={[animation]}
         initial={[animation]}
       >
-        <div id="title" className={`text-fl-md md:text-fl-lg sm:text-fl-lg lg:text-fl-xl xl:text-fl-3xl ${ThemedStyle.title} `}>
+        <div id="title" className={`text-fl-lg md:text-fl-xl sm:text-fl-lg lg:text-fl-2xl xl:text-fl-3xl text-center ${ThemedStyle.title} `}>
           {content}
         </div>
       </ReactAnime.Anime>
