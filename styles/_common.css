@@ -11,7 +11,7 @@
 :root {
   --fg: #000;
   --bg: #fff;
-  --theme: #e81c4f;
+  --theme: #c2003c;
   --sm: 640px;
   --md: 768px;
   --lg: 1024px;
@@ -62,7 +62,7 @@ a {
 }
 
 [role="tablist"] [tabindex="0"] {
-color: var(--theme);
+  color: var(--theme);
 }
 
 [role="tablist"] button {
