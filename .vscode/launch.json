@@ -2,17 +2,6 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Next.js: debug full stack",
-      "type": "node-terminal",
-      "request": "launch",
-      "command": "npm run dev",
-      "serverReadyAction": {
-        "pattern": "started server on .+, url: (https?://.+)",
-        "uriFormat": "%s",
-        "action": "openExternally"
-      }
-    },
-    {
       "name": "Next.js: debug server-side",
       "type": "node-terminal",
       "request": "launch",
@@ -20,9 +9,20 @@
     },
     {
       "name": "Next.js: debug client-side",
-      "runtimeExecutable": "firefox",
+      "type": "chrome",
       "request": "launch",
       "url": "http://localhost:3000"
+    },
+    {
+      "name": "Next.js: debug full stack",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "serverReadyAction": {
+        "pattern": "started server on .+, url: (https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithEdge"
+      }
     },
     {
       "type": "node",
@@ -46,10 +46,15 @@
     },
     {
       "name": "Launch Storybook",
-      "runtimeArgs": ["run", "story"],
+      "runtimeArgs": [
+        "run",
+        "story"
+      ],
       "runtimeExecutable": "npm",
       "request": "launch",
-      "skipFiles": ["<node_internals>/**"],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
       "type": "node"
     }
   ]
