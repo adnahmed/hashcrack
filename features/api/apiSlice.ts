@@ -1,5 +1,5 @@
 // Import the RTK Query methods from the React-specific entry point
-import { CAPTCHA_HEADER_TOKEN } from "@/data/constants";
+import { CAPTCHA_HEADER_TOKEN } from "@/assets/constants";
 import { AppState } from "@/lib/redux/store";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { HYDRATE } from "next-redux-wrapper";

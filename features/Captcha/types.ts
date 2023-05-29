@@ -1,5 +1,5 @@
-import { langOptions } from "@/data/langOptions";
-import { sizeOptions } from "@/data/turnstileWidgetSize";
+import { langOptions } from "@/assets/langOptions";
+import { sizeOptions } from "@/assets/turnstileWidgetSize";
 
 export type Lang = typeof langOptions[number]["value"];
 
