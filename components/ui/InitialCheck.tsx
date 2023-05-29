@@ -1,11 +1,14 @@
 import Captcha from "@/features/Captcha/Captcha";
+import { selectCaptchaErrors } from "@/features/Captcha/captchaSlice";
 import Logo from "@/public/favicon.svg";
 import style from "@/styles/InitialCheck.module.css";
 import { Toaster } from "react-hot-toast";
 import Obfuscate from "react-obfuscate";
+import { useSelector } from "react-redux";
 import DotLoader from "./DotLoader";
 
 function IntialCheck() {
+  const captchaErrors = useSelector(selectCaptchaErrors);
   return (
     <div className={style.main}>
       <img
@@ -17,7 +20,8 @@ function IntialCheck() {
         Please wait while we are checking your browser...
       </span>
       <div>
-        <DotLoader />
+        {!captchaErrors?.includes("invalid-input-response") ?
+          <DotLoader /> : undefined}
         <Captcha />
       </div>
       <div>
