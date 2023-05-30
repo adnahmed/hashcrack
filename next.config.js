@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const path = require("path");
 const withImages = require("next-images");
+const withTM = require('next-transpile-modules')([
+  '@patternfly/react-core',
+  '@patternfly/react-styles',
+  '@patternfly-labs/react-form-wizard'
+])
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: [process.env.ANALYZE === "true"],
 });
@@ -28,5 +33,6 @@ let nextConfig = {
   env: {},
 };
 nextConfig = withImages(nextConfig);
+nextConfig = withTM(nextConfig);
 module.exports =
   process.env.ANALYZE === "true" ? withBundleAnalyzer(nextConfig) : nextConfig;
