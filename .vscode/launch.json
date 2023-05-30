@@ -9,7 +9,8 @@
     },
     {
       "name": "Next.js: debug client-side",
-      "runtimeExecutable": "firefox",
+      "runtimeExecutable": "edge",
+      "type": "msedge",
       "request": "launch",
       "url": "http://localhost:3000"
     },
