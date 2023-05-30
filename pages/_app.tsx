@@ -11,7 +11,7 @@ import ErrorBoundary from "../components/ErrorBoundary";
 
 // Font files can be colocated inside of `app`
 export const inter = localFont({
-  src: "../data/inter.woff2",
+  src: "../assets/inter.woff2",
   display: "swap",
 });
 

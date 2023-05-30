@@ -1,5 +1,5 @@
+import hashTypes from "@/assets/hash-types.json";
 import Title from "@/components/Title";
-import hashTypes from "@/data/hash-types.json";
 import HashInput from "@/features/HashInput/HashInput";
 import style from '@/styles/NewTask.module.css';
 import { useState } from "react";

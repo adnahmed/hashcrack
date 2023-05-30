@@ -1,3 +1,4 @@
+/** @type {import('vite').UserConfig} */
 import path from "path";
 import { defineConfig } from "vite";
 import svgr from "vite-plugin-svgr";
@@ -14,4 +15,7 @@ export default defineConfig({
     "process.env": process.env,
     global: {},
   },
+  optimizeDeps: {
+    exclude: ['@patternfly-labs/react-form-wizard']
+  }
 });

@@ -1,4 +1,4 @@
-import hashTypes from "@/data/hash-types.json";
+import hashTypes from "@/assets/hash-types.json";
 import Captcha from "@/features/Captcha/Captcha";
 import { useDropzone } from "react-dropzone";
 import { useSelector } from "react-redux";
