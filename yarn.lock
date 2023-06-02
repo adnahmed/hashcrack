@@ -7435,6 +7435,11 @@ pure-rand@^6.0.0:
   resolved "https://registry.yarnpkg.com/pure-rand/-/pure-rand-6.0.2.tgz#a9c2ddcae9b68d736a8163036f088a2781c8b306"
   integrity sha512-6Yg0ekpKICSjPswYOuC5sku/TSWaRYlA0qsXqJgM/d/4pLPHPuTxK7Nbf7jFKzAeedUhR8C7K9Uv63FBsSo8xQ==
 
+pyscript-react@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/pyscript-react/-/pyscript-react-0.0.2.tgz#5e83be7cf73cdcdfbc26964d54a8ce718a1655ef"
+  integrity sha512-ZFgZQVrdwCm+ggmI8I6ZYsKb6Yo22eT9WD736706ZzWt5YQF/8/+75kOw8uRHDIHLXn0jukHsfS44OAD/wgRCw==
+
 query-string@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-8.1.0.tgz#e7f95367737219544cd360a11a4f4ca03836e115"
