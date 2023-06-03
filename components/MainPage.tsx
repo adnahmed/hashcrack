@@ -6,6 +6,7 @@ import style from "@/styles/MainPage.module.css";
 import { TabsRef } from "flowbite-react";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
+import { Toaster } from "react-hot-toast";
 import Navbar from "./Navbar";
 import Title from "./Title";
 import { TabLabels, TabsEnum } from "./ui/Tabs";
@@ -66,7 +67,10 @@ const MainPage = () => {
       {openNavbar &&
         <Navbar ref={tabsRef} TabLabels={TabLabels} activeTab={activeTab} setActiveTab={setActiveTab} />
       }
-      {TabsEnum[TabLabels[activeTab]]}
+      <>
+        {TabsEnum[TabLabels[activeTab]]}
+        <Toaster />
+      </>
     </>
   );
 };
