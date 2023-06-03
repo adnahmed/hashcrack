@@ -14,10 +14,10 @@ const Navbar = React.forwardRef<TabsRef, NavbarProps>((props, tabsRef) => {
     <Tabs.Group
       ref={tabsRef}
       onActiveTabChange={(tab) => { setActiveTab(tab) }}
-      className="[& *]:text-fl-xs-2xl [& *]:h-fl-2xs-2xl [& *]:w-fl-2xl flex-nowrap  justify-center gap-fl-md" aria-label="Full width tabs" style="default">
+      className="[& *]:text-fl-xs-2xl [& *]:h-fl-2xs-2xl [& *]:w-fl-2xl  flex-nowrap justify-center " aria-label="Full width tabs" style="default">
       {
         TabLabels.map((title, index) => (
-          < Tabs.Item active={activeTab === index} key={title} title={title}>
+          <Tabs.Item active={activeTab === index} key={title} title={title}>
           </Tabs.Item>))
       }
     </Tabs.Group >
