@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <Provider store={store}>
       <ErrorBoundary>
         {getLayout(
-          <ThemeProvider>
+          <ThemeProvider attribute="class">
             <Component {...pageProps} />
           </ThemeProvider>
         )}

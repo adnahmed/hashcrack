@@ -10,8 +10,6 @@
 @tailwind utilities;
 
 :root {
-  --fg: #000;
-  --bg: #fff;
   --theme: #c2003c;
   --theme-bg: #f5dec9;
   --sm: 640px;
@@ -21,10 +19,11 @@
   --xl2: 1536px;
 }
 
+
+
 html {
   font-family: Inter, system-ui;
   box-sizing: border-box;
-  color: #555;
   min-height: 100%;
 }
 
@@ -39,10 +38,7 @@ html {
   color: white;
 }
 
-[data-theme="dark"] {
-  --fg: #fff;
-  --bg: #000;
-}
+
 
 *,
 *::before,
@@ -63,7 +59,17 @@ a {
   color: var(--theme);
   background-color: var(--theme-bg);
 }
+html,
+body {
+  color: #000;
+  background: #fff;
+}
 
+[data-theme='dark'],
+[data-theme='dark'] body {
+  color: #fff !important;
+  background: #000 !important;
+}
 [role="tablist"] button {
   align-self: center;
   background: #f9fafa;
