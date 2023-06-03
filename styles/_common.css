@@ -113,6 +113,7 @@ a {
   width: 100%;
   align-self: center;
   flex-direction: row;
+  border-bottom: 0;
 }
 
 @media (width <=940px) {
