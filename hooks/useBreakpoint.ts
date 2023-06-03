@@ -1,6 +1,6 @@
 import { create } from "@kodingdotninja/use-tailwind-breakpoint";
 import { useEffect } from "react";
-type BreakpointKey = "sm" | "md" | "lg" | "lg2" | "xl" | "xl2";
+type BreakpointKey = "sm" | "md" | "lg" | "lg2" | "xl" | "xl2" | "lg2";
 
 const hooks = create({
   // Smartphone
