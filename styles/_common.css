@@ -67,8 +67,8 @@ body {
 
 [data-theme='dark'],
 [data-theme='dark'] body {
-  color: #fff !important;
-  background: #000 !important;
+  color: #fff;
+  background: #000;
 }
 [role="tablist"] button {
   align-self: center;
