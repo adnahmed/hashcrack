@@ -50,11 +50,6 @@ html {
   box-sizing: inherit;
 }
 
-main {
-  display: block;
-  width: 100vw;
-}
-
 a {
   color: var(--theme);
 }
