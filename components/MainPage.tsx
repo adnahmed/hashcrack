@@ -37,7 +37,7 @@ const MainPage = () => {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={Logo} alt="Logo" className={`m-auto w-fl-xl-3xl`} />
         }
-        <Title className="grid-" text="Crackq.Me" />
+        <Title text="Crackq.Me" />
         <div className={style["theme"]}>
           {theme === "dark" ? (
             // eslint-disable-next-line @next/next/no-img-element
