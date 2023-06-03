@@ -1,6 +1,5 @@
 import { Tabs, TabsRef } from "flowbite-react";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 
 interface NavbarProps {
@@ -15,7 +14,7 @@ const Navbar = React.forwardRef<TabsRef, NavbarProps>((props, tabsRef) => {
     <Tabs.Group
       ref={tabsRef}
       onActiveTabChange={(tab) => { setActiveTab(tab) }}
-      className="justify-center flex-nowrap [& *]:text-fl-xs-2xl gap-fl-md [& *]:h-fl-2xs-2xl  [& *]:w-fl-2xl" aria-label="Full width tabs" style="default">
+      className="[& *]:text-fl-xs-2xl [& *]:h-fl-2xs-2xl [& *]:w-fl-2xl flex-nowrap  justify-center gap-fl-md" aria-label="Full width tabs" style="default">
       {
         TabLabels.map((title, index) => (
           < Tabs.Item active={activeTab === index} key={title} title={title}>
@@ -28,14 +27,3 @@ const Navbar = React.forwardRef<TabsRef, NavbarProps>((props, tabsRef) => {
 Navbar.displayName = 'Navbar';
 
 export default Navbar;
-/*
-
-      <Tabs.Item title="Add New Task">
-        <NewTask />
-      </Tabs.Item>
-      <Tabs.Item title="Get Result">Get Result</Tabs.Item>
-      <Tabs.Item title="Verify Service">Verify Service</Tabs.Item>
-      <Tabs.Item title="Contact Us">
-        <ContactUs />
-      </Tabs.Item>
-      */
