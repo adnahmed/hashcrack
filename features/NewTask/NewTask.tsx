@@ -1,27 +1,28 @@
 import hashTypes from "@/assets/hash-types.json";
-import Title from "@/components/Title";
-import HashInput from "@/features/HashInput/HashInput";
-import style from '@/styles/NewTask.module.css';
+import { Section, Step, WizardPage } from '@patternfly-labs/react-form-wizard';
 import { useState } from "react";
-import { Toaster } from "react-hot-toast";
-import { useSelector } from "react-redux";
+import toast from 'react-hot-toast';
 import SelectSearch from 'react-select-search';
-import { selectCaptchaValidated } from "../Captcha/captchaSlice";
-import VerifyTask from "../VerifyTask/VerifyTask";
-
+import HashInput from "../HashInput/HashInput";
 export default function NewTask() {
   const { options } = hashTypes;
-  const captchaVerified = useSelector(selectCaptchaValidated);
   const [hashType, setHashType] = useState<string>("-1");
   return (
-    <div className={`my-auto flex flex-col items-center justify-center gap-fl-md text-center ${style.main} `}>
-      <Title className="text-fl-sm sm:text-fl-lg md:text-fl-xl lg:text-2xl" text={hashType === '-1' ? "Please choose a hash type to continue." : "Add Hash Lists"} />
-      <SelectSearch onChange={(selectedValue) => setHashType(selectedValue.toString())} search options={options} placeholder="Choose Hash Type" />
-      {hashType !== undefined && hashType !== "-1" && (
-        <HashInput hashType={hashType} />
-      )}
-      {captchaVerified && <VerifyTask />}
-      <Toaster />
-    </div>
-  );
+    <WizardPage yaml={false} title="" onSubmit={function (data: unknown): Promise<void> {
+      throw new Error("Function not implemented.");
+    }} onCancel={function (): void {
+      throw new Error("Function not implemented.");
+    }}>
+      <Step label="Add Hashlist" id="add-hashlist">
+        <Section autohide={false} id="select-hashtype" label={"Select Hash Type"}>
+          <SelectSearch onChange={(selectedValue) => { setHashType(selectedValue.toString()); toast.error("hello") }} search options={options} placeholder="Choose Hash Type" />
+        </Section>
+        {hashType !== undefined && hashType !== "-1" && (
+          <Section autohide={false} id="input-hash" label={"Input Hashlist"}>
+            <HashInput hashType={hashType} />
+          </Section>
+        )}
+      </Step>
+    </WizardPage>
+  )
 }
