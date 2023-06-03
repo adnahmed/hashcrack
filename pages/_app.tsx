@@ -35,13 +35,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
     <Provider store={store}>
       <ErrorBoundary>
         {getLayout(
-          <main className={inter.className}>
-            <ThemeProvider>
-              <Component {...pageProps} />
-            </ThemeProvider>
-          </main>
+          <ThemeProvider>
+            <Component {...pageProps} />
+          </ThemeProvider>
         )}
       </ErrorBoundary>
-    </Provider>
+    </Provider >
   );
 }
