@@ -112,37 +112,9 @@ a {
   }
 }
 
-/* Table Styles */
-ul li,
-ol li {
-  line-height: 140%;
-}
-
-table {
-  border-collapse: initial;
-  background: rgb(255 255 255 / 40%);
-}
-
-th,
-td {
-  background-color: #eee;
-  color: #555;
-  padding: var(--p-fl-2xl);
-  text-align: left;
-}
-
 th {
-  font-weight: bold;
-  white-space: nowrap;
-  background: #000;
   color: #fff;
 }
 
-tr:first-of-type th:not(:last-child) {
-  border-right-color: transparent;
-}
 
-tr:first-child th:first-child,
-tr:not(:first-child, :last-child) th {
-  border-bottom-color: transparent !important;
-}
+
