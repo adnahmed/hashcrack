@@ -1,4 +1,5 @@
 import captcha, { extendedApiSlice } from "@/features/Captcha/captchaSlice";
+import navigation from "@/features/Navigation/navigationSlice";
 import { apiSlice } from "@/features/api/apiSlice";
 import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
 import { rtkQueryErrorLogger } from "./errorLoggerMiddleware";
@@ -8,6 +9,7 @@ export function makeStore() {
     reducer: {
       [extendedApiSlice.reducerPath]: extendedApiSlice.reducer,
       captcha: captcha.reducer,
+      navigation: navigation.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       [
