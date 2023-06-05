@@ -1,3 +1,4 @@
+import { selectActiveTab } from "@/features/Navigation/navigationSlice";
 import { useBreakpoint } from "@/hooks/useBreakpoint";
 import Logo from "@/public/favicon.svg";
 import Moon from "@/public/moon-outline.svg";
@@ -7,13 +8,14 @@ import { TabsRef } from "flowbite-react";
 import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 import { Toaster } from "react-hot-toast";
-import Navbar from "./Navbar";
+import { useSelector } from "react-redux";
+import Navbar from "../features/Navigation/Navbar";
 import Title from "./Title";
 import { TabLabels, TabsEnum } from "./ui/Tabs";
 const MainPage = () => {
   const { theme, setTheme } = useTheme();
   const [openNavbar, setOpenNavbar] = useState(false);
-  const [activeTab, setActiveTab] = useState<number>(0);
+  const activeTab = useSelector(selectActiveTab);
   const tabsRef = useRef<TabsRef>(null);
   const isDesktop = useBreakpoint('lg2');
   useEffect(() => {
@@ -30,6 +32,7 @@ const MainPage = () => {
       max-w-3xl
       grid-flow-col
       items-center
+      md:w-full
     ${style.heading}
       `}
       >
@@ -65,7 +68,7 @@ const MainPage = () => {
         </button>}
       </div>
       {openNavbar &&
-        <Navbar ref={tabsRef} TabLabels={TabLabels} activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Navbar ref={tabsRef} TabLabels={TabLabels} activeTab={activeTab} />
       }
       <>
         {TabsEnum[TabLabels[activeTab]]}
