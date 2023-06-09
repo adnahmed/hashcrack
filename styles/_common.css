@@ -127,3 +127,7 @@ a {
 th {
   color: #fff;
 }
+
+.pf-c-page {
+  z-index: 0;
+}
