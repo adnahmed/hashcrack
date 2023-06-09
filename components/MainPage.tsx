@@ -17,7 +17,7 @@ const MainPage = () => {
   const [openNavbar, setOpenNavbar] = useState(false);
   const activeTab = useSelector(selectActiveTab);
   const tabsRef = useRef<TabsRef>(null);
-  const isDesktop = useBreakpoint('lg2');
+  const isDesktop = useBreakpoint('mdx');
   useEffect(() => {
     if (isDesktop) setOpenNavbar(true)
     else setOpenNavbar(false)
@@ -31,6 +31,9 @@ const MainPage = () => {
       grid
       grid-flow-col
       items-center
+      align-middle
+      mdx:max-w-xl
+      mdx:gap-fl-lg
     ${style.heading}
       `}
       >
