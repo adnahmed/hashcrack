@@ -1,5 +1,5 @@
 import { AppState } from "@/lib/redux/store";
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 interface NavigationState {
     activeTab: number;
 }
@@ -18,4 +18,5 @@ const navigation = createSlice({
 export default navigation;
 export const selectActiveTab = (state: AppState) =>
     state.navigation.activeTab;
+export const selectActiveWizardTab = createSelector(selectActiveTab, (activeTab) => activeTab === 1);
 export const { activeTabChanged } = navigation.actions;
