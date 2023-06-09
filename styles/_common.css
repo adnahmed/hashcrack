@@ -9,15 +9,18 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --theme: #c2003c;
-  --theme-bg: #f5dec9;
-  --sm: 640px;
-  --md: 768px;
-  --mdx: 938px;
-  --lg: 1024px;
-  --xl: 1280px;
-  --xl2: 1536px;
+@layer base {
+  :root {
+    --theme: #c2003c;
+    --theme-bg: #f5dec9;
+    --theme-dark-bg: #1f2937;
+    --sm: 640px;
+    --md: 768px;
+    --mdx: 938px;
+    --lg: 1024px;
+    --xl: 1280px;
+    --xl2: 1536px;
+  }
 }
 
 html {
