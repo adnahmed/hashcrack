@@ -2,11 +2,11 @@
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-max-width: calc(var(--xl));
-margin: 0 auto;
+  max-width: calc(var(--xl));
+  margin: 0 auto;
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (width > 938px) {
   .stats {
     flex-direction: row;
   }

@@ -1,14 +1,14 @@
-import { selectActiveTab } from "@/features/Navigation/navigationSlice";
+import { selectActiveTab, selectActiveWizardTab } from "@/features/Navigation/navigationSlice";
 import { useBreakpoint } from "@/hooks/useBreakpoint";
 import Logo from "@/public/favicon.svg";
 import Moon from "@/public/moon-outline.svg";
 import Sun from "@/public/sunny-outline.svg";
 import style from "@/styles/MainPage.module.css";
-import { TabsRef } from "flowbite-react";
 import { useTheme } from "next-themes";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { useSelector } from "react-redux";
+import TetherComponent from 'react-tether';
 import Navbar from "../features/Navigation/Navbar";
 import Title from "./Title";
 import { TabLabels, TabsEnum } from "./ui/Tabs";
@@ -16,8 +16,9 @@ const MainPage = () => {
   const { theme, setTheme } = useTheme();
   const [openNavbar, setOpenNavbar] = useState(false);
   const activeTab = useSelector(selectActiveTab);
-  const tabsRef = useRef<TabsRef>(null);
-  const isDesktop = useBreakpoint('lg2');
+  const isWizardTab = useSelector(selectActiveWizardTab);
+  const isSmartPhone = useBreakpoint('sm');
+  const isDesktop = useBreakpoint('mdx');
   useEffect(() => {
     if (isDesktop) setOpenNavbar(true)
     else setOpenNavbar(false)
@@ -27,12 +28,14 @@ const MainPage = () => {
     <>
       <div
         className={`
+      ${isWizardTab ? 'w-screen': ''}
       m-auto
       grid
-      max-w-3xl
       grid-flow-col
       items-center
-      md:w-full
+      align-middle
+      mdx:max-w-xl
+      mdx:gap-fl-lg
     ${style.heading}
       `}
       >
@@ -47,7 +50,7 @@ const MainPage = () => {
             <img
               src={Sun}
               alt={"light-theme"}
-              className={`m-fl-3xs h-fl-xs w-fl-xs`}
+              className={`m-fl-3xs  w-fl-xs`}
               onClick={() => setTheme("light")}
             />
           ) : (
@@ -55,21 +58,41 @@ const MainPage = () => {
             <img
               src={Moon}
               alt={"dark-theme"}
-              className={`m-fl-3xs h-fl-xs w-fl-xs`}
+              className={`m-fl-3xs w-fl-xs`}
               onClick={() => setTheme("dark")}
             />
           )}
         </div>
-        {!isDesktop && <button onClick={() => { setOpenNavbar(!openNavbar) }} className={`hamburger hamburger--collapse ${openNavbar && 'is-active'}`} type="button">
+        {!isDesktop && <>
+        <TetherComponent
+				attachment="bottom left"
+        targetAttachment="middle center"
+        targetOffset={`50% ${ isSmartPhone ? '30%' :  '20%' } 0 0`}
+				constraints={[
+					{
+						to: "scrollParent",
+						attachment: "together",
+					},
+				]}
+				/* renderTarget: This is what the item will be tethered to, make sure to attach the ref */
+				renderTarget={(ref) => (
+<button ref={ref} onClick={() => { setOpenNavbar(!openNavbar) }} className={`hamburger hamburger--collapse ${openNavbar && 'is-active'}`} type="button">
           <span className="hamburger-box">
             <span className="hamburger-inner">
             </span>
           </span>
-        </button>}
+        </button>
+				)}
+				/* renderElement: If present, this item will be tethered to the the component returned by renderTarget */
+				renderElement={(ref) =>
+					openNavbar &&
+        <Navbar ref={ref} TabLabels={TabLabels} activeTab={activeTab} />
+				}
+			/>
+        </>}
       </div>
-      {openNavbar &&
-        <Navbar ref={tabsRef} TabLabels={TabLabels} activeTab={activeTab} />
-      }
+        {isDesktop && 
+        <Navbar TabLabels={TabLabels} activeTab={activeTab} />}
       <>
         {TabsEnum[TabLabels[activeTab]]}
         <Toaster />

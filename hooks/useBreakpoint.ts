@@ -1,19 +1,19 @@
 import { create } from "@kodingdotninja/use-tailwind-breakpoint";
 import { useEffect } from "react";
-type BreakpointKey = "sm" | "md" | "lg" | "lg2" | "xl" | "xl2" | "lg2";
+type BreakpointKey = "sm" | "md" | "mdx" | "lg" | "xl" | "xl2";
 
 const hooks = create({
   // Smartphone
-  sm: "320px",
-  md: "640px",
-  // Tablet
-  lg: "768px",
+  sm: "321px",
+  md: "641px",
   // Notebook
-  lg2: "940px",
+  mdx: "939px",
+  // Tablet
+  lg: "769px",
   // Laptop
-  xl: "1024px",
+  xl: "1025px",
   // Desktop
-  xl2: "1600px",
+  xl2: "1601px",
 });
 
 export function useBreakpoint(breakpoint: BreakpointKey) {
