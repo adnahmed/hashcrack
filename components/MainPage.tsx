@@ -1,4 +1,4 @@
-import { selectActiveTab } from "@/features/Navigation/navigationSlice";
+import { selectActiveTab, selectActiveWizardTab } from "@/features/Navigation/navigationSlice";
 import { useBreakpoint } from "@/hooks/useBreakpoint";
 import Logo from "@/public/favicon.svg";
 import Moon from "@/public/moon-outline.svg";
@@ -16,6 +16,7 @@ const MainPage = () => {
   const { theme, setTheme } = useTheme();
   const [openNavbar, setOpenNavbar] = useState(false);
   const activeTab = useSelector(selectActiveTab);
+  const isWizardTab = useSelector(selectActiveWizardTab);
   const isSmartPhone = useBreakpoint('sm');
   const isDesktop = useBreakpoint('mdx');
   useEffect(() => {
@@ -27,13 +28,14 @@ const MainPage = () => {
     <>
       <div
         className={`
-      mdx:max-w-xl
-      mdx:gap-fl-lg
+      ${isWizardTab ? 'w-screen': ''}
       m-auto
       grid
       grid-flow-col
       items-center
       align-middle
+      mdx:max-w-xl
+      mdx:gap-fl-lg
     ${style.heading}
       `}
       >
