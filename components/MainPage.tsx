@@ -29,10 +29,8 @@ const MainPage = () => {
         className={`
       m-auto
       grid
-      max-w-3xl
       grid-flow-col
       items-center
-      md:w-full
     ${style.heading}
       `}
       >
@@ -47,7 +45,7 @@ const MainPage = () => {
             <img
               src={Sun}
               alt={"light-theme"}
-              className={`m-fl-3xs h-fl-xs w-fl-xs`}
+              className={`m-fl-3xs  w-fl-xs`}
               onClick={() => setTheme("light")}
             />
           ) : (
@@ -55,7 +53,7 @@ const MainPage = () => {
             <img
               src={Moon}
               alt={"dark-theme"}
-              className={`m-fl-3xs h-fl-xs w-fl-xs`}
+              className={`m-fl-3xs w-fl-xs`}
               onClick={() => setTheme("dark")}
             />
           )}
