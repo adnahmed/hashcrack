@@ -3,7 +3,6 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { activeTabChanged } from "./navigationSlice";
 
-
 interface NavbarProps {
   activeTab: number;
   TabLabels: string[];
@@ -16,7 +15,7 @@ const Navbar = React.forwardRef<TabsRef, NavbarProps>((props, tabsRef) => {
     <Tabs.Group
       ref={tabsRef}
       onActiveTabChange={(tab) => { dispatch(activeTabChanged(tab)) }}
-      className=" flex-nowrap justify-center gap-0 " aria-label="Full width tabs" style="default">
+      className="flex-nowrap justify-center gap-0 rounded-md" aria-label="Full width tabs" style="default">
       {
         TabLabels.map((title, index) => (
           <Tabs.Item active={activeTab === index} key={title} title={title}>

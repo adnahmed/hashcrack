@@ -20,8 +20,6 @@
   --xl2: 1536px;
 }
 
-
-
 html {
   font-family: Inter, system-ui;
   box-sizing: border-box;
@@ -39,7 +37,11 @@ html {
   color: white;
 }
 
-
+[style='color-scheme: dark;'],
+[style='color-scheme: dark;'] body {
+  color: #fff;
+  background: var(--theme-dark-bg);
+}
 
 *,
 *::before,
@@ -106,6 +108,16 @@ a {
 @media (width <=938px) {
   [role="tablist"] {
     flex-direction: column;
+    border-width: 1px;
+    border-color: var(--theme);
+    background-color: white;
+    border-bottom: 1px solid;
+  }
+
+  [style='color-scheme: dark;'],
+  [style='color-scheme: dark;'] [role="tablist"] {
+    border-color: white;
+    background-color: var(--theme-dark-bg);
   }
 }
 
