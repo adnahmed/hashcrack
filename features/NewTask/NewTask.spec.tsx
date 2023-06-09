@@ -1,18 +1,17 @@
-import { render, screen } from "@testing-library/react";
-import user from "@testing-library/user-event";
 import cases from "jest-in-case";
 import { Provider } from "react-redux";
+import renderer from 'react-test-renderer';
 import { makeStore } from "../../lib/redux/store";
 import NewTask from "./NewTask";
 describe("<NewTask />", () => {
   it("renders the component", () => {
     const store = makeStore();
-    render(
+    const tree = renderer.create(
       <Provider store={store}>
         <NewTask />
       </Provider>
-    );
-    expect(screen.getByText("Select hash type...")).toBeInTheDocument();
+    ).toJSON();
+    expect(tree).toMatchSnapshot();
   });
 
   it("shows the input component after selecting hash type and instructions", async () => {
