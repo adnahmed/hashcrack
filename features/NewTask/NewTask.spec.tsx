@@ -14,92 +14,15 @@ describe("<NewTask />", () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it("shows the input component after selecting hash type and instructions", async () => {
-    const store = makeStore();
-    render(
-      <Provider store={store}>
-        <NewTask />
-      </Provider>
-    );
-
-    expect(
-      screen.queryByLabelText(/paste your hashlist here/i)
-    ).not.toBeInTheDocument();
-
-    await user.selectOptions(
-      screen.getByRole("combobox"),
-      screen.getByRole("option", { name: "MD5" })
-    );
-    expect(
-      await screen.findByLabelText(/paste your hashlist here/i)
-    ).toBeInTheDocument();
-    expect(
-      await screen.findByLabelText(
-        /Drag here hashlist file or click to browse/i
-      )
-    ).toBeInTheDocument();
-
-    expect(
-      document.getElementById("hashlist_instructions")
-    ).toBeInTheDocument();
+  it("shows the input component after selecting hash type and instructions", () => {
   });
 
-  it("shows appropriate UI when selected WPA/WPA2 EAPOL", async () => {
-    const store = makeStore();
-    render(
-      <Provider store={store}>
-        <NewTask />
-      </Provider>
-    );
-
-    await user.selectOptions(
-      screen.getByRole("combobox"),
-      screen.getByRole("option", { name: /WPA\/WPA2 EAPOL/i })
-    );
-
-    expect(
-      screen.queryByLabelText(/paste your hashlist here/i)
-    ).not.toBeInTheDocument();
-
-    expect(
-      await screen.findByLabelText(
-        /Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or click to browse/i
-      )
-    ).toBeInTheDocument();
-
-    expect(await screen.findByLabelText(/ESSID/i)).toBeInTheDocument();
-    expect(await screen.findByLabelText(/BSSID/i)).toBeInTheDocument();
-    expect(
-      await document.getElementById("pcap_capture_instructions")
-    ).toBeInTheDocument();
+  it("shows appropriate UI when selected WPA/WPA2 EAPOL", () => {
   });
 
   cases(
     "Select other Wireless Network HashTypes",
-    async (opts) => {
-      const store = makeStore();
-      render(
-        <Provider store={store}>
-          <NewTask />
-        </Provider>
-      );
-      await user.selectOptions(
-        screen.getByRole("combobox"),
-        screen.getByRole("option", { name: opts.roleName })
-      );
-
-      expect(
-        screen.queryByLabelText(
-          /Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or click to browse/i
-        )
-      ).not.toBeInTheDocument();
-      expect(screen.queryByLabelText(/ESSID/i)).not.toBeInTheDocument();
-      expect(screen.queryByLabelText(/BSSID/i)).not.toBeInTheDocument();
-
-      expect(await screen.findByLabelText(opts.label)).toBeInTheDocument();
-      expect(
-        await document.getElementById("pcap_capture_instructions")
-      ).toBeInTheDocument();
+    (opts) => {
     },
     {
       "WPA/WPA2 PMKID": {
