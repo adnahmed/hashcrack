@@ -11,14 +11,26 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}",
   ],
-  extend: {},
-  plugins: [
-    require('tailwind-utopia')({
-      useClamp: true,
-      baseStep: 'base',
-    }),
-    require("flowbite/plugin"),
-  ],
+  extend: {
+    // colors: {
+    //   transparent: 'transparent',
+    //   current: 'currentColor',
+    //   black: colors.black,
+    //   white: colors.white,
+    //   gray: colors.slate,
+    //   green: colors.emerald,
+    //   purple: colors.violet,
+    //   yellow: colors.amber,
+    //   pink: colors.fuchsia,
+    //   red: colors.red,
+    //   'midnight': '#121063',
+    //   'metal': '#565584',
+    //   'tahiti': '#3ab7bf',
+    //   'silver': '#ecebff',
+    //   'bubble-gum': '#ff77e9',
+    //   'bermuda': '#78dcca',
+    // },
+  },
   theme: {
     screens: {
       'sm': '640px',
@@ -38,6 +50,13 @@ module.exports = {
 
       '2xl': '1536px',
       // => @media (min-width: 1536px) { ... }
-    }
-  }
+    },
+  },
+  plugins: [
+    require('tailwind-utopia')({
+      useClamp: true,
+      baseStep: 'base',
+    }),
+    require("flowbite/plugin"),
+  ],
 };
