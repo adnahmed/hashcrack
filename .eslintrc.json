@@ -8,6 +8,20 @@
     "plugin:jest-dom/recommended",
     "next/core-web-vitals"
   ],
+  "rules": {
+    "@typescript-eslint/no-empty-function": "error"
+  },
+  "overrides": [
+    {
+      "files": [
+        "*.spec.tsx",
+        "*.spec.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/no-empty-function": "warn"
+      }
+    }
+  ],
   "parser": "@typescript-eslint/parser",
   "ignorePatterns": [
     "jest.config.js",
