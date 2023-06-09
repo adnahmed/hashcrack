@@ -1,6 +1,6 @@
-import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 import { GetServerSideProps } from "next";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Table, Tbody, Td, Th, Thead, Tr } from "react-super-responsive-table";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
@@ -28,7 +28,7 @@ export default function TaskTable() {
   return (
     <Table className="border-spacing-fl-3xs " hoverable={true}>
       <Thead>
-        <Tr className="[&>*]:px-fl-3xs-2xs [&>*]:py-fl-3xs-2xs [&>*]:text-fl-2xs-lg [&>*]:text-center [&>*]:bg-[var(--theme)] ">
+        <Tr className="[&>*]:text-fl-2xs-lg [&>*]:bg-[var(--theme)] [&>*]:p-fl-3xs-2xs [&>*]:text-center">
           <Th>Task ID</Th>
           <Th>Type</Th>
           <Th>Description</Th>
@@ -40,10 +40,10 @@ export default function TaskTable() {
         </Tr>
       </Thead>
       <Tbody className="divide-y ">
-        {Array.from({ length: 10 }).map((v, i) => (
+        {Array.from({ length: 100 }).map((v, i) => (
           <Tr
             key={i} dark
-            className="bg-white :border-gray-700 dark:bg-gray-800"
+            className=":border-gray-700 bg-white dark:bg-gray-800"
           >
             <Td>Task ID</Td>
             <Td className="whitespace-nowrap font-medium text-gray-900 dark:text-white">

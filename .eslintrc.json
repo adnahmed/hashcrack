@@ -8,9 +8,6 @@
     "plugin:jest-dom/recommended",
     "next/core-web-vitals"
   ],
-  "rules": {
-    "@typescript-eslint/no-empty-function": "error"
-  },
   "overrides": [
     {
       "files": [
