@@ -26,26 +26,6 @@
       }
     },
     {
-      "type": "node",
-      "name": "vscode-jest-tests.v2",
-      "request": "launch",
-      "args": [
-        "test",
-        "--",
-        "--runInBand",
-        "--watchAll=false",
-        "--testNamePattern",
-        "${jest.testNamePattern}",
-        "--runTestsByPath",
-        "${jest.testFile}"
-      ],
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
-      "disableOptimisticBPs": true,
-      "runtimeExecutable": "npm"
-    },
-    {
       "name": "Launch Storybook",
       "runtimeArgs": [
         "run",
@@ -57,6 +37,17 @@
         "<node_internals>/**"
       ],
       "type": "node"
+    },
+    {
+      "type": "node",
+      "name": "vscode-jest-tests.v2",
+      "request": "launch",
+      "args": [
+        "run",
+        "test",
+      ],
+      "runtimeExecutable": "npm",
+      "console": "internalConsole"
     }
   ]
 }
