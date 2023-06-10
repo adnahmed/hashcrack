@@ -1,19 +1,19 @@
 export default function ContactUs() {
   return (
-    <section className="text-gray-600 body-font relative">
-      <div className="container py-8 mx-auto">
-        <div className="flex flex-col text-center w-full mb-12">
-          <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
+    <section className="body-font relative text-gray-600">
+      <div className="container mx-auto items-center py-4">
+        <div className="mb-2 flex w-full flex-col text-center">
+          <p className="mx-auto text-base leading-relaxed lg:w-2/3">
             Please fill the contact form.
           </p>
         </div>
-        <div className="lg:max-w-xl mx-auto">
-          <div className="flex flex-wrap -m-2">
+        <div className="mx-5 lg:max-w-xl">
+          <div className="flex flex-wrap">
             <div className="w-full">
               <div className="relative">
                 <label
                   htmlFor="name"
-                  className="leading-7 text-sm text-gray-600"
+                  className="text-sm leading-7 text-gray-600"
                 >
                   Name<span className="text-red-500">*</span>
                 </label>
@@ -21,15 +21,15 @@ export default function ContactUs() {
                   type="text"
                   id="name"
                   name="name"
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  className="w-full rounded border border-gray-300 bg-gray-100 bg-opacity-50 px-3 py-1 text-base leading-8 text-gray-700 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"
                 />
               </div>
             </div>
-            <div className="py-4 w-full">
+            <div className="w-full py-2">
               <div className="relative">
                 <label
                   htmlFor="email"
-                  className="leading-7 text-sm text-gray-600"
+                  className="text-sm leading-7 text-gray-600"
                 >
                   Email<span className="text-red-500">*</span>
                 </label>
@@ -37,7 +37,7 @@ export default function ContactUs() {
                   type="email"
                   id="email"
                   name="email"
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  className="w-full rounded border border-gray-300 bg-gray-100 bg-opacity-50 px-3 py-1 text-base leading-8 text-gray-700 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"
                 />
               </div>
             </div>
@@ -45,7 +45,7 @@ export default function ContactUs() {
               <div className="relative">
                 <label
                   htmlFor="email"
-                  className="leading-7 text-sm text-gray-600"
+                  className="text-sm leading-7 text-gray-600"
                 >
                   Confirm Email<span className="text-red-500">*</span>
                 </label>
@@ -53,47 +53,47 @@ export default function ContactUs() {
                   type="email"
                   id="email"
                   name="email"
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  className="w-full rounded border border-gray-300 bg-gray-100 bg-opacity-50 px-3 py-1 text-base leading-8 text-gray-700 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"
                 />
               </div>
             </div>
-            <div className=" py-4 w-full">
+            <div className="w-full py-2">
               <div className="relative">
-                <label htmlFor="email" className="text-sm text-gray-600 block">
+                <label htmlFor="email" className="block text-sm text-gray-600">
                   Task ID
                 </label>
                 <label className="leading-2 text-xs text-gray-400">
                   This may help us find your task faster.
                 </label>
                 <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                  type="text"
+                  id="task_id"
+                  name="task_id"
+                  className="w-full rounded border border-gray-300 bg-gray-100 bg-opacity-50 px-3 py-1 text-base leading-8 text-gray-700 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"
                 />
               </div>
             </div>
-            <div className=" w-full">
+            <div className="w-full">
               <div className="relative">
                 <label
                   htmlFor="message"
-                  className="leading-7 text-sm text-gray-600"
+                  className="text-sm leading-7 text-gray-600"
                 >
                   Message<span className="text-red-500">*</span>
                 </label>
                 <textarea
                   id="message"
                   name="message"
-                  className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-32 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                  className="h-32 w-full resize-none rounded border border-gray-300 bg-gray-100 bg-opacity-50 px-3 py-1 text-base leading-6 text-gray-700 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"
                 ></textarea>
               </div>
             </div>
-            <span className="leading-4 py-3 text-xs text-gray-500">
+            <span className="py-2 text-xs leading-4 text-gray-500">
               Fields marked with <span className="text-red-500">*</span> are
               required.
             </span>
-            <div className="p-2 w-full">
-              <button className="flex mx-auto text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-[color:var(--theme)] rounded text-lg">
+            <div className="w-full p-2">
+              <button className="mx-auto flex rounded border-0 bg-indigo-500 px-8 py-2 text-lg text-white hover:bg-[color:var(--theme)] focus:outline-none">
                 Submit
               </button>
             </div>
