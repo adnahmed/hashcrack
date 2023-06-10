@@ -1,7 +1,6 @@
 import hashTypes from '@/assets/hash-types.json';
 import { Section, Step, WizardPage } from '@patternfly-labs/react-form-wizard';
 import { useState } from 'react';
-import toast from 'react-hot-toast';
 import SelectSearch from 'react-select-search';
 import HashInput from '../HashInput/HashInput';
 export default function NewTask() {
@@ -22,7 +21,6 @@ export default function NewTask() {
                     <SelectSearch
                         onChange={(selectedValue) => {
                             setHashType(selectedValue.toString());
-                            toast.error('hello');
                         }}
                         search
                         options={options}
