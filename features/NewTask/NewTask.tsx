@@ -27,11 +27,7 @@ export default function NewTask() {
                         placeholder="Choose Hash Type"
                     />
                 </Section>
-                {hashType !== undefined && hashType !== '-1' && (
-                    <Section autohide={false} id="input-hash" label={'Input Hashlist'}>
-                        <HashInput hashType={hashType} />
-                    </Section>
-                )}
+                {hashType !== undefined && hashType !== '-1' && <HashInput hashType={hashType} />}
             </Step>
         </WizardPage>
     );
