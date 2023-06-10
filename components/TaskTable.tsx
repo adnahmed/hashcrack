@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import { useEffect, useState } from "react";
 import { Table, Tbody, Td, Th, Thead, Tr } from "react-super-responsive-table";
+import BackToTopButton from "./ui/BackToTopButton";
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
@@ -26,6 +27,7 @@ export default function TaskTable() {
     return null;
   }
   return (
+    <>
     <Table className="border-spacing-fl-3xs " hoverable={true}>
       <Thead>
         <Tr className="[&>*]:text-fl-2xs-lg [&>*]:bg-[var(--theme)] [&>*]:p-fl-3xs-2xs [&>*]:text-center">
@@ -59,5 +61,7 @@ export default function TaskTable() {
         ))}
       </Tbody>
     </Table>
+        <BackToTopButton />
+        </>
   );
 }

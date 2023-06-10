@@ -11,7 +11,6 @@ import { useSelector } from "react-redux";
 import TetherComponent from 'react-tether';
 import Navbar from "../features/Navigation/Navbar";
 import Title from "./Title";
-import BackToTopButton from "./ui/BackToTopButton";
 import { TabLabels, TabsEnum } from "./ui/Tabs";
 const MainPage = () => {
   const { theme, setTheme } = useTheme();
@@ -97,7 +96,6 @@ const MainPage = () => {
       <>
         {TabsEnum[TabLabels[activeTab]]}
         <Toaster />
-        <BackToTopButton />
       </>
     </>
   );
