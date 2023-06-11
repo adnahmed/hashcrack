@@ -141,6 +141,12 @@ th {
   color: #fff;
 }
 
+[class*=pf-c-] {
+  --pf-c-page__main-section--PaddingTop: 0px;
+  --pf-c-page__main-section--PaddingBottom: 0px;
+  --pf-c-page__main-section--PaddingLeft: 0px;
+  --pf-c-page__main-section--PaddingRight: 0px;
+}
 .pf-c-page {
   z-index: 0;
 }
