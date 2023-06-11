@@ -25,7 +25,7 @@
 
   @media screen and (width >= 938px) {
     :root {
-      --width-input-select: 30vw;
+      --width-input-select: 100%;
     }
     [aria-label="content"] {
       max-width: 990px !important;
@@ -150,4 +150,4 @@ th {
 }
 .pf-c-page {
   z-index: 0;
-}
+  }
