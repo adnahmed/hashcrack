@@ -17,6 +17,7 @@ function AddHashlist() {
                     }}
                     search
                     options={options}
+                    value={hashtype}
                     placeholder="Choose Hash Type"
                 />
             </Section>
