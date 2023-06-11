@@ -65,7 +65,7 @@ body.is-light-mode .select-search-container {
     z-index: 1;
     display: block;
     height: 48px;
-    width: 100%;
+    width: var(--width-input-select);
     padding: 0 40px 0 16px;
     background: var(--select-search-background);
     border: 2px solid var(--select-search-border);

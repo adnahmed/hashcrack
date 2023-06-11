@@ -20,6 +20,13 @@
     --lg: 1024px;
     --xl: 1280px;
     --xl2: 1536px;
+    --width-input-select: 100%;
+  }
+
+  @media screen and (width >= 938px) {
+    :root {
+      --width-input-select: 100%;
+    }
   }
 }
 
@@ -128,6 +135,30 @@ th {
   color: #fff;
 }
 
+[class*=pf-c-] {
+  --pf-c-page__main-section--PaddingTop: 0px;
+  --pf-c-page__main-section--PaddingBottom: 0px;
+  --pf-c-page__main-section--PaddingLeft: 0px;
+  --pf-c-page__main-section--PaddingRight: 0px;
+}
 .pf-c-page {
   z-index: 0;
+  overflow-y: auto;
+  align-self: center;
+  width: 100%;
+}
+
+@media screen and (width >= 1536px) {
+
+  .pf-c-page {
+    width: var(--xl2);
+  }
+}
+
+
+@media screen and (height >= 936px) {
+
+  .pf-c-page {
+    max-height: var(--md);
+  }
 }
