@@ -172,3 +172,7 @@ th {
 .dropzone-p {
   margin: auto;
 }
+
+[class="pf-c-wizard__footer-cancel"] {
+  display: none;
+}
