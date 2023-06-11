@@ -27,13 +27,6 @@
     :root {
       --width-input-select: 100%;
     }
-    [aria-label="content"] {
-      max-width: 990px !important;
-      max-height: 529px !important;;
-      margin: auto !important;;
-      margin-top: 0 !important;
-    }
-    
   }
 }
 
@@ -150,4 +143,22 @@ th {
 }
 .pf-c-page {
   z-index: 0;
+  overflow-y: auto;
+  align-self: center;
+  width: 100%;
+}
+
+@media screen and (width >= 1536px) {
+
+  .pf-c-page {
+    width: var(--xl2);
   }
+}
+
+
+@media screen and (height >= 936px) {
+
+  .pf-c-page {
+    max-height: var(--md);
+  }
+}
