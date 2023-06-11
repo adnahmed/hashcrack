@@ -21,6 +21,15 @@
     --xl: 1280px;
     --xl2: 1536px;
   }
+
+  @media screen and (width >= 938px) {
+    [aria-label="content"] {
+      max-width: 990px !important;
+      max-height: 529px !important;;
+      margin: auto !important;;
+    }
+    
+  }
 }
 
 html {
