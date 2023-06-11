@@ -31,6 +31,7 @@
       max-width: 990px !important;
       max-height: 529px !important;;
       margin: auto !important;;
+      margin-top: 0 !important;
     }
     
   }
