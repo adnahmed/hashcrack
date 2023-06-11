@@ -166,7 +166,7 @@ th {
 [class="dropzone"] {
   max-height: 110px !important;
   min-height: 80px !important;
-  margin-top: calc(0.5rem * 1.0 + 1%);
+  margin-bottom: calc(0.5rem * 1.0 + 1%);
 }
 
 .dropzone-p {

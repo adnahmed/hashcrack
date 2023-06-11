@@ -37,7 +37,7 @@ export default function HashInput({ hashType }: HashInputProps) {
                     ) : (
                         <>
                             <textarea id="hashlist" name="hashlist" className="h-32 w-full resize-none rounded border border-gray-300 bg-gray-100 bg-opacity-50 px-3 py-1 text-base leading-6 text-gray-700 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"></textarea>
-                            <label htmlFor="hashlist" className="mx-auto text-sm leading-7 text-gray-600">
+                            <label htmlFor="hashlist" className="mx-auto text-sm mb-5 leading-7 text-gray-600">
                                 {isPMKID ? 'Paste your WPA PMKID here, multiple APs not allowed' : 'Paste your WPA hash (-m 22000) here, only one hash per task allowed'}
                                 <span className="text-red-500">*</span>
                             </label>
@@ -51,7 +51,7 @@ export default function HashInput({ hashType }: HashInputProps) {
                         Paste your hashlist here
                         <span className="text-red-500">*</span>
                     </label>
-                    <p className="mx-auto text-lg leading-7 text-gray-800">OR</p>
+                    <p className="mx-auto mb-4 text-lg leading-7 text-gray-800">OR</p>
                     <div {...getRootProps({ className: 'dropzone' })}>
                         <input name="hashlistFile" {...getInputProps()} />
                         <p className="dropzone-p">Drag here hashlist file or click to browse</p>
