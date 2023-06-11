@@ -23,7 +23,7 @@ export default function HashInput({ hashType }: HashInputProps) {
                         <>
                             <div {...getRootProps({ className: 'dropzone' })}>
                                 <input name="capFile" {...getInputProps()} />
-                                <p>Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or click to browse</p>
+                                <p className="dropzone-p">Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or click to browse</p>
                             </div>
                             <label htmlFor="essid" className="text-sm leading-7 text-gray-600">
                                 ESSID
@@ -54,7 +54,7 @@ export default function HashInput({ hashType }: HashInputProps) {
                     <p className="mx-auto text-lg leading-7 text-gray-800">OR</p>
                     <div {...getRootProps({ className: 'dropzone' })}>
                         <input name="hashlistFile" {...getInputProps()} />
-                        <p>Drag here hashlist file or click to browse</p>
+                        <p className="dropzone-p">Drag here hashlist file or click to browse</p>
                     </div>
                 </>
             )}

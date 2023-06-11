@@ -135,13 +135,7 @@ th {
   color: #fff;
 }
 
-[class*=pf-c-] {
-  --pf-c-page__main-section--PaddingTop: 0px;
-  --pf-c-page__main-section--PaddingBottom: 0px;
-  --pf-c-page__main-section--PaddingLeft: 0px;
-  --pf-c-page__main-section--PaddingRight: 0px;
-}
-.pf-c-page {
+.pf-c-wizard {
   z-index: 0;
   overflow-y: auto;
   align-self: center;
@@ -150,7 +144,7 @@ th {
 
 @media screen and (width >= 1536px) {
 
-  .pf-c-page {
+  .pf-c-wizard {
     width: var(--xl2);
   }
 }
@@ -158,7 +152,23 @@ th {
 
 @media screen and (height >= 936px) {
 
-  .pf-c-page {
+  .pf-c-wizard {
     max-height: var(--md);
   }
+}
+
+.pf-c-wizard__main-body {
+  height: 100%;
+  display: flex; 
+  flex-direction: column;
+}
+
+[class="dropzone"] {
+  max-height: 110px !important;
+  min-height: 80px !important;
+  margin-top: calc(0.5rem * 1.0 + 1%);
+}
+
+.dropzone-p {
+  margin: auto;
 }
