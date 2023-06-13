@@ -1,11 +1,11 @@
 import AddHashlist from '@/components/AddHashlist';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import { Wizard, WizardStep } from '@patternfly/react-core';
-import { useDispatch, useSelector } from 'react-redux';
 import { initiatedVerifyHashList, selectVerificationState, selectWizardStepReached, stepIdReached } from './newTaskSlice';
 export default function NewTask() {
-    const wizardStepReached = useSelector(selectWizardStepReached);
-    const verificationSatus = useSelector(selectVerificationState);
-    const dispatch = useDispatch();
+    const wizardStepReached = useAppSelector(selectWizardStepReached);
+    const verificationSatus = useAppSelector(selectVerificationState);
+    const dispatch = useAppDispatch();
     const steps: WizardStep[] = (() => {
         let steps = [
             { name: 'Add Hashlist', component: <AddHashlist /> },

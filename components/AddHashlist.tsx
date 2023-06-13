@@ -1,12 +1,15 @@
 import hashTypes from '@/assets/hash-types.json';
 import HashInput from '@/features/HashInput/HashInput';
 import { selectSelectedHashType, selectedHashType } from '@/features/NewTask/newTaskSlice';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import { Section } from '@patternfly-labs/react-form-wizard';
-import { useDispatch, useSelector } from 'react-redux';
+import { Progress } from 'flowbite-react';
 import SelectSearch from 'react-select-search';
+
+const ReadingHashlistProgress: React.FunctionComponent = () => <Progress title="Reading Hashlist" progress={0} />;
 function AddHashlist() {
-    const dispatch = useDispatch();
-    const hashtype = useSelector(selectSelectedHashType);
+    const dispatch = useAppDispatch();
+    const hashtype = useAppSelector(selectSelectedHashType);
     const { options } = hashTypes;
     return (
         <>

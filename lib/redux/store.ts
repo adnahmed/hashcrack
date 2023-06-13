@@ -3,6 +3,7 @@ import navigation from "@/features/Navigation/navigationSlice";
 import newTask from "@/features/NewTask/newTaskSlice";
 import { apiSlice } from "@/features/api/apiSlice";
 import { Action, ThunkAction, configureStore } from "@reduxjs/toolkit";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { rtkQueryErrorLogger } from "./errorLoggerMiddleware";
 
 export function makeStore() {
@@ -25,7 +26,8 @@ export function makeStore() {
 const store = makeStore();
 export type AppStore = ReturnType<typeof makeStore>;
 export type AppState = ReturnType<AppStore["getState"]>;
-export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch = () => useDispatch<typeof store.dispatch>()
+export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   AppState,

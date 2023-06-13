@@ -1,7 +1,7 @@
 import hashTypes from '@/assets/hash-types.json';
 import Captcha from '@/features/Captcha/Captcha';
+import { useAppSelector } from '@/lib/redux/store';
 import { useDropzone } from 'react-dropzone';
-import { useSelector } from 'react-redux';
 import { selectCaptchaValidated } from '../Captcha/captchaSlice';
 interface HashInputProps {
     hashType: string;
@@ -14,7 +14,7 @@ export default function HashInput({ hashType }: HashInputProps) {
     const isWireless = wirelessNetworkGroup?.items.find((p) => p['value'] === hashType);
     const isEAPOL = isWireless && /EAPOL/i.test(isWireless['name']);
     const isPMKID = isWireless && /PMKID/i.test(isWireless['name']);
-    const captchaVerified = useSelector(selectCaptchaValidated);
+    const captchaVerified = useAppSelector(selectCaptchaValidated);
     return (
         <>
             {isWireless ? (
@@ -37,7 +37,7 @@ export default function HashInput({ hashType }: HashInputProps) {
                     ) : (
                         <>
                             <textarea id="hashlist" name="hashlist" className="h-32 w-full resize-none rounded border border-gray-300 bg-gray-100 bg-opacity-50 px-3 py-1 text-base leading-6 text-gray-700 outline-none transition-colors duration-200 ease-in-out focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200"></textarea>
-                            <label htmlFor="hashlist" className="mx-auto text-sm mb-5 leading-7 text-gray-600">
+                            <label htmlFor="hashlist" className="mx-auto mb-5 text-sm leading-7 text-gray-600">
                                 {isPMKID ? 'Paste your WPA PMKID here, multiple APs not allowed' : 'Paste your WPA hash (-m 22000) here, only one hash per task allowed'}
                                 <span className="text-red-500">*</span>
                             </label>
