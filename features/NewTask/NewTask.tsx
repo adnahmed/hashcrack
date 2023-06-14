@@ -1,34 +1,51 @@
-import hashTypes from '@/assets/hash-types.json';
-import { Section, Step, WizardPage } from '@patternfly-labs/react-form-wizard';
-import { useState } from 'react';
-import SelectSearch from 'react-select-search';
-import HashInput from '../HashInput/HashInput';
+import AddHashlist from '@/components/AddHashlist';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
+import { Wizard, WizardStep } from '@patternfly/react-core';
+import { initiatedVerifyHashList, selectVerificationState, selectWizardStepReached, stepIdReached } from './newTaskSlice';
 export default function NewTask() {
-    const { options } = hashTypes;
-    const [hashType, setHashType] = useState<string>('-1');
+    const wizardStepReached = useAppSelector(selectWizardStepReached);
+    const verificationSatus = useAppSelector(selectVerificationState);
+    const dispatch = useAppDispatch();
+    const steps: WizardStep[] = (() => {
+        let steps = [
+            { name: 'Add Hashlist', component: <AddHashlist /> },
+            { name: 'Verify Hashlist', component: <AddHashlist /> },
+        ];
+        let id = 1;
+        steps = steps.map((step) => ({
+            ...step,
+            id: id++,
+            canJumpTo: id > 1 ? wizardStepReached : null,
+        }));
+        return steps;
+    })();
+    const closeWizard = () => {
+        // eslint-disable-next-line no-console
+        console.log('close wizard');
+    };
+    const onNext = ({ id }: WizardStep) => {
+        if (id) {
+            if (typeof id === 'string') {
+                id = parseInt(id);
+            }
+            if (id === 2) {
+                dispatch(initiatedVerifyHashList());
+            }
+            dispatch(stepIdReached(wizardStepReached < id ? id : wizardStepReached));
+        }
+    };
+
     return (
-        <WizardPage
-            yaml={false}
+        <Wizard
+            hideClose={true}
+            cancelButtonText=""
             title=""
+            onNext={onNext}
+            onClose={closeWizard}
             onSubmit={function (data: unknown): Promise<void> {
                 throw new Error('Function not implemented.');
             }}
-            onCancel={function (): void {
-                throw new Error('Function not implemented.');
-            }}>
-            <Step label="Add Hashlist" id="add-hashlist">
-                <Section autohide={false} id="select-hashtype" label={'Select Hash Type'}>
-                    <SelectSearch
-                        onChange={(selectedValue) => {
-                            setHashType(selectedValue.toString());
-                        }}
-                        search
-                        options={options}
-                        placeholder="Choose Hash Type"
-                    />
-                </Section>
-                {hashType !== undefined && hashType !== '-1' && <HashInput hashType={hashType} />}
-            </Step>
-        </WizardPage>
+            steps={steps}
+        />
     );
 }

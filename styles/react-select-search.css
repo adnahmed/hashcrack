@@ -78,6 +78,7 @@ body.is-light-mode .select-search-container {
     text-overflow: ellipsis;
     line-height: 48px;
     letter-spacing: 0.01rem;
+    margin-bottom: calc(1.0rem * 1.0 + 1%);
     -webkit-appearance: none;
     -webkit-font-smoothing: antialiased;
 }
