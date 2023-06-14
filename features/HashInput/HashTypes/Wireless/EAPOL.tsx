@@ -1,15 +1,32 @@
 import hashTypes from '@/assets/hash-types.json';
+import { verifyHashlist } from '@/features/NewTask/newTaskSlice';
 import clsx from 'clsx';
-import { useDropzone } from 'react-dropzone';
+import { useCallback } from 'react';
+import { useDropzone, type DropzoneOptions } from 'react-dropzone';
+import { useAppDispatch } from '../../../../lib/redux/store';
 import { HashInputInstructions, HashInputProps } from '../../HashInput';
-
+export const WPACaptureFileTypes = ['.cap', '.pcap', '.hccap', '.hccapx'];
 const EAPOLWirelessHash: React.FunctionComponent<HashInputProps> = ({ hashType }) => {
     const { options } = hashTypes;
     const wirelessNetworkGroup = options.find((p) => /wireless networks/i.test(p['name']));
     const isWireless = wirelessNetworkGroup?.items.find((p) => p['value'] === hashType);
     const isEAPOL = isWireless && /EAPOL/i.test(isWireless['name']);
-    const { acceptedFiles, getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone();
-
+    const dispatch = useAppDispatch();
+    const onDrop = useCallback<NonNullable<DropzoneOptions['onDrop']>>(async (acceptedFiles) => {
+        try {
+            const resp = await dispatch(verifyHashlist({ inputMethod: 'file', hashlistFile: acceptedFiles[0] })).unwrap();
+            console.log(resp);
+        } catch (err) {
+            console.error(err);
+        }
+    }, []);
+    const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
+        onDrop,
+        maxFiles: 1,
+        accept: {
+            'application/octet-stream': WPACaptureFileTypes,
+        },
+    });
     return isEAPOL ? (
         <>
             <div {...getRootProps({ className: clsx({ dropzone: true, 'bg-red-100': isDragReject, 'border-red-500': isDragReject, 'bg-green-100': isDragAccept, 'border-green-300': isDragAccept }) })}>
