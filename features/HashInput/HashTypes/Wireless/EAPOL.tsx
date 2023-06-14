@@ -1,4 +1,5 @@
 import hashTypes from '@/assets/hash-types.json';
+import clsx from 'clsx';
 import { useDropzone } from 'react-dropzone';
 import { HashInputInstructions, HashInputProps } from '../../HashInput';
 
@@ -7,12 +8,13 @@ const EAPOLWirelessHash: React.FunctionComponent<HashInputProps> = ({ hashType }
     const wirelessNetworkGroup = options.find((p) => /wireless networks/i.test(p['name']));
     const isWireless = wirelessNetworkGroup?.items.find((p) => p['value'] === hashType);
     const isEAPOL = isWireless && /EAPOL/i.test(isWireless['name']);
-    const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+    const { acceptedFiles, getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone();
+
     return isEAPOL ? (
         <>
-            <div {...getRootProps({ className: 'dropzone' })}>
+            <div {...getRootProps({ className: clsx({ dropzone: true, 'bg-red-100': isDragReject, 'border-red-500': isDragReject, 'bg-green-100': isDragAccept, 'border-green-300': isDragAccept }) })}>
                 <input name="capFile" {...getInputProps()} />
-                <p className="dropzone-p">Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or click to browse</p>
+                <p className="dropzone-p">{!isDragActive ? 'Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or click to browse' : 'Drop file here...'}</p>
             </div>
             <label htmlFor="essid" className="text-sm leading-7 text-gray-600">
                 ESSID
