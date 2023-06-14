@@ -12,7 +12,8 @@
       "runtimeExecutable": "edge",
       "type": "msedge",
       "request": "launch",
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
     },
     {
       "name": "Next.js: debug full stack",
@@ -22,7 +23,7 @@
       "serverReadyAction": {
         "pattern": "started server on .+, url: (https?://.+)",
         "uriFormat": "%s",
-        "action": "openExternally"
+        "action": "debugWithEdge"
       }
     },
     {
