@@ -29,7 +29,7 @@ const EAPOLWirelessHash: React.FunctionComponent<HashInputProps> = ({ hashType }
     });
     return isEAPOL ? (
         <>
-            <div {...getRootProps({ className: clsx({ dropzone: true, 'bg-red-100': isDragReject, 'border-red-500': isDragReject, 'bg-green-100': isDragAccept, 'border-green-300': isDragAccept }) })}>
+            <div {...getRootProps({ className: clsx({ dropzone: true, 'border-gray-500': true, 'bg-green-100': isDragReject, 'border-green-300': isDragReject }) })}>
                 <input name="capFile" {...getInputProps()} />
                 <p className="dropzone-p">{!isDragActive ? 'Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or click to browse' : 'Drop file here...'}</p>
             </div>
