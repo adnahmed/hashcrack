@@ -1,14 +1,9 @@
-/** @type {import('next').NextConfig} */
 const path = require("path");
 const withImages = require("next-images");
-const withTM = require('next-transpile-modules')([
-  '@patternfly/react-core',
-  '@patternfly/react-styles',
-  '@patternfly-labs/react-form-wizard'
-])
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: [process.env.ANALYZE === "true"],
 });
+/** @type {import('next').NextConfig} */
 let nextConfig = {
   webpack(config, {
     dev,
@@ -31,8 +26,13 @@ let nextConfig = {
   },
   reactStrictMode: true,
   env: {},
+  transpilePackages: [
+    '@patternfly/react-core',
+    '@patternfly/react-styles',
+    '@patternfly-labs/react-form-wizard',
+    'redux-persist'
+  ]
 };
 nextConfig = withImages(nextConfig);
-nextConfig = withTM(nextConfig);
 module.exports =
   process.env.ANALYZE === "true" ? withBundleAnalyzer(nextConfig) : nextConfig;
