@@ -3,7 +3,6 @@
     "target": "ESNext",
     "typeRoots": [
       "./node_modules/@types",
-      "./node_modules/redux-persist/types"
     ],
     "lib": [
       "dom",
