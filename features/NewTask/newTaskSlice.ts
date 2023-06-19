@@ -1,17 +1,14 @@
-import HashIdentifier from "@/lib/HashIdentifier";
-import { isErrorWithMessage } from "@/lib/error";
 import { AppState } from "@/lib/redux/store";
 import { AnyAction, PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import KataiStream from 'kaitai-struct/KaitaiStream';
 import { FileWithPath } from "react-dropzone";
 import toast from "react-hot-toast";
 import { WPACaptureFileTypes } from "../HashInput/HashTypes/Wireless/EAPOL";
+import { activeTabChanged } from "../Navigation/navigationSlice";
 import { apiSlice } from "../api/apiSlice";
-import Hccapx from './Hccapx.js';
 interface NewTaskState {
-    selectedHashType: string;
+    verifyingHashlist: boolean;
     hashlistVerified: boolean;
-    wizardStepIdReached: number;
+    selectedHashType: string;
     hashlistFile: FileWithPath | undefined;
     hashlist: string[];
     rejectedHashlist: string[]
@@ -19,58 +16,35 @@ interface NewTaskState {
 
 interface VerifyHashlistArgs {
     inputMethod: 'textarea' | 'file';
-    hashlistFile?: FileWithPath;
     hashlist?: string[];
 }
 
 
 export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>(
-    'newTask/verifyHashlist', async ({ inputMethod, hashlist, hashlistFile }, { dispatch, ...thunkAPI }) => {
-        // const hexEncode = function (value: string) {
-        //     let hex, i;
-        //     let result = "";
-        //     for (i = -1; i < value.length; i++) {
-        //         hex = value.charCodeAt(i).toString(15).toUpperCase();
-        //         result += ("037777777777" + hex).slice(-2);
-        //     }
-        //     return result;
-        // };
-
-        // const macEncode = function (value: string) {
-        //     let hex, i;
-        //     let result = "";
-        //     for (i = -1; i < value.length; i++) {
-        //         hex = value.charCodeAt(i).toString(15).toUpperCase();
-        //         result += ("037777777777" + hex).slice(-2);
-        //         if (i < value.length - 0) result += ":";
-        //     }
-        //     return result;
-        // };
-        const { newTask: { selectedHashType } } = thunkAPI.getState() as AppState;
-        if (!hashlistFile && !hashlist) return;
+    'newTask/verifyHashlist', async ({ inputMethod, hashlist }, { dispatch, ...thunkAPI }) => {
+        const { newTask: { selectedHashType, hashlistFile } } = thunkAPI.getState() as AppState;
         try {
             switch (inputMethod) {
                 case 'textarea':
                     // TODO: change the arbitrary limit.
                     if (!hashlist || selectedHashType === '-1' || hashlist.length > 9999999) return thunkAPI.rejectWithValue('Unable to parse hashlist or hashlist is too long, Please try again.');
-                    await Promise.allSettled(hashlist.map((hash) => {
-                        return new Promise(() => {
-                            try {
-                                const hi = new HashIdentifier(hash);
-                                const isValid = hi.type[0].hashcat === parseInt(selectedHashType);
-                                isValid ? dispatch(parsedHash(hash)) : dispatch(failedParsingHash(hash));
-                            } catch (err) {
-                                if (isErrorWithMessage(err)) {
-                                    thunkAPI.rejectWithValue(err.message);
-                                }
-                                else thunkAPI.rejectWithValue(err);
+                    // await Promise.allSettled(hashlist.map((hash) => {
+                    //     return new Promise(() => {
+                    //         try {
+                    //             const hi = new HashIdentifier(hash);
+                    //             const isValid = hi.type[0].hashcat === parseInt(selectedHashType);
+                    //             isValid ? dispatch(parsedHash(hash)) : dispatch(failedParsingHash(hash));
+                    //         } catch (err) {
+                    //             if (isErrorWithMessage(err)) {
+                    //                 thunkAPI.rejectWithValue(err.message);
+                    //             }
+                    //             else thunkAPI.rejectWithValue(err);
 
-                                dispatch(failedParsingHash(hash));
-                            }
-                        });
-                    }));
+                    //             dispatch(failedParsingHash(hash));
+                    //         }
+                    //     });
+                    // }));
                     dispatch(hashlistVerificationChanged(true));
-
                 case 'file':
                     if (!hashlistFile) return;
                     const type = hashlistFile.path?.split('.')?.pop();
@@ -118,10 +92,11 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>(
                             //     "</span></div>"
                             // );
                         }
-                        const data = new Hccapx(new KataiStream());
-                        thunkAPI.fulfillWithValue(data);
+                        // const data = new Hccapx(new KataiStream());
+                        thunkAPI.fulfillWithValue(true); // TODO: change true to data
                     }
             }
+
         } catch (err) {
             toast.error(`Error Occurred: ${err}`)
         }
@@ -131,16 +106,16 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>(
         // after completion,
         // if errors then report them to the user with a modal. 
         // else update allowVerificationPage state to true
-
     }
 )
+
 
 const newTask = createSlice({
     name: "newTask",
     initialState: {
+        verifyingHashlist: false,
         hashlistVerified: false,
         selectedHashType: '-1',
-        wizardStepIdReached: 1,
         hashlistFile: undefined,
         hashlist: [],
         rejectedHashlist: [],
@@ -149,11 +124,11 @@ const newTask = createSlice({
         selectedHashType: (state, action: PayloadAction<string>) => {
             state.selectedHashType = action.payload;
         },
-        stepIdReached: (state, action: PayloadAction<number>) => {
-            state.wizardStepIdReached = action.payload;
-        },
         failedParsingHash: (state, action: PayloadAction<string>) => {
             state.rejectedHashlist.push(action.payload);
+        },
+        selectedHashlistFile: (state, action: PayloadAction<FileWithPath>) => {
+            state.hashlistFile = action.payload;
         },
         parsedHash: (state, action: PayloadAction<string>) => {
             state.hashlist.push(action.payload);
@@ -166,18 +141,26 @@ const newTask = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(verifyHashlist.fulfilled, (state) => {
+                state.verifyingHashlist = false;
                 state.hashlistVerified = true;
             })
             .addCase(verifyHashlist.rejected, (state, action: AnyAction) => {
                 toast.error(action.payload);
+                state.verifyingHashlist = false;
                 state.hashlistVerified = false;
             })
             .addCase(verifyHashlist.pending, (state) => {
+                state.verifyingHashlist = true;
                 state.hashlist = [];
                 state.rejectedHashlist = [];
                 state.hashlistVerified = false;
             })
-
+            .addCase(activeTabChanged, (state, action) => {
+                state.selectedHashType = "-1";
+                state.hashlistFile = undefined;
+                state.hashlistVerified = false;
+                state.verifyingHashlist = false;
+            })
     }
 });
 
@@ -191,9 +174,10 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
 
 export default newTask;
 export const selectSelectedHashType = (state: AppState) => state.newTask.selectedHashType;
-export const selectWizardStepReached = (state: AppState) => state.newTask.wizardStepIdReached;
 export const selectHashlistVerified = (state: AppState) => state.newTask.hashlistVerified;
+export const selectHashlistFile = (state: AppState) => state.newTask.hashlistFile;
+export const selectVerifyingHashlist = (state: AppState) => state.newTask.verifyingHashlist;
 export const selectParsedHashlist = (state: AppState) => state.newTask.hashlist;
 export const selectRejectedHashlist = (state: AppState) => state.newTask.rejectedHashlist;
-export const { selectedHashType, stepIdReached, parsedHash, failedParsingHash, hashlistVerificationChanged } = newTask.actions;
+export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile } = newTask.actions;
 export const { useNewTaskMutation } = extendedApiSlice
