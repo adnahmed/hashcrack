@@ -44,7 +44,7 @@ const makeConfiguredStore = (reducer: CombinedState<typeof rootReducer>) => conf
 });
 
 
-const makeStore = () => {
+export const makeStore = () => {
   return makeConfiguredStore(rootReducer);
 }
 
