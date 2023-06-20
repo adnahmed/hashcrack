@@ -1,20 +1,17 @@
-import { persistor } from '@/lib/redux/store';
-import dynamic from 'next/dynamic';
 import AllHashTypes from './HashTypes/All';
 import EAPOLWirelessHash from './HashTypes/Wireless/EAPOL';
 import WPAPMKIDHash from './HashTypes/Wireless/WPAPMKID';
-const PersistGate = dynamic(import('redux-persist/integration/react').then((module) => module.PersistGate));
 export interface HashInputProps {
     hashType: string;
 }
 
 export default function HashInput({ hashType }: HashInputProps) {
     return (
-        <PersistGate persistor={persistor}>
+        <>
             <EAPOLWirelessHash hashType={hashType} />
             <WPAPMKIDHash hashType={hashType} />
             <AllHashTypes hashType={hashType} />
-        </PersistGate>
+        </>
     );
 }
 

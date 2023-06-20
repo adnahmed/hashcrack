@@ -1,4 +1,4 @@
-import store from '@/lib/redux/store';
+import wrapper from '@/lib/redux/store';
 import '@/styles/globals.scss';
 import localFont from '@next/font/local';
 import '@total-typescript/ts-reset';
@@ -28,15 +28,16 @@ export function reportWebVitals(metric: NextWebVitalsMetric) {
     console.log(metric);
 }
 
-export default function App({ Component, pageProps }: AppPropsWithLayout) {
+export default function App({ Component, ...rest }: AppPropsWithLayout) {
     // Use the layout defined at the page level, if available
     const getLayout = Component.getLayout || ((page) => page);
+    const { store, props } = wrapper.useWrappedStore(rest);
     return (
         <Provider store={store}>
             <ErrorBoundary>
                 {getLayout(
                     <ThemeProvider attribute="class">
-                        <Component {...pageProps} />
+                        <Component {...props.pageProps} />
                     </ThemeProvider>
                 )}
             </ErrorBoundary>
