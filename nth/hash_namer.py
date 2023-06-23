@@ -12,7 +12,8 @@ class Name_That_Hash:
         for prototype in self.prototypes:
             if prototype.regex.match(chash):
                 for mode in prototype.modes:
-                    output.append(mode)
+                    if not mode.hashcat is None:
+                        output.append(mode.hashcat)
         return output
 
     def identify_all(self, chash: str):

@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2023-06-23 15:58:04
+// Transcrypt'ed from Python, 2023-06-23 19:21:08
 var hash_info = {};
 var hash_namer = {};
 var hashes = {};
@@ -27,13 +27,14 @@ export var HashType =  __class__ ('HashType', [object], {
 		var to_ret = [];
 		var populars = [];
 		for (var i of self.prototypes) {
-			if (__in__ (i.py_name, self.popular)) {
-				populars.append (i.__dict__);
+			if (__in__ (i, popular)) {
+				populars.append (i);
 			}
 			else {
-				to_ret.append (i.__dict__);
+				to_ret.append (i);
 			}
 		}
+		print ('found hashes: ', self.prototypes);
 		return populars + to_ret;
 	});}
 });

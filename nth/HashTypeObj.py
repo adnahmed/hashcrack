@@ -17,7 +17,6 @@ class HashType:
         self.chash = chash
         self.prototypes = nth.identify(chash)
         self.prototypes = self.sort_by_popular()
-
         self.hash_obj = {self.chash: self.prototypes}
 
     def get_prototypes(self):
@@ -35,8 +34,9 @@ class HashType:
         to_ret = []
         populars = []
         for i in self.prototypes:
-            if i.name in self.popular:
-                populars.append(i.__dict__)
+            if i in popular:
+                populars.append(i)
             else:
-                to_ret.append(i.__dict__)
+                to_ret.append(i)
+        print("found hashes: ", self.prototypes)
         return populars + to_ret

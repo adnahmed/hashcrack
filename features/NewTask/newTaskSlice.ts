@@ -1,4 +1,6 @@
+import { isErrorWithMessage } from "@/lib/error";
 import { AppState } from "@/lib/redux/store";
+import { HashType } from '@/nth/HashTypeObj';
 import { AnyAction, PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { FileWithPath } from "react-dropzone";
 import toast from "react-hot-toast";
@@ -26,44 +28,62 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>(
         try {
             switch (inputMethod) {
                 case 'textarea':
-                    // TODO: change the arbitrary limit.
-                    if (!hashlist || selectedHashType === '-1' || hashlist.length > 9999999) return thunkAPI.rejectWithValue('Unable to parse hashlist or hashlist is too long, Please try again.');
-                    // await Promise.allSettled(hashlist.map((hash) => {
-                    //     return new Promise(() => {
-                    //         try {
-                    //             const hi = new HashIdentifier(hash);
-                    //             const isValid = hi.type[0].hashcat === parseInt(selectedHashType);
-                    //             isValid ? dispatch(parsedHash(hash)) : dispatch(failedParsingHash(hash));
-                    //         } catch (err) {
-                    //             if (isErrorWithMessage(err)) {
-                    //                 thunkAPI.rejectWithValue(err.message);
-                    //             }
-                    //             else thunkAPI.rejectWithValue(err);
+                    if (!hashlist || selectedHashType === '-1') return thunkAPI.rejectWithValue('Unable to parse hashlist or hashlist is too long, Please try again.');
+                    await Promise.allSettled(hashlist.map((hash) => {
+                        return new Promise(() => {
+                            try {
+                                const hi = HashType(hash).prototypes;
+                                const isValid = hi.split(',').includes(selectedHashType);
+                                isValid ? dispatch(parsedHash(hash)) : dispatch(failedParsingHash(hash));
+                            } catch (err) {
+                                if (isErrorWithMessage(err)) {
+                                    thunkAPI.rejectWithValue(err.message);
+                                }
+                                else thunkAPI.rejectWithValue(err);
 
-                    //             dispatch(failedParsingHash(hash));
-                    //         }
-                    //     });
-                    // }));
+                                dispatch(failedParsingHash(hash));
+                            }
+                        });
+                    }));
                     dispatch(hashlistVerificationChanged(true));
                 case 'file':
                     if (!hashlistFile) return;
                     const type = hashlistFile.path?.split('.')?.pop();
-                    if (!type || !WPACaptureFileTypes.includes(`.${type}`))
-                        return thunkAPI.rejectWithValue(`Invalid File, expected ${WPACaptureFileTypes.join(', ')}, got ${type}`);
-                    const reader = new FileReader();
-                    reader.onload = async function () {
-                        const arrayBuffer = await hashlistFile?.arrayBuffer(),
-                            array = new Uint8Array(arrayBuffer),
-                            s = String.fromCharCode.apply(null, Array.from<number>(array));
-                        if (s.substring(0, 5) == "HCPX" && hashlistFile.size % 393 == 0) {
-                            const out = "";
-                            for (let i = 0; i < hashlistFile.size / 393; i++) {
-                                const pos = i * 393;
-                                const essid = s.substring(pos + 10, 33).replace("\x00", "");
-                                // var bssid = macEncode(s.substring(pos + 59, 7));
-                                // var stmac = s.substring(pos + 97, 7)macEncode();
-                                // var mic = s.substring(pos + 43, 17)hexEncode();
-                                // out +=
+                    // if (!type || !WPACaptureFileTypes.includes(`.${type}`))
+                    //     return thunkAPI.rejectWithValue(`Invalid File, expected ${WPACaptureFileTypes.join(', ')}, got ${type}`);
+                    if (WPACaptureFileTypes.includes(`.${type}`)) {
+
+                        const reader = new FileReader();
+                        reader.onload = async function () {
+                            const arrayBuffer = await hashlistFile?.arrayBuffer(),
+                                array = new Uint8Array(arrayBuffer),
+                                s = String.fromCharCode.apply(null, Array.from<number>(array));
+                            if (s.substring(0, 5) == "HCPX" && hashlistFile.size % 393 == 0) {
+                                const out = "";
+                                for (let i = 0; i < hashlistFile.size / 393; i++) {
+                                    const pos = i * 393;
+                                    const essid = s.substring(pos + 10, 33).replace("\x00", "");
+                                    // var bssid = macEncode(s.substring(pos + 59, 7));
+                                    // var stmac = s.substring(pos + 97, 7)macEncode();
+                                    // var mic = s.substring(pos + 43, 17)hexEncode();
+                                    // out +=
+                                    //     '<div style="margin-top:6px;"><span class="results-highlight">' +
+                                    //     bssid +
+                                    //     '</span> &lt;-&gt; <span class="results-highlight">' +
+                                    //     stmac +
+                                    //     '</span>  <span class="results-highlight">' +
+                                    //     essid +
+                                    //     '</span><br>MIC: <span class="results-highlight">' +
+                                    //     mic +
+                                    //     "</span></div>";
+                                }
+                                // $("#wpa-verify-mic").html(out);
+                            } else if (hashlistFile.size == 392) {
+                                // var essid = s.substr(0, 32).replace("\x00", "");
+                                // var bssid = s.substr(36, 6).macEncode();
+                                // var stmac = s.substr(42, 6).macEncode();
+                                // var mic = s.substr(s.length - 16).hexEncode();
+                                // $("#wpa-verify-mic").html(
                                 //     '<div style="margin-top:6px;"><span class="results-highlight">' +
                                 //     bssid +
                                 //     '</span> &lt;-&gt; <span class="results-highlight">' +
@@ -72,28 +92,12 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>(
                                 //     essid +
                                 //     '</span><br>MIC: <span class="results-highlight">' +
                                 //     mic +
-                                //     "</span></div>";
+                                //     "</span></div>"
+                                // );
                             }
-                            // $("#wpa-verify-mic").html(out);
-                        } else if (hashlistFile.size == 392) {
-                            // var essid = s.substr(0, 32).replace("\x00", "");
-                            // var bssid = s.substr(36, 6).macEncode();
-                            // var stmac = s.substr(42, 6).macEncode();
-                            // var mic = s.substr(s.length - 16).hexEncode();
-                            // $("#wpa-verify-mic").html(
-                            //     '<div style="margin-top:6px;"><span class="results-highlight">' +
-                            //     bssid +
-                            //     '</span> &lt;-&gt; <span class="results-highlight">' +
-                            //     stmac +
-                            //     '</span>  <span class="results-highlight">' +
-                            //     essid +
-                            //     '</span><br>MIC: <span class="results-highlight">' +
-                            //     mic +
-                            //     "</span></div>"
-                            // );
+                            // const data = new Hccapx(new KataiStream());
+                            thunkAPI.fulfillWithValue(true); // TODO: change true to data
                         }
-                        // const data = new Hccapx(new KataiStream());
-                        thunkAPI.fulfillWithValue(true); // TODO: change true to data
                     }
             }
 
