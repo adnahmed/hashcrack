@@ -49,10 +49,9 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>(
                 case 'file':
                     if (!hashlistFile) return;
                     const type = hashlistFile.path?.split('.')?.pop();
-                    // if (!type || !WPACaptureFileTypes.includes(`.${type}`))
-                    //     return thunkAPI.rejectWithValue(`Invalid File, expected ${WPACaptureFileTypes.join(', ')}, got ${type}`);
+                    if (selectedHashType === '2500' || !WPACaptureFileTypes.includes(`.${type}`))
+                        return thunkAPI.rejectWithValue(`Invalid File, expected ${WPACaptureFileTypes.join(', ')}, got ${type}`);
                     if (WPACaptureFileTypes.includes(`.${type}`)) {
-
                         const reader = new FileReader();
                         reader.onload = async function () {
                             const arrayBuffer = await hashlistFile?.arrayBuffer(),
@@ -98,6 +97,10 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>(
                             // const data = new Hccapx(new KataiStream());
                             thunkAPI.fulfillWithValue(true); // TODO: change true to data
                         }
+                    }
+                    else {
+                        // We found another file type
+
                     }
             }
 
