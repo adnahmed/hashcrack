@@ -17,6 +17,9 @@ const wizard = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(activeTabChanged, (state, action) => {
+            if (action.payload === 1) {
+                return;
+            }
             state.wizardStepIdReached = 1;
         })
     }
