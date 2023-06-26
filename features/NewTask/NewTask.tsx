@@ -2,10 +2,11 @@ import HashlistContext from '@/Context/HashlistContext';
 import AddHashlist from '@/components/AddHashlist';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import { Button, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
-import { useContext, useEffect, useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import VerifyHashlist from '../VerifyHashlist/VerifyHashlist';
 import { selectWizardStepReached, stepIdReached } from '../Wizard/wizardSlice';
-import { selectHashlistFile, selectHashlistVerified, selectSelectedHashType, selectVerifyingHashlist, verifyHashlist } from './newTaskSlice';
+import { selectHashlistFile, selectHashlistVerified, selectSelectedHashType, selectVerifyingHashlist } from './newTaskSlice';
+import { verifyHashlist } from './verifyHashlistThunk';
 
 export default function NewTask() {
     const wizardStepReached = useAppSelector(selectWizardStepReached);
@@ -35,9 +36,7 @@ export default function NewTask() {
         ],
         [hashlistFile, hashlistVerified, selectedHashType, usingTextArea, verifyingHashlist, wizardStepReached]
     );
-    useEffect(() => {
-        console.log(steps);
-    }, [steps]);
+
     const closeWizard = () => {
         // eslint-disable-next-line no-console
         console.log('try me');
