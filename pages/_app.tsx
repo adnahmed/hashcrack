@@ -1,10 +1,10 @@
 import wrapper from '@/lib/redux/store';
 import '@/styles/globals.scss';
-import localFont from '@next/font/local';
 import '@total-typescript/ts-reset';
 import { NextPage } from 'next';
 import { ThemeProvider } from 'next-themes';
 import type { AppProps, NextWebVitalsMetric } from 'next/app';
+import localFont from 'next/font/local';
 import { ReactElement, ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import ErrorBoundary from '../components/ErrorBoundary';
