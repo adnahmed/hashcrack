@@ -1,3 +1,3 @@
-[submodule "crackq"]
-	path = crackq
-	url = https://github.com/adnahmed/crackq.git
+[submodule "fitcrack"]
+	path = fitcrack
+	url = https://github.com/adnahmed/fitcrack
