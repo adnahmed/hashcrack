@@ -2,7 +2,6 @@ import style from "@/styles/Loading.module.css";
 import type * as CSS from "csstype";
 const mainStyle: CSS.Properties = {
   display: "flex",
-  minHeight: "100vh",
   alignItems: "center",
   justifyContent: "center",
 };
