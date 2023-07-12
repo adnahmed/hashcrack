@@ -20,10 +20,10 @@ function palette(min: number, max: number) {
 export function trimNewLines(str: string) {
     const regex = /[^\r\n]/;
     const result = str.match(regex);
-    if (!result || !result.index) {
+    if (!result) {
         return '';
     }
-    const firstIndex = result.index;
+    const firstIndex = result.index as number;
     let lastIndex = str.length - 1;
     while (str[lastIndex] === '\r' || str[lastIndex] === '\n') {
         lastIndex--;
@@ -33,4 +33,8 @@ export function trimNewLines(str: string) {
 
 export function condenseWhitespace(string: string) {
     return string.trim().replace(/\s{2,}/gu, ' ');
+}
+
+export function getHashlist(text: string) {
+    return condenseWhitespace(trimNewLines(text)).split(' ');
 }

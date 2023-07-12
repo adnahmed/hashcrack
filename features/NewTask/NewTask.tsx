@@ -1,6 +1,7 @@
 import HashlistContext from '@/Context/HashlistContext';
 import AddHashlist from '@/components/AddHashlist';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
+import { getHashlist } from '@/lib/utils';
 import { Button, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
 import { useContext, useMemo } from 'react';
 import VerifyHashlist from '../VerifyHashlist/VerifyHashlist';
@@ -50,7 +51,8 @@ export default function NewTask() {
             const nextStep = (id: number) => dispatch(stepIdReached(wizardStepReached < id ? id : wizardStepReached));
             if (id === 2) {
                 if (usingTextArea) {
-                    dispatch(verifyHashlist({ inputMethod: 'textarea', hashlist: hashlistConsumer.hashlist.split('\n') }));
+                    const hashlist = getHashlist(hashlistConsumer.hashlist);
+                    dispatch(verifyHashlist({ inputMethod: 'textarea', hashlist }));
                 }
                 if (hashlistFile) {
                     try {
