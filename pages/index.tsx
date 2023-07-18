@@ -22,7 +22,11 @@ const Home: NextPageWithLayout = () => {
                 {!captchaValidated ? (
                     <IntialCheck />
                 ) : (
-                    <Suspense fallback={<Loading />}>
+                    <Suspense fallback={
+                        <div className=''>
+                            <Loading />
+                        </div>
+                    }>
                         <MainPage />
                     </Suspense>
                 )}
