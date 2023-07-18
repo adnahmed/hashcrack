@@ -52,6 +52,7 @@ html {
     }
 }
 
+/**/
 :not(#title)::selection {
     background: var(--theme);
     color: white;
@@ -148,14 +149,14 @@ th {
 
 .pf-c-wizard {
     z-index: 0;
-    overflow-y: auto;
+    /* overflow-y: auto; */
     align-self: center;
-    width: 100%;
+    /* width: 100%; */
 }
 
 @media screen and (width >= 1536px) {
     .pf-c-wizard {
-        width: var(--xl2);
+        /* width: var(--xl2); */
     }
 }
 
@@ -166,7 +167,7 @@ th {
 }
 
 .pf-c-wizard__main-body {
-    height: 100%;
+    /* height: 100%; */
     display: flex;
     flex-direction: column;
 }
