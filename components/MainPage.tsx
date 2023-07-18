@@ -8,6 +8,7 @@ import style from '@/styles/MainPage.module.css';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import OutsideClickHandler from 'react-outside-click-handler';
 import TetherComponent from 'react-tether';
 import Navbar from '../features/Navigation/Navbar';
 import Title from './Title';
@@ -53,35 +54,42 @@ const MainPage = () => {
                     )}
                 </div>
                 {!isDesktop && (
-                    <>
-                        <TetherComponent
-                            attachment="bottom left"
-                            targetAttachment="middle center"
-                            targetOffset={`50% ${isSmartPhone ? '30%' : '20%'} 0 0`}
-                            constraints={[
-                                {
-                                    to: 'scrollParent',
-                                    attachment: 'together',
-                                },
-                            ]}
-                            /* renderTarget: This is what the item will be tethered to, make sure to attach the ref */
-                            renderTarget={(ref) => (
-                                <button
-                                    ref={ref}
-                                    onClick={() => {
+                    <TetherComponent
+                        attachment="bottom left"
+                        targetAttachment="middle center"
+                        targetOffset={`50% ${isSmartPhone ? '30%' : '20%'} 0 0`}
+                        constraints={[
+                            {
+                                to: 'scrollParent',
+                                attachment: 'together',
+                            },
+                        ]}
+                        /* renderTarget: This is what the item will be tethered to, make sure to attach the ref */
+                        renderTarget={(ref) => (
+                            <button
+                                ref={ref}
+                                onClick={() => {
+                                    setOpenNavbar(!openNavbar);
+                                }}
+                                className={`hamburger hamburger--collapse ${openNavbar && 'is-active'}`}
+                                type="button">
+                                <span className="hamburger-box">
+                                    <span className="hamburger-inner"></span>
+                                </span>
+                            </button>
+                        )}
+                        /* renderElement: If present, this item will be tethered to the the component returned by renderTarget */
+                        renderElement={(ref) =>
+                            openNavbar && (
+                                <OutsideClickHandler
+                                    onOutsideClick={() => {
                                         setOpenNavbar(!openNavbar);
-                                    }}
-                                    className={`hamburger hamburger--collapse ${openNavbar && 'is-active'}`}
-                                    type="button">
-                                    <span className="hamburger-box">
-                                        <span className="hamburger-inner"></span>
-                                    </span>
-                                </button>
-                            )}
-                            /* renderElement: If present, this item will be tethered to the the component returned by renderTarget */
-                            renderElement={(ref) => openNavbar && <Navbar ref={ref} TabLabels={TabLabels} activeTab={activeTab} />}
-                        />
-                    </>
+                                    }}>
+                                    <Navbar ref={ref} TabLabels={TabLabels} activeTab={activeTab} />
+                                </OutsideClickHandler>
+                            )
+                        }
+                    />
                 )}
             </div>
             {isDesktop && <Navbar TabLabels={TabLabels} activeTab={activeTab} />}
