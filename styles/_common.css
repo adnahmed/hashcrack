@@ -112,6 +112,10 @@ a {
     display: none;
 }
 
+[style='color-scheme: dark;'] [role='tablist'] button:hover:not([aria-selected='true']) {
+    color: var(--theme);
+}
+
 [role='tablist'] button:hover:not([aria-selected='true']) {
     background-color: var(--theme-bg);
     font-weight: 800;
@@ -151,7 +155,7 @@ th {
     z-index: 0;
     /* overflow-y: auto; */
     align-self: center;
-    /* width: 100%; */
+    width: 100%;
 }
 
 @media screen and (width >= 1536px) {
