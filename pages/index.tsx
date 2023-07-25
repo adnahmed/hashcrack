@@ -1,5 +1,5 @@
 import IntialCheck from '@/components/ui/InitialCheck';
-import Loading from '@/components/ui/Loading';
+import { FullLoading } from '@/components/ui/Loading';
 import { selectCaptchaValidated } from '@/features/Captcha/captchaSlice';
 import { selectActiveWizardTab } from '@/features/Navigation/navigationSlice';
 import { useAppSelector } from '@/lib/redux/store';
@@ -22,11 +22,7 @@ const Home: NextPageWithLayout = () => {
                 {!captchaValidated ? (
                     <IntialCheck />
                 ) : (
-                    <Suspense fallback={
-                        <div className=''>
-                            <Loading />
-                        </div>
-                    }>
+                    <Suspense fallback={<FullLoading />}>
                         <MainPage />
                     </Suspense>
                 )}
