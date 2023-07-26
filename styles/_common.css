@@ -147,10 +147,6 @@ a {
     }
 }
 
-th {
-    color: #fff;
-}
-
 .pf-c-wizard {
     z-index: 0;
     /* overflow-y: auto; */
