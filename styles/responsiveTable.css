@@ -32,7 +32,6 @@
   }
 
   .responsiveTable tbody tr {
-    border: 1px solid var(--theme);
     padding: 0.25em;
   }
 
