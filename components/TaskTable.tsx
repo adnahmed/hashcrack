@@ -1,7 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
 import { Table, Tbody, Td, Th, Thead, Tr } from 'react-super-responsive-table';
-import BackToTopButton from './ui/BackToTopButton';
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
@@ -118,7 +117,6 @@ export default function TaskTable() {
                     </ul>
                 </nav>
             </div>
-            <BackToTopButton />
         </div>
     );
 }
