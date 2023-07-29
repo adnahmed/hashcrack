@@ -156,7 +156,7 @@ a {
 
 @media screen and (width >= 1536px) {
     .pf-c-wizard {
-        /* width: var(--xl2); */
+        width: var(--xl2);
     }
 }
 
@@ -172,14 +172,14 @@ a {
     flex-direction: column;
 }
 
-[class='dropzone'] {
+/* [class='dropzone'] {
     max-height: 110px !important;
     min-height: 80px !important;
     margin-bottom: calc(0.5rem * 1 + 1%);
 }
-
-.dropzone-p {
-    margin: auto;
+*/
+.dropzone {
+    padding: 3rem;
 }
 
 [class='pf-c-wizard__footer-cancel'] {

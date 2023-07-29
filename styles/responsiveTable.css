@@ -1,12 +1,22 @@
 /* inspired by: https://css-tricks.com/responsive-data-tables/ */
 .responsiveTable {
-  width: 100%;
   max-width: calc(var(--xl) * 1.5);
-  margin: 0 auto;
 }
+
+/* .task-row {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 0.5fr .8fr minmax(max-content, .5fr) max-content max-content .5fr 1.5fr minmax(max-content, .6fr);
+} */
 
 .responsiveTable td .tdBefore {
   display: none;
+}
+.responsiveTable td {
+  max-width: max-content
+}
+.responsiveTable th {
+  max-width: max-content
 }
 
 @media screen and (width <=938px) {
