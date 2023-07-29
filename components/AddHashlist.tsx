@@ -6,6 +6,7 @@ import { Section } from '@patternfly-labs/react-form-wizard';
 import { Progress } from 'flowbite-react';
 import SelectSearch from 'react-select-search';
 
+// TODO: Complete Reading Hashlist Progress.
 const ReadingHashlistProgress: React.FunctionComponent = () => <Progress title="Reading Hashlist" progress={0} />;
 function AddHashlist() {
     const dispatch = useAppDispatch();
