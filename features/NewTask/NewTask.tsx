@@ -4,9 +4,10 @@ import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
 import { Button, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
 import { useContext, useMemo } from 'react';
+import ConfigureTask from '../ConfigureTask/ConfigureTask';
 import VerifyHashlist from '../VerifyHashlist/VerifyHashlist';
 import { selectWizardStepReached, stepIdReached } from '../Wizard/wizardSlice';
-import { selectHashlistFile, selectHashlistVerified, selectSelectedHashType, selectVerifyingHashlist } from './newTaskSlice';
+import { selectHashlistFile, selectHashlistVerified, selectParsedHashlist, selectSelectedHashType, selectVerifyingHashlist } from './newTaskSlice';
 import { verifyHashlist } from './verifyHashlistThunk';
 
 export default function NewTask() {
@@ -15,6 +16,7 @@ export default function NewTask() {
     const hashlistVerified = useAppSelector(selectHashlistVerified);
     const verifyingHashlist = useAppSelector(selectVerifyingHashlist);
     const hashlistFile = useAppSelector(selectHashlistFile);
+    const parsedHashes = useAppSelector(selectParsedHashlist);
     const hashlistConsumer = useContext(HashlistContext);
     const usingTextArea = hashlistConsumer && hashlistConsumer.hashlist.length !== 0;
     const VerifyStepDisabled = useMemo(() => (hashlistFile === undefined && !usingTextArea) || selectedHashType === '-1', [hashlistFile, usingTextArea, selectedHashType]);
@@ -32,6 +34,13 @@ export default function NewTask() {
                 name: 'Verify Hashlist',
                 component: <VerifyHashlist />,
                 isDisabled: VerifyStepDisabled,
+                canJumpTo: wizardStepReached === 2,
+            },
+            {
+                id: '3',
+                name: 'Configure Task',
+                component: <ConfigureTask />,
+                isDisabled: parsedHashes.length === 0,
                 canJumpTo: wizardStepReached === 2,
             },
         ],
