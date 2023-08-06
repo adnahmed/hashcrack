@@ -2,6 +2,7 @@ import Loading from '@/components/ui/Loading';
 import { useAppSelector } from '@/lib/redux/store';
 import styles from '@/styles/VerifyHashlist.module.css';
 import { Accordion } from 'flowbite-react';
+import NanoClamp from 'nanoclamp';
 import { FC, SVGProps } from 'react';
 import { selectHashlistVerified, selectParsedHashlist, selectRejectedHashlist, selectVerifyingHashlist } from '../NewTask/newTaskSlice';
 const QuestionMark: FC<SVGProps<SVGSVGElement>> = (props) => {
@@ -56,9 +57,11 @@ function VerifyHashlist() {
                     </Accordion.Title>
                     <Accordion.Content>
                         {parsedHashes.map((h) => (
-                            <li key={h} className="mb-2 flex">
-                                <Tick />
-                                <span>{h}</span>
+                            <li key={h} className={`mb-2 flex`}>
+                                <span className={`${styles.good}`}>
+                                    <Tick />
+                                </span>
+                                <NanoClamp is="span" lines={1} text={h} />
                             </li>
                         ))}
                     </Accordion.Content>
@@ -77,9 +80,11 @@ function VerifyHashlist() {
                     </Accordion.Title>
                     <Accordion.Content className={styles.acontent}>
                         {rejectedHashes.map((h) => (
-                            <li key={h} className="mb-2 flex">
-                                <QuestionMark />
-                                <span>{h}</span>
+                            <li key={h} className={`mb-2 flex`}>
+                                <span className={styles.bad}>
+                                    <QuestionMark />
+                                </span>
+                                <NanoClamp is="span" lines={1} text={h} />
                             </li>
                         ))}
                     </Accordion.Content>
