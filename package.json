@@ -25,6 +25,7 @@
     "@patternfly/react-core": "^4.276.8",
     "@patternfly/react-styles": "^4.92.6",
     "@patternfly/react-table": "^4.113.0",
+    "@previewjs/config-helper-nextjs": "^1.0.20",
     "@react-hook/resize-observer": "^1.2.6",
     "@reduxjs/toolkit": "^1.9.5",
     "@resvg/resvg-js": "^2.4.1",
