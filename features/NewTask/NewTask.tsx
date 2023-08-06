@@ -5,11 +5,11 @@ import { getHashlist } from '@/lib/utils';
 import { Button, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
 import React, { useContext, useMemo } from 'react';
 import { animateScroll as scroll } from 'react-scroll';
-import { activeTabChanged } from '../../features/Navigation/navigationSlice';
+import { activeTabChanged, selectActiveTab } from '../../features/Navigation/navigationSlice';
 import ConfigureTask from '../ConfigureTask/ConfigureTask';
 import VerifyHashlist from '../VerifyHashlist/VerifyHashlist';
 import { selectWizardStepReached, stepIdReached } from '../Wizard/wizardSlice';
-import { selectHashlistFile, selectHashlistVerified, selectParsedHashlist, selectSelectedHashType, selectVerifyingHashlist } from './newTaskSlice';
+import { selectHashlistFile, selectHashlistVerified, selectParsedHashlist, selectRejectedHashlist, selectSelectedHashType, selectVerifyingHashlist } from './newTaskSlice';
 import { verifyHashlist } from './verifyHashlistThunk';
 
 export default function NewTask() {
@@ -19,7 +19,9 @@ export default function NewTask() {
     const verifyingHashlist = useAppSelector(selectVerifyingHashlist);
     const hashlistFile = useAppSelector(selectHashlistFile);
     const parsedHashes = useAppSelector(selectParsedHashlist);
+    const rejectedHashes = useAppSelector(selectRejectedHashlist);
     const hashlistConsumer = useContext(HashlistContext);
+    const activeTab = useAppSelector(selectActiveTab);
     const usingTextArea = hashlistConsumer && hashlistConsumer.hashlist.length !== 0;
     const VerifyStepDisabled = useMemo(() => (hashlistFile === undefined && !usingTextArea) || selectedHashType === '-1', [hashlistFile, usingTextArea, selectedHashType]);
     const dispatch = useAppDispatch();
@@ -97,9 +99,11 @@ export default function NewTask() {
             <WizardContextConsumer>
                 {({ activeStep, goToStepByName, onNext, onBack, onClose, goToStepById: goToStep }) => (
                     <>
-                        <Button variant="primary" className={NextStepDisabled ? 'pf-m-disabled' : ''} type="submit" onClick={onNext}>
-                            Next
-                        </Button>
+                        {activeStep.id === '2' && !hashlistVerified ? undefined : (
+                            <Button variant="primary" className={NextStepDisabled ? 'pf-m-disabled' : ''} type="submit" onClick={onNext}>
+                                {rejectedHashes.length > 0 ? 'Continue' : 'Next'}
+                            </Button>
+                        )}
                         <Button variant="secondary" className={usingInput ? '' : 'pf-m-disabled'} type="submit" onClick={() => resetWizard(goToStep)}>
                             Reset
                         </Button>

@@ -21,7 +21,6 @@ const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
         return;
     }
     state.selectedHashType = "-1";
-    state.hashlistFile = undefined;
     state.hashlistFileType = undefined;
     state.hashlistVerified = false;
     state.verifyingHashlist = false;
@@ -30,6 +29,9 @@ const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
         state.hashlistFileSize = undefined;
         URL.revokeObjectURL(state.hashlistFile)
     }
+    state.hashlistFile = undefined;
+    state.hashlist = [];
+    state.rejectedHashlist = [];
 }
 
 const newTask = createSlice({
