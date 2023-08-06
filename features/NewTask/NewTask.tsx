@@ -3,7 +3,8 @@ import AddHashlist from '@/components/AddHashlist';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
 import { Button, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
-import { useContext, useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
+import { animateScroll as scroll } from 'react-scroll';
 import ConfigureTask from '../ConfigureTask/ConfigureTask';
 import VerifyHashlist from '../VerifyHashlist/VerifyHashlist';
 import { selectWizardStepReached, stepIdReached } from '../Wizard/wizardSlice';
@@ -21,6 +22,10 @@ export default function NewTask() {
     const usingTextArea = hashlistConsumer && hashlistConsumer.hashlist.length !== 0;
     const VerifyStepDisabled = useMemo(() => (hashlistFile === undefined && !usingTextArea) || selectedHashType === '-1', [hashlistFile, usingTextArea, selectedHashType]);
     const dispatch = useAppDispatch();
+    React.useEffect(() => {
+        if (usingTextArea || hashlistFile !== undefined) scroll.scrollToBottom();
+        else scroll.scrollToTop();
+    }, [hashlistFile, usingTextArea]);
     const steps: WizardStep[] = useMemo(
         () => [
             {
@@ -79,9 +84,7 @@ export default function NewTask() {
         }
     };
 
-    const onReset = ({ id }: WizardStep) => {
-        // TODO: Add reset reducer
-    };
+    const onReset = ({ id }: WizardStep) => {};
 
     const CustomFooter = (
         <WizardFooter>
