@@ -149,7 +149,7 @@ a {
 
 .pf-c-wizard {
     z-index: 0;
-    /* overflow-y: auto; */
+    scroll-behavior: smooth;
     align-self: center;
     width: 100%;
 }
