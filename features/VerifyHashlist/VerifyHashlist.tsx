@@ -55,7 +55,7 @@ function VerifyHashlist() {
                         </span>
                         <span className={`font-bold`}>{parsedHashes.length}</span>
                     </Accordion.Title>
-                    <Accordion.Content>
+                    <Accordion.Content className={styles.acontent}>
                         {parsedHashes.map((h) => (
                             <li key={h} className={`mb-2 flex`}>
                                 <span className={`${styles.good}`}>

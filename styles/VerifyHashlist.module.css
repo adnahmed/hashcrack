@@ -36,6 +36,7 @@
 
 .acontent {
     border-bottom-width: calc(1px * calc(1 - var(--tw-divide-y-reverse))) !important;
+    border-top-width: 0px !important;
 }
 
 .bad svg[class="h-6 w-6 shrink-0 rotate-180"] {
