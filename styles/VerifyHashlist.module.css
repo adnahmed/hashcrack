@@ -1,0 +1,44 @@
+.title h4 {
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+}
+
+.title {
+    border-top: none !important;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+    border-bottom-width: 2px !important;
+}
+.bad:focus {
+    --tw-text-opacity: 1;
+    color: rgb(224 36 36 / var(--tw-text-opacity)) !important;
+}
+.good:focus {
+    --tw-text-opacity: 1;
+    color: rgb(14 159 110 / var(--tw-text-opacity)) !important;
+}
+
+
+.title:focus {
+    box-shadow:none !important;
+}
+
+
+
+.title svg {
+    display: none;
+}
+
+.accord {
+    gap: 2rem;
+}
+
+.acontent {
+    border-bottom-width: calc(1px * calc(1 - var(--tw-divide-y-reverse))) !important;
+}
+
+.bad svg[class="h-6 w-6 shrink-0 rotate-180"] {
+    --red:rgb(224 36 36 / var(--tw-text-opacity));
+    color: red !important;
+}
