@@ -10,6 +10,7 @@ export interface Tabs {
 
 const NewTaskWrapper = (props: any) => {
     const [hashlist, setHashlist] = useState('');
+
     return (
         <HashlistContext.Provider value={{ hashlist, setHashlist }}>
             <NewTask />

@@ -1,5 +1,5 @@
 import { AppState } from "@/lib/redux/store";
-import { AnyAction, PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import { activeTabChanged } from "../Navigation/navigationSlice";
 import { apiSlice } from "../api/apiSlice";
@@ -13,6 +13,23 @@ interface NewTaskState {
     hashlistFileSize?: number;
     hashlist: string[];
     rejectedHashlist: string[]
+}
+
+const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
+    // TODO: replace magic number 1 with Tabs Label enum.
+    if (action.type === `${activeTabChanged.name}/activeTabChanged` && action.payload === 1 /* Add New Task Tab */) {
+        return;
+    }
+    state.selectedHashType = "-1";
+    state.hashlistFile = undefined;
+    state.hashlistFileType = undefined;
+    state.hashlistVerified = false;
+    state.verifyingHashlist = false;
+    if (state.hashlistFile) {
+        state.hashlistFileType = undefined;
+        state.hashlistFileSize = undefined;
+        URL.revokeObjectURL(state.hashlistFile)
+    }
 }
 
 const newTask = createSlice({
@@ -51,6 +68,7 @@ const newTask = createSlice({
         hashlistVerificationChanged: (state, action: PayloadAction<boolean>) => {
             state.hashlistVerified = action.payload;
         },
+        resettedWizard: ResetWizard
     },
 
     extraReducers: (builder) => {
@@ -64,7 +82,7 @@ const newTask = createSlice({
                     URL.revokeObjectURL(state.hashlistFile)
                 }
             })
-            .addCase(verifyHashlist.rejected, (state, action: AnyAction) => {
+            .addCase(verifyHashlist.rejected, (state, action: PayloadAction<any>) => {
                 toast.error(action.payload);
                 state.verifyingHashlist = false;
                 state.hashlistVerified = false;
@@ -80,23 +98,11 @@ const newTask = createSlice({
                 state.rejectedHashlist = [];
                 state.hashlistVerified = false;
             })
-            .addCase(activeTabChanged, (state, action) => {
-                if (action.payload === 1) {
-                    return;
-                }
-                state.selectedHashType = "-1";
-                state.hashlistFile = undefined;
-                state.hashlistFileType = undefined;
-                state.hashlistVerified = false;
-                state.verifyingHashlist = false;
-                if (state.hashlistFile) {
-                    state.hashlistFileType = undefined;
-                    state.hashlistFileSize = undefined;
-                    URL.revokeObjectURL(state.hashlistFile)
-                }
-            })
+            .addCase(activeTabChanged, ResetWizard)
     }
 });
+
+
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({

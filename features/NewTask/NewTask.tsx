@@ -5,6 +5,7 @@ import { getHashlist } from '@/lib/utils';
 import { Button, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
 import React, { useContext, useMemo } from 'react';
 import { animateScroll as scroll } from 'react-scroll';
+import { activeTabChanged } from '../../features/Navigation/navigationSlice';
 import ConfigureTask from '../ConfigureTask/ConfigureTask';
 import VerifyHashlist from '../VerifyHashlist/VerifyHashlist';
 import { selectWizardStepReached, stepIdReached } from '../Wizard/wizardSlice';
@@ -22,10 +23,11 @@ export default function NewTask() {
     const usingTextArea = hashlistConsumer && hashlistConsumer.hashlist.length !== 0;
     const VerifyStepDisabled = useMemo(() => (hashlistFile === undefined && !usingTextArea) || selectedHashType === '-1', [hashlistFile, usingTextArea, selectedHashType]);
     const dispatch = useAppDispatch();
+    const usingInput = usingTextArea || hashlistFile !== undefined;
     React.useEffect(() => {
-        if (usingTextArea || hashlistFile !== undefined) scroll.scrollToBottom();
+        if (usingInput) scroll.scrollToBottom();
         else scroll.scrollToTop();
-    }, [hashlistFile, usingTextArea]);
+    }, [usingInput]);
     const steps: WizardStep[] = useMemo(
         () => [
             {
@@ -84,28 +86,25 @@ export default function NewTask() {
         }
     };
 
-    const onReset = ({ id }: WizardStep) => {};
-
+    function resetWizard(goToStep: (step: string) => void) {
+        hashlistConsumer?.setHashlist('');
+        dispatch(activeTabChanged(1));
+        goToStep('1');
+    }
+    const NextStepDisabled = VerifyStepDisabled;
     const CustomFooter = (
         <WizardFooter>
             <WizardContextConsumer>
-                {({ activeStep, goToStepByName, onNext, onBack, onClose }) => {
-                    if (activeStep.id === '1') {
-                        return (
-                            <>
-                                <Button variant="primary" className={VerifyStepDisabled ? 'pf-m-disabled' : ''} type="submit" onClick={onNext}>
-                                    Next
-                                </Button>
-                            </>
-                        );
-                    }
-                    return (
-                        <>
-                            {/* <Button onClick={() => validateLastStep(onNext)}>Validate</Button> */}
-                            {/* <Button onClick={() => goToStepByName('First step')}>Go to Beginning</Button> */}
-                        </>
-                    );
-                }}
+                {({ activeStep, goToStepByName, onNext, onBack, onClose, goToStepById: goToStep }) => (
+                    <>
+                        <Button variant="primary" className={NextStepDisabled ? 'pf-m-disabled' : ''} type="submit" onClick={onNext}>
+                            Next
+                        </Button>
+                        <Button variant="secondary" className={usingInput ? '' : 'pf-m-disabled'} type="submit" onClick={() => resetWizard(goToStep)}>
+                            Reset
+                        </Button>
+                    </>
+                )}
             </WizardContextConsumer>
         </WizardFooter>
     );
@@ -115,7 +114,6 @@ export default function NewTask() {
             cancelButtonText=""
             title=""
             onNext={onNext}
-            onBack={onReset}
             footer={CustomFooter}
             onClose={closeWizard}
             onSubmit={function (data: unknown): Promise<void> {
