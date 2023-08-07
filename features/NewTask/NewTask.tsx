@@ -101,7 +101,7 @@ export default function NewTask() {
                     <>
                         {activeStep.id === '2' && !hashlistVerified ? undefined : (
                             <Button variant="primary" className={NextStepDisabled ? 'pf-m-disabled' : ''} type="submit" onClick={onNext}>
-                                {rejectedHashes.length > 0 && activeStep.id === '2' ? 'Continue' : 'Next'}
+                                {rejectedHashes.length > 0 && activeStep.id === '2' ? '⚠️ Continue' : 'Next'}
                             </Button>
                         )}
                         <Button variant="secondary" className={usingInput ? '' : 'pf-m-disabled'} type="submit" onClick={() => resetWizard(goToStep)}>
