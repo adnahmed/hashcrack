@@ -23,11 +23,14 @@ const Tick: FC<SVGProps<SVGSVGElement>> = (props) => {
         </svg>
     );
 };
+
 function VerifyHashlist() {
     const verifyingHashlist = useAppSelector(selectVerifyingHashlist);
     const parsedHashes = useAppSelector(selectParsedHashlist);
     const rejectedHashes = useAppSelector(selectRejectedHashlist);
     const hashlistVerified = useAppSelector(selectHashlistVerified);
+    const showRejectedHashes = parsedHashes.length === 0 && rejectedHashes.length > 0;
+    const showParsedHashes = parsedHashes.length > 0 && rejectedHashes.length === 0;
     const collapseAll = parsedHashes.length > 0 && rejectedHashes.length > 0;
     if (verifyingHashlist)
         return (
@@ -43,52 +46,60 @@ function VerifyHashlist() {
                 <span className="font-bold">{parsedHashes.length + rejectedHashes.length}</span>
             </p>
             <Accordion className={`flex flex-col ${styles.accord} border-0`} collapseAll={collapseAll}>
-                <Accordion.Panel isOpen={parsedHashes.length > 0 && rejectedHashes.length === 0}>
-                    <Accordion.Title as="h4" className={`flex ${styles.good} ${styles.title}`}>
-                        <span>
-                            <Tick
-                                style={{
-                                    display: 'inline',
-                                }}
-                            />
-                            Recognized Hashes
-                        </span>
-                        <span className={`font-bold`}>{parsedHashes.length}</span>
-                    </Accordion.Title>
-                    <Accordion.Content className={styles.acontent}>
-                        {parsedHashes.map((h) => (
-                            <li key={h} className={`mb-2 flex`}>
-                                <span className={`${styles.good}`}>
-                                    <Tick />
-                                </span>
-                                <NanoClamp is="span" lines={1} text={h} />
-                            </li>
-                        ))}
-                    </Accordion.Content>
-                </Accordion.Panel>
-                <Accordion.Panel isOpen={parsedHashes.length === 0 && rejectedHashes.length > 0}>
-                    <Accordion.Title as="h4" className={`flex ${rejectedHashes.length > 0 ? styles.bad : ''} ${styles.title}`}>
-                        <span>
-                            <QuestionMark
-                                style={{
-                                    display: 'inline',
-                                }}
-                            />
-                            Unrecognized Hashes
-                        </span>
-                        <span className={`font-bold`}>{rejectedHashes.length}</span>
-                    </Accordion.Title>
-                    <Accordion.Content className={styles.acontent}>
-                        {rejectedHashes.map((h) => (
-                            <li key={h} className={`mb-2 flex`}>
-                                <span className={styles.bad}>
-                                    <QuestionMark />
-                                </span>
-                                <NanoClamp is="span" lines={1} text={h} />
-                            </li>
-                        ))}
-                    </Accordion.Content>
-                </Accordion.Panel>
+                {showParsedHashes ? (
+                    <Accordion.Panel isOpen={showParsedHashes}>
+                        <Accordion.Title as="h4" className={`flex ${styles.good} ${styles.title}`}>
+                            <span>
+                                <Tick
+                                    style={{
+                                        display: 'inline',
+                                    }}
+                                />
+                                Recognized Hashes
+                            </span>
+                            <span className={`font-bold`}>{parsedHashes.length}</span>
+                        </Accordion.Title>
+                        <Accordion.Content className={styles.acontent}>
+                            {parsedHashes.map((h) => (
+                                <li key={h} className={`mb-2 flex`}>
+                                    <span className={`${styles.good}`}>
+                                        <Tick />
+                                    </span>
+                                    <NanoClamp is="span" lines={1} text={h} />
+                                </li>
+                            ))}
+                        </Accordion.Content>
+                    </Accordion.Panel>
+                ) : (
+                    <></>
+                )}
+                {showRejectedHashes ? (
+                    <Accordion.Panel isOpen={showRejectedHashes}>
+                        <Accordion.Title as="h4" className={`flex ${rejectedHashes.length > 0 ? styles.bad : ''} ${styles.title}`}>
+                            <span>
+                                <QuestionMark
+                                    style={{
+                                        display: 'inline',
+                                    }}
+                                />
+                                Unrecognized Hashes
+                            </span>
+                            <span className={`font-bold`}>{rejectedHashes.length}</span>
+                        </Accordion.Title>
+                        <Accordion.Content className={styles.acontent}>
+                            {rejectedHashes.map((h) => (
+                                <li key={h} className={`mb-2 flex`}>
+                                    <span className={styles.bad}>
+                                        <QuestionMark />
+                                    </span>
+                                    <NanoClamp is="span" lines={1} text={h} />
+                                </li>
+                            ))}
+                        </Accordion.Content>
+                    </Accordion.Panel>
+                ) : (
+                    <></>
+                )}
             </Accordion>
         </div>
     );
