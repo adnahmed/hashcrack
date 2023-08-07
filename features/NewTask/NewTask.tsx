@@ -99,7 +99,7 @@ export default function NewTask() {
             <WizardContextConsumer>
                 {({ activeStep, goToStepByName, onNext, onBack, onClose, goToStepById: goToStep }) => (
                     <>
-                        {activeStep.id === '2' && !hashlistVerified ? undefined : (
+                        {activeStep.id === '2' && parsedHashes.length === 0 ? undefined : (
                             <Button variant="primary" className={NextStepDisabled ? 'pf-m-disabled' : ''} type="submit" onClick={onNext}>
                                 {rejectedHashes.length > 0 && activeStep.id === '2' ? '⚠️ Continue' : 'Next'}
                             </Button>

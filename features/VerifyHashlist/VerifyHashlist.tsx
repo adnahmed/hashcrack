@@ -29,9 +29,9 @@ function VerifyHashlist() {
     const parsedHashes = useAppSelector(selectParsedHashlist);
     const rejectedHashes = useAppSelector(selectRejectedHashlist);
     const hashlistVerified = useAppSelector(selectHashlistVerified);
-    const showRejectedHashes = parsedHashes.length === 0 && rejectedHashes.length > 0;
-    const showParsedHashes = parsedHashes.length > 0 && rejectedHashes.length === 0;
     const collapseAll = parsedHashes.length > 0 && rejectedHashes.length > 0;
+    const showRejectedHashes = (parsedHashes.length === 0 && rejectedHashes.length > 0) || collapseAll;
+    const showParsedHashes = (parsedHashes.length > 0 && rejectedHashes.length === 0) || collapseAll;
     if (verifyingHashlist)
         return (
             <>
