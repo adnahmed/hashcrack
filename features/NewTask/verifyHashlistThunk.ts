@@ -35,6 +35,7 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
             if (isErrorWithMessage(err)) {
                 thunkAPI.rejectWithValue(err.message);
             } else thunkAPI.rejectWithValue(err);
+            // TODO: add suggestion type for rejected hashes
             dispatch(failedParsingHash(hash));
         }
     };
