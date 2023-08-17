@@ -1,6 +1,6 @@
 import { apiSlice } from '@/features/api/apiSlice';
 import { AppState } from '@/lib/redux/store';
-import { TurnstileServerValidationResponse } from '@marsidev/react-turnstile';
+import type { TurnstileServerValidationResponse } from '@marsidev/react-turnstile';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export const extendedApiSlice = apiSlice.injectEndpoints({

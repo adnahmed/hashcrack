@@ -1,6 +1,6 @@
 import getClientIp from "@/lib/getClientIp";
 import runMiddleware from "@/lib/runMiddleware";
-import { TurnstileServerValidationResponse } from "@marsidev/react-turnstile";
+import type { TurnstileServerValidationResponse } from "@marsidev/react-turnstile";
 import { IsNotEmpty, Length } from "class-validator";
 import Cors from "cors";
 import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
