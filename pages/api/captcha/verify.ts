@@ -50,9 +50,14 @@ class TokenValidateHandler {
       }
       // TODO: REPORT DUMMY TOKEN IN PRODUCTION
     }
+
+    // Verifying Client IP
     const clientIp = await getClientIp(req);
     if (clientIp === null)
       throw new UnprocessableEntityException("Could not determine ip address");
+    // Verifying Client IP End
+
+    // Validating Token
     const validationRes = await fetch(verifyEndpoint, {
       method: "POST",
       body: `secret=${encodeURIComponent(
@@ -64,7 +69,8 @@ class TokenValidateHandler {
         "content-type": "application/x-www-form-urlencoded",
       },
     });
-    return (await validationRes.json()) as TurnstileServerValidationResponse;
+    const response = await validationRes.json() as TurnstileServerValidationResponse
+    return response as TurnstileServerValidationResponse;
   }
 }
 
