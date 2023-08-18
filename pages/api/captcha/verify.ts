@@ -1,10 +1,8 @@
 import getClientIp from "@/lib/getClientIp";
 import runMiddleware from "@/lib/runMiddleware";
-import { sessionOptions } from "@/lib/session";
 import type { TurnstileServerValidationResponse } from "@marsidev/react-turnstile";
 import { IsNotEmpty, Length } from "class-validator";
 import Cors from "cors";
-import { withIronSessionApiRoute } from "iron-session/next";
 import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
 import {
   Body,
@@ -12,11 +10,10 @@ import {
   Post,
   Req,
   Res,
-  UnprocessableEntityException,
-  ValidationPipe,
-  createHandler,
+  UnprocessableEntityException, ValidationPipe, createHandler
 } from "next-api-decorators";
 import os from "os";
+import { withSessionRoute } from '../../../lib/session';
 const DUMMY_TOKEN = 'XXXX.DUMMY.TOKEN.XXXX';
 
 const verifyEndpoint =
@@ -26,6 +23,7 @@ const cors = Cors({
   origin: "crackq.me",
   methods: ["POST"],
 });
+
 class TokenValidateInput {
   @IsNotEmpty()
   @Length(1, 2048)
@@ -53,6 +51,7 @@ class TokenValidateHandler {
           ...req.session,
           validationResponse
         }
+        await req.session.save();
         return validationResponse;
       }
       // TODO: REPORT DUMMY TOKEN IN PRODUCTION
@@ -81,7 +80,8 @@ class TokenValidateHandler {
       ...req.session,
       validationResponse
     }
-    return validationResponse as TurnstileServerValidationResponse;
+    await req.session.save();
+    return validationResponse;
   }
 }
 
@@ -93,4 +93,4 @@ export const config: PageConfig = {
   },
 };
 
-export default withIronSessionApiRoute(createHandler(TokenValidateHandler), sessionOptions);
+export default withSessionRoute(createHandler(TokenValidateHandler));
