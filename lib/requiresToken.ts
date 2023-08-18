@@ -1,13 +1,11 @@
-import { CAPTCHA_HEADER_TOKEN } from "@/assets/constants";
 import { NextApiRequest, NextApiResponse } from "next";
 import { NextFunction, UnauthorizedException, createMiddlewareDecorator } from "next-api-decorators";
 
 const requiresToken = createMiddlewareDecorator(
     async (req: NextApiRequest, res: NextApiResponse, next: NextFunction) => {
-        const headers = req.headers;
-        const token = headers[CAPTCHA_HEADER_TOKEN]
-        // TODO: verify signature of token;
-        if (!token && process.env.NODE_ENV !== 'development') { throw new UnauthorizedException(); }
+        const validationResponse = req.session.validationResponse;
+        if (!validationResponse) { throw new UnauthorizedException(); }
+        if (!validationResponse.success) { throw new UnauthorizedException(`Following Errors occurred:\n ${validationResponse["error-codes"]?.join('\n')}`) }
         next();
     }
 )
