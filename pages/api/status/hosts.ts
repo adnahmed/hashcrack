@@ -1,3 +1,4 @@
+import requiresToken from "@/lib/requiresToken";
 import runMiddleware from "@/lib/runMiddleware";
 import Cors from 'cors';
 import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
@@ -17,11 +18,13 @@ const cors = Cors({
 
 class StatusHandler {
   @Get()
+  @requiresToken()
   @HttpCode(200)
   async hosts(
     @Req() req: NextApiRequest,
     @Res() res: NextApiResponse) {
     await runMiddleware(req, res, cors);
+    return {};
   }
 }
 
