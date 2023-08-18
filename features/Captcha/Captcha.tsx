@@ -29,7 +29,7 @@ export default function Captcha({ initialTheme, initialSize, initialLang, ...pro
     const siteKey =
         process.env.NODE_ENV === 'development'
             ? // Always pass on dev
-            '1x00000000000000000000AA'
+              '1x00000000000000000000AA'
             : process.env.NEXT_PUBLIC_CFSITE_KEY;
     // Useful for analytics
     const [cData, setCData] = useState(Date.now().toString());
@@ -51,5 +51,10 @@ export default function Captcha({ initialTheme, initialSize, initialLang, ...pro
         toast.error("Captcha didn't launch due to an error, Please refresh the page.");
     };
     // TODO: Add Retry Button
-    return <div {...props}>{captchaErrors?.includes('invalid-input-response') ? <p className="color:[var(--theme)]">Invalid Captcha Provided!</p> : <Turnstile id="cf-challenge" options={{ cData }} ref={turnstileRef} siteKey={siteKey} onSuccess={onSuccess} onError={onError} />}</div>;
+    if (captchaErrors?.includes('invalid-input-response')) return <p className="color:[var(--theme)]">Invalid Captcha Provided!</p>;
+    return (
+        <div {...props}>
+            <Turnstile id="cf-challenge" options={{ cData }} ref={turnstileRef} siteKey={siteKey} onSuccess={onSuccess} onError={onError} />
+        </div>
+    );
 }
