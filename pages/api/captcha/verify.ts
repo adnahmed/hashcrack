@@ -1,6 +1,6 @@
 import getClientIp from "@/lib/getClientIp";
 import runMiddleware from "@/lib/runMiddleware";
-import { TurnstileServerValidationResponse } from "@marsidev/react-turnstile";
+import type { TurnstileServerValidationResponse } from "@marsidev/react-turnstile";
 import { IsNotEmpty, Length } from "class-validator";
 import Cors from "cors";
 import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
@@ -10,11 +10,11 @@ import {
   Post,
   Req,
   Res,
-  UnprocessableEntityException,
-  ValidationPipe,
-  createHandler,
+  UnprocessableEntityException, ValidationPipe, createHandler
 } from "next-api-decorators";
 import os from "os";
+import { withSessionRoute } from '../../../lib/session';
+const DUMMY_TOKEN = 'XXXX.DUMMY.TOKEN.XXXX';
 
 const verifyEndpoint =
   "https://challenges.cloudflare.com/turnstile/v0/siteverify";
@@ -23,6 +23,7 @@ const cors = Cors({
   origin: "crackq.me",
   methods: ["POST"],
 });
+
 class TokenValidateInput {
   @IsNotEmpty()
   @Length(1, 2048)
@@ -40,20 +41,30 @@ class TokenValidateHandler {
     await runMiddleware(req, res, cors);
     const { token } = body;
     if (process.env.NODE_ENV === "development") {
-      if (token === "XXXX.DUMMY.TOKEN.XXXX") {
+      if (token === DUMMY_TOKEN) {
         // Allow DUMMY TOKEN IN DEVELOPMENT
-        const res: TurnstileServerValidationResponse = {
+        const validationResponse: TurnstileServerValidationResponse = {
           success: true,
           hostname: os.hostname(),
         };
-        return res;
+        req.session = {
+          ...req.session,
+          validationResponse
+        }
+        await req.session.save();
+        return validationResponse;
       }
       // TODO: REPORT DUMMY TOKEN IN PRODUCTION
     }
+
+    // Verifying Client IP
     const clientIp = await getClientIp(req);
     if (clientIp === null)
       throw new UnprocessableEntityException("Could not determine ip address");
-    const validationRes = await fetch(verifyEndpoint, {
+    // Verifying Client IP End
+
+    // Validating Token
+    const response = await fetch(verifyEndpoint, {
       method: "POST",
       body: `secret=${encodeURIComponent(
         process.env.CFSECRET_KEY
@@ -64,7 +75,13 @@ class TokenValidateHandler {
         "content-type": "application/x-www-form-urlencoded",
       },
     });
-    return (await validationRes.json()) as TurnstileServerValidationResponse;
+    const validationResponse = await response.json() as TurnstileServerValidationResponse
+    req.session = {
+      ...req.session,
+      validationResponse
+    }
+    await req.session.save();
+    return validationResponse;
   }
 }
 
@@ -76,4 +93,4 @@ export const config: PageConfig = {
   },
 };
 
-export default createHandler(TokenValidateHandler);
+export default withSessionRoute(createHandler(TokenValidateHandler));

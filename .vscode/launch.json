@@ -5,6 +5,11 @@
       "name": "Next.js: debug server-side",
       "type": "node-terminal",
       "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "sourceMaps": true,
+      "env": {
+        "NODE_OPTIONS": "--inspect"
+      },
       "command": "npm run dev"
     },
     {
@@ -16,15 +21,27 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "Next.js: debug full stack",
+      "name": "full stack",
       "type": "node-terminal",
-      "request": "launch",
       "command": "npm run dev",
+      "env": {
+        "NODE_OPTIONS": "--inspect"
+      },
+      "request": "launch",
+      "outputCapture": "std",
+      "cwd": "${workspaceFolder}",
+      "sourceMaps": true,
       "serverReadyAction": {
         "pattern": "started server on .+, url: (https?://.+)",
         "uriFormat": "%s",
         "action": "debugWithEdge"
       }
+    },
+    {
+      "name": "attach api",
+      "type": "node",
+      "request": "attach",
+      "port": 9229
     },
     {
       "name": "Launch Storybook",
@@ -49,6 +66,15 @@
       ],
       "runtimeExecutable": "npm",
       "console": "internalConsole"
+    },
+  ],
+  "compounds": [
+    {
+      "name": "Run Dev",
+      "configurations": [
+        "full stack",
+        "attach api"
+      ]
     }
   ]
 }

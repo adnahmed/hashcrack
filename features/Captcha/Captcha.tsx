@@ -3,7 +3,7 @@ import { Turnstile, TurnstileInstance, TurnstileProps } from '@marsidev/react-tu
 import { useTheme } from 'next-themes';
 import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
-import { captchaFailed, selectCaptchaErrors, tokenValidated, useValidateTokenMutation } from './captchaSlice';
+import { captchaFailed, selectCanRetryCaptcha, selectCaptchaErrors, tokenValidated, useValidateTokenMutation } from './captchaSlice';
 import { Lang, Theme, WidgetSize } from './types';
 
 interface Props extends Omit<TurnstileProps, 'siteKey'> {
@@ -22,17 +22,25 @@ export default function Captcha({ initialTheme, initialSize, initialLang, ...pro
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [siteTheme]);
+
     const captchaErrors = useAppSelector(selectCaptchaErrors);
+    const canRetry = useAppSelector(selectCanRetryCaptcha);
     const turnstileRef = useRef<TurnstileInstance>(null);
     const [validateToken, { isError, isSuccess, error, isLoading }] = useValidateTokenMutation();
     const dispatch = useAppDispatch();
     const siteKey =
         process.env.NODE_ENV === 'development'
             ? // Always pass on dev
-            '1x00000000000000000000AA'
+              '1x00000000000000000000AA'
             : process.env.NEXT_PUBLIC_CFSITE_KEY;
     // Useful for analytics
     const [cData, setCData] = useState(Date.now().toString());
+    useEffect(() => {
+        if (captchaErrors && captchaErrors.length > 0 && canRetry) {
+            const turnstile = turnstileRef.current;
+            turnstile?.reset();
+        }
+    }, [canRetry, captchaErrors]);
     const onSuccess: TurnstileProps['onSuccess'] = async (token) => {
         try {
             const res = await validateToken(token).unwrap();
@@ -43,7 +51,7 @@ export default function Captcha({ initialTheme, initialSize, initialLang, ...pro
             }
         } catch (error) {
             // TODO: Report Error for analytics
-            console.log('error:', JSON.stringify(error));
+            toast.error("Couldn't Validate Captcha due to an error, Please refresh the page to try again.", { duration: Infinity });
         }
     };
 
@@ -51,5 +59,10 @@ export default function Captcha({ initialTheme, initialSize, initialLang, ...pro
         toast.error("Captcha didn't launch due to an error, Please refresh the page.");
     };
     // TODO: Add Retry Button
-    return <div {...props}>{captchaErrors?.includes('invalid-input-response') ? <p className="color:[var(--theme)]">Invalid Captcha Provided!</p> : <Turnstile id="cf-challenge" options={{ cData }} ref={turnstileRef} siteKey={siteKey} onSuccess={onSuccess} onError={onError} />}</div>;
+    if (captchaErrors?.includes('invalid-input-response')) return <p className="color:[var(--theme)]">Invalid Captcha Provided!</p>;
+    return (
+        <div {...props}>
+            <Turnstile id="cf-challenge" options={{ cData }} ref={turnstileRef} siteKey={siteKey} onSuccess={onSuccess} onError={onError} />
+        </div>
+    );
 }

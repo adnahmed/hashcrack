@@ -3,8 +3,8 @@ import { selectCaptchaErrors } from '@/features/Captcha/captchaSlice';
 import { useAppSelector } from '@/lib/redux/store';
 import Logo from '@/public/favicon.svg';
 import style from '@/styles/InitialCheck.module.css';
-import { Toaster } from 'react-hot-toast';
 import Obfuscate from 'react-obfuscate';
+import CustomToaster from '../Toaster';
 import DotLoader from './DotLoader';
 
 function IntialCheck() {
@@ -31,7 +31,7 @@ function IntialCheck() {
                     </Obfuscate>
                 </div>
             </div>
-            <Toaster />
+            <CustomToaster />
         </div>
     );
 }

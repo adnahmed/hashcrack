@@ -1,8 +1,7 @@
 import { apiSlice } from '@/features/api/apiSlice';
 import { AppState } from '@/lib/redux/store';
-import { TurnstileServerValidationResponse } from '@marsidev/react-turnstile';
+import type { TurnstileServerValidationResponse } from '@marsidev/react-turnstile';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-
 export const extendedApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         validateToken: builder.mutation<TurnstileServerValidationResponse, string>({
@@ -16,7 +15,6 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
 });
 
 export type CaptchaState = {
-    token?: string;
     validated: boolean;
     errors: TurnstileServerValidationResponse['error-codes'];
     canRetry: boolean;
@@ -25,12 +23,11 @@ export type CaptchaState = {
 const captcha = createSlice({
     name: 'captcha',
     initialState: {
-        validated: process.env.NODE_ENV === 'development' ? true : false,
+        validated: false,
         canRetry: true,
     } as CaptchaState,
     reducers: {
         tokenValidated: (state, action: PayloadAction<string>) => {
-            state.token = action.payload;
             state.validated = true;
         },
         captchaFailed: (state, action: PayloadAction<TurnstileServerValidationResponse['error-codes']>) => {
@@ -44,8 +41,8 @@ const captcha = createSlice({
 });
 
 export default captcha;
-export const selectCaptchaToken = (state: AppState) => state.captcha.token;
 export const selectCaptchaErrors = (state: AppState) => state.captcha.errors;
 export const selectCaptchaValidated = (state: AppState) => state.captcha.validated;
+export const selectCanRetryCaptcha = (state: AppState) => state.captcha.canRetry;
 export const { tokenValidated, captchaFailed } = captcha.actions;
 export const { useValidateTokenMutation } = extendedApiSlice;
