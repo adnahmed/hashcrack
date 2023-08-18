@@ -51,7 +51,7 @@ export default function Captcha({ initialTheme, initialSize, initialLang, ...pro
             }
         } catch (error) {
             // TODO: Report Error for analytics
-            console.log('error:', JSON.stringify(error));
+            toast.error("Couldn't Validate Captcha due to an error, Please refresh the page to try again.", { duration: Infinity });
         }
     };
 
