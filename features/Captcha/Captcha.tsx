@@ -3,7 +3,7 @@ import { Turnstile, TurnstileInstance, TurnstileProps } from '@marsidev/react-tu
 import { useTheme } from 'next-themes';
 import { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
-import { captchaFailed, selectCaptchaErrors, tokenValidated, useValidateTokenMutation } from './captchaSlice';
+import { captchaFailed, selectCanRetryCaptcha, selectCaptchaErrors, tokenValidated, useValidateTokenMutation } from './captchaSlice';
 import { Lang, Theme, WidgetSize } from './types';
 
 interface Props extends Omit<TurnstileProps, 'siteKey'> {
@@ -22,7 +22,9 @@ export default function Captcha({ initialTheme, initialSize, initialLang, ...pro
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [siteTheme]);
+
     const captchaErrors = useAppSelector(selectCaptchaErrors);
+    const canRetry = useAppSelector(selectCanRetryCaptcha);
     const turnstileRef = useRef<TurnstileInstance>(null);
     const [validateToken, { isError, isSuccess, error, isLoading }] = useValidateTokenMutation();
     const dispatch = useAppDispatch();
@@ -33,6 +35,12 @@ export default function Captcha({ initialTheme, initialSize, initialLang, ...pro
             : process.env.NEXT_PUBLIC_CFSITE_KEY;
     // Useful for analytics
     const [cData, setCData] = useState(Date.now().toString());
+    useEffect(() => {
+        if (captchaErrors && captchaErrors.length > 0 && canRetry) {
+            const turnstile = turnstileRef.current;
+            turnstile?.reset();
+        }
+    }, [canRetry, captchaErrors]);
     const onSuccess: TurnstileProps['onSuccess'] = async (token) => {
         try {
             const res = await validateToken(token).unwrap();
