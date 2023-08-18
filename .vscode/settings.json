@@ -17,8 +17,4 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "launch": {
-    "configurations": [],
-    "compounds": []
-  }
 }
