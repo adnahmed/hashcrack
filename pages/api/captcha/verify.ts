@@ -1,8 +1,10 @@
 import getClientIp from "@/lib/getClientIp";
 import runMiddleware from "@/lib/runMiddleware";
+import { sessionOptions } from "@/lib/session";
 import type { TurnstileServerValidationResponse } from "@marsidev/react-turnstile";
 import { IsNotEmpty, Length } from "class-validator";
 import Cors from "cors";
+import { withIronSessionApiRoute } from "iron-session/next";
 import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
 import {
   Body,
@@ -15,6 +17,7 @@ import {
   createHandler,
 } from "next-api-decorators";
 import os from "os";
+const DUMMY_TOKEN = 'XXXX.DUMMY.TOKEN.XXXX';
 
 const verifyEndpoint =
   "https://challenges.cloudflare.com/turnstile/v0/siteverify";
@@ -40,13 +43,17 @@ class TokenValidateHandler {
     await runMiddleware(req, res, cors);
     const { token } = body;
     if (process.env.NODE_ENV === "development") {
-      if (token === "XXXX.DUMMY.TOKEN.XXXX") {
+      if (token === DUMMY_TOKEN) {
         // Allow DUMMY TOKEN IN DEVELOPMENT
-        const res: TurnstileServerValidationResponse = {
+        const validationResponse: TurnstileServerValidationResponse = {
           success: true,
           hostname: os.hostname(),
         };
-        return res;
+        req.session = {
+          ...req.session,
+          validationResponse
+        }
+        return validationResponse;
       }
       // TODO: REPORT DUMMY TOKEN IN PRODUCTION
     }
@@ -58,7 +65,7 @@ class TokenValidateHandler {
     // Verifying Client IP End
 
     // Validating Token
-    const validationRes = await fetch(verifyEndpoint, {
+    const response = await fetch(verifyEndpoint, {
       method: "POST",
       body: `secret=${encodeURIComponent(
         process.env.CFSECRET_KEY
@@ -69,8 +76,12 @@ class TokenValidateHandler {
         "content-type": "application/x-www-form-urlencoded",
       },
     });
-    const response = await validationRes.json() as TurnstileServerValidationResponse
-    return response as TurnstileServerValidationResponse;
+    const validationResponse = await response.json() as TurnstileServerValidationResponse
+    req.session = {
+      ...req.session,
+      validationResponse
+    }
+    return validationResponse as TurnstileServerValidationResponse;
   }
 }
 
@@ -82,4 +93,4 @@ export const config: PageConfig = {
   },
 };
 
-export default createHandler(TokenValidateHandler);
+export default withIronSessionApiRoute(createHandler(TokenValidateHandler), sessionOptions);
