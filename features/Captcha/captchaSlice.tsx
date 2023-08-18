@@ -47,5 +47,6 @@ export default captcha;
 export const selectCaptchaToken = (state: AppState) => state.captcha.token;
 export const selectCaptchaErrors = (state: AppState) => state.captcha.errors;
 export const selectCaptchaValidated = (state: AppState) => state.captcha.validated;
+export const selectCanRetryCaptcha = (state: AppState) => state.captcha.canRetry;
 export const { tokenValidated, captchaFailed } = captcha.actions;
 export const { useValidateTokenMutation } = extendedApiSlice;
