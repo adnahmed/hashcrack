@@ -7,11 +7,11 @@ import Sun from '@/public/sunny-outline.svg';
 import style from '@/styles/MainPage.module.css';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-import { Toaster } from 'react-hot-toast';
 import OutsideClickHandler from 'react-outside-click-handler';
 import TetherComponent from 'react-tether';
 import Navbar from '../features/Navigation/Navbar';
 import Title from './Title';
+import CustomToaster from './Toaster';
 import { TabLabels, TabsEnum } from './ui/Tabs';
 const MainPage = () => {
     const { theme, setTheme } = useTheme();
@@ -95,7 +95,7 @@ const MainPage = () => {
             {isDesktop && <Navbar TabLabels={TabLabels} activeTab={activeTab} />}
             <>
                 {TabsEnum[TabLabels[activeTab]]}
-                <Toaster />
+                <CustomToaster />
             </>
         </>
     );
