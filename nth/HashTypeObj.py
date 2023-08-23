@@ -38,5 +38,4 @@ class HashType:
                 populars.append(i)
             else:
                 to_ret.append(i)
-        print("found hashes: ", self.prototypes)
         return populars + to_ret

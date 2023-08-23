@@ -121,5 +121,5 @@ export const selectHashlistFile = (state: AppState) => state.newTask.hashlistFil
 export const selectVerifyingHashlist = (state: AppState) => state.newTask.verifyingHashlist;
 export const selectParsedHashlist = (state: AppState) => state.newTask.hashlist;
 export const selectRejectedHashlist = (state: AppState) => state.newTask.rejectedHashlist;
-export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile } = newTask.actions;
+export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard } = newTask.actions;
 export const { useNewTaskMutation } = extendedApiSlice

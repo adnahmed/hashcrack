@@ -15,6 +15,6 @@
     "strings": true
   },
   "files.associations": {
-    "*.css": "tailwindcss"
+    "*.css": "css"
   },
 }
