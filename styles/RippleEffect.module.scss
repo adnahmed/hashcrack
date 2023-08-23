@@ -1,6 +1,5 @@
-$button-ripple: var(--theme);
-
 .rippleButton {
+    $button-ripple: var(--theme);
     position: relative;
     display: inline-grid;
     place-items: center;
@@ -25,6 +24,12 @@ $button-ripple: var(--theme);
     &.ripple::before {
         transition: transform 0.5s;
         animation: ripple 0.5s;
+    }
+}
+
+.rippleButtonDisabled {
+    &::before {
+        background-color: #222;
     }
 }
 
