@@ -1,6 +1,6 @@
 import styles from '@/styles/ConfigureTask.module.css';
 import rippleStyle from '@/styles/RippleEffect.module.scss';
-import { JSX, SVGProps, useEffect, useRef, useState } from 'react';
+import React, { JSX, SVGProps, useEffect, useRef, useState } from 'react';
 
 function ConfigureTask() {
     return (
@@ -14,7 +14,7 @@ function ConfigureTask() {
 function ComingSoonAttacks() {
     const [x, y, buttonRef] = useMouseProgress();
     return (
-        <button type="button" ref={buttonRef} style={{ '--x': x, '--y': y }} className={`${rippleStyle.rippleButtonDisabled} ${styles.attackButton} ${rippleStyle.rippleButton} ${styles.attackButtonDisabled}  border py-3`}>
+        <button type="button" ref={buttonRef} style={{ '--x': x, '--y': y } as React.CSSProperties} className={`${rippleStyle.rippleButtonDisabled} ${styles.attackButton} ${rippleStyle.rippleButton} ${styles.attackButtonDisabled}  border py-3`}>
             <PinIcon className={`${styles.icon} `} />
             More Coming Soon...
         </button>
@@ -23,7 +23,7 @@ function ComingSoonAttacks() {
 function BasicHashAttack() {
     const [x, y, buttonRef] = useMouseProgress();
     return (
-        <button type="button" ref={buttonRef} style={{ '--x': x, '--y': y }} className={`${styles.attackButton} ${rippleStyle.rippleButton} border py-3`}>
+        <button type="button" ref={buttonRef} style={{ '--x': x, '--y': y } as React.CSSProperties} className={`${styles.attackButton} ${rippleStyle.rippleButton} border py-3`}>
             <BasicIcon className={`${styles.icon} `} />
             Basic Hash Search
         </button>
