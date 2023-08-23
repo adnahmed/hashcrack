@@ -1,4 +1,4 @@
-import Stats from '@/components/Stats';
+import Stats from '@/features/Stats/Stats';
 import type { Story, StoryDefault } from '@ladle/react';
 
 export const StatsStory: Story = () => (
