@@ -1,5 +1,7 @@
 import { apiSlice } from '@/features/api/apiSlice';
-
+interface HostInfo {
+    code: number;
+}
 export const extendedApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         getHosts: builder.query<HostInfo, undefined>({
