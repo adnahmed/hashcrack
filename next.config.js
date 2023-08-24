@@ -31,6 +31,7 @@ let nextConfig = {
     '@patternfly/react-core',
     '@patternfly/react-styles',
     '@patternfly-labs/react-form-wizard',
+    '@patternfly/react-table',
     'redux-persist'
   ]
 };
