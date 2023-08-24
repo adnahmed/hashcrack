@@ -23,7 +23,7 @@ export type CaptchaState = {
 const captcha = createSlice({
     name: 'captcha',
     initialState: {
-        validated: false,
+        validated: process.env.NODE_ENV === 'development',
         canRetry: true,
     } as CaptchaState,
     reducers: {
