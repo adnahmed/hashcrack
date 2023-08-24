@@ -1,6 +1,8 @@
+import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import styles from '@/styles/ConfigureTask.module.css';
 import rippleStyle from '@/styles/RippleEffect.module.scss';
 import React, { JSX, SVGProps, useEffect, useRef, useState } from 'react';
+import { Configuration, selectSelectedConfig, selectedConfig } from '../NewTask/newTaskSlice';
 
 function ConfigureTask() {
     return (
@@ -20,10 +22,24 @@ function ComingSoonAttacks() {
         </button>
     );
 }
+function useChangedConfig(buttonRef: React.MutableRefObject<HTMLButtonElement | null>, config: Configuration) {
+    const currentConfig = useAppSelector(selectSelectedConfig);
+    useEffect(() => {
+        const button = buttonRef?.current;
+        const updateTheme = (e) => {
+            if (currentConfig === config) button?.classList.add(`${styles.attackButtonSelected}`);
+            else button?.classList.remove(`${styles.attackButtonSelected}`);
+        };
+        button?.addEventListener('animationend', updateTheme);
+        return () => button?.removeEventListener('animationend', updateTheme);
+    }, [buttonRef, config, currentConfig]);
+}
 function BasicHashAttack() {
+    const dispatch = useAppDispatch();
     const [x, y, buttonRef] = useMouseProgress();
+    useChangedConfig(buttonRef as React.MutableRefObject<HTMLButtonElement | null>, Configuration.BASIC);
     return (
-        <button type="button" ref={buttonRef} style={{ '--x': x, '--y': y } as React.CSSProperties} className={`${styles.attackButton} ${rippleStyle.rippleButton} border py-3`}>
+        <button onClick={() => dispatch(selectedConfig(Configuration.BASIC))} type="button" ref={buttonRef} style={{ '--x': x, '--y': y } as React.CSSProperties} className={`${styles.attackButton} ${rippleStyle.rippleButton} border py-3`}>
             <BasicIcon className={`${styles.icon} `} />
             Basic Hash Search
         </button>
@@ -47,20 +63,21 @@ const useMouseProgress = () => {
     const [x, setX] = useState<string | null>(null);
     const [y, setY] = useState<string | null>(null);
     useEffect(() => {
+        const button = buttonRef?.current;
         const updateXY = (e: MouseEvent | TouchEvent) => {
             const event = addTouchOffsets(e);
             setX(`${event.offsetX}px`);
             setY(`${event.offsetY}px`);
-            buttonRef?.current?.classList.add(`${rippleStyle.ripple}`);
-            buttonRef?.current?.addEventListener('animationend', (e) => {
-                buttonRef?.current?.classList.remove(`${rippleStyle.ripple}`);
+            button?.classList.add(`${rippleStyle.ripple}`);
+            button?.addEventListener('animationend', (e) => {
+                button?.classList.remove(`${rippleStyle.ripple}`);
             });
         };
-        buttonRef?.current?.addEventListener('mousedown', updateXY);
-        buttonRef?.current?.addEventListener('touchmove', updateXY);
+        button?.addEventListener('mousedown', updateXY);
+        button?.addEventListener('touchmove', updateXY);
         return () => {
-            buttonRef?.current?.removeEventListener('mousedown', updateXY);
-            buttonRef?.current?.removeEventListener('touchmove', updateXY);
+            button?.removeEventListener('mousedown', updateXY);
+            button?.removeEventListener('touchmove', updateXY);
         };
     }, [setX, setY, buttonRef]);
     return [x, y, buttonRef];

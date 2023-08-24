@@ -4,7 +4,11 @@ import toast from "react-hot-toast";
 import { activeTabChanged } from "../Navigation/navigationSlice";
 import { apiSlice } from "../api/apiSlice";
 import { verifyHashlist } from "./verifyHashlistThunk";
+export enum Configuration {
+    BASIC
+}
 interface NewTaskState {
+    selectedConfig?: Configuration;
     verifyingHashlist: boolean;
     hashlistVerified: boolean;
     selectedHashType: string;
@@ -24,6 +28,7 @@ const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
     state.hashlistFileType = undefined;
     state.hashlistVerified = false;
     state.verifyingHashlist = false;
+    state.selectedConfig = undefined;
     if (state.hashlistFile) {
         state.hashlistFileType = undefined;
         state.hashlistFileSize = undefined;
@@ -37,6 +42,7 @@ const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
 const newTask = createSlice({
     name: "newTask",
     initialState: {
+        selectedConfig: undefined,
         verifyingHashlist: false,
         hashlistVerified: false,
         selectedHashType: '-1',
@@ -69,6 +75,9 @@ const newTask = createSlice({
         },
         hashlistVerificationChanged: (state, action: PayloadAction<boolean>) => {
             state.hashlistVerified = action.payload;
+        },
+        selectedConfig: (state, action: PayloadAction<Configuration>) => {
+            state.selectedConfig = action.payload;
         },
         resettedWizard: ResetWizard
     },
@@ -121,5 +130,6 @@ export const selectHashlistFile = (state: AppState) => state.newTask.hashlistFil
 export const selectVerifyingHashlist = (state: AppState) => state.newTask.verifyingHashlist;
 export const selectParsedHashlist = (state: AppState) => state.newTask.hashlist;
 export const selectRejectedHashlist = (state: AppState) => state.newTask.rejectedHashlist;
-export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard } = newTask.actions;
+export const selectSelectedConfig = (state: AppState) =>
+    state.newTask.selectedConfig; export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard, selectedConfig } = newTask.actions;
 export const { useNewTaskMutation } = extendedApiSlice

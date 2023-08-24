@@ -37,11 +37,17 @@
     text-transform: uppercase;
     vertical-align: middle;
     white-space: nowrap;
+    transition: 0.2s cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.attackButtonSelected {
+    background-color: var(--theme);
+    color: var(--theme-bg);
 }
 
 .attackButton:hover {
     background-color: var(--theme-bg);
-    transition: 0.2s cubic-bezier(0.4, 0, 0.6, 1);
+    color: var(--theme);
 }
 
 .attackButtonDisabled {
