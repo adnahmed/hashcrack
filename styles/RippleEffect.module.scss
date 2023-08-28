@@ -1,7 +1,6 @@
 .rippleButton {
     $button-ripple: var(--theme);
     position: relative;
-    display: inline-grid;
     place-items: center;
     isolation: isolate;
     overflow: hidden;

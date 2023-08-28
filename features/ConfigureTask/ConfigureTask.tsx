@@ -6,7 +6,7 @@ import { Configuration, selectSelectedConfig, selectedConfig } from '../NewTask/
 
 function ConfigureTask() {
     return (
-        <div className="flex ">
+        <div className={styles.attackContainer}>
             <BasicHashAttack />
             <ComingSoonAttacks />
         </div>
@@ -16,7 +16,7 @@ function ConfigureTask() {
 function ComingSoonAttacks() {
     const [x, y, buttonRef] = useMouseProgress();
     return (
-        <button type="button" ref={buttonRef} style={{ '--x': x, '--y': y } as React.CSSProperties} className={`${rippleStyle.rippleButtonDisabled} ${styles.attackButton} ${rippleStyle.rippleButton} ${styles.attackButtonDisabled}  border py-3`}>
+        <button type="button" ref={buttonRef} style={{ '--x': x, '--y': y } as React.CSSProperties} className={`text-fl-xs ${rippleStyle.rippleButtonDisabled} ${styles.attackButton} ${rippleStyle.rippleButton} ${styles.attackButtonDisabled} `}>
             <PinIcon className={`${styles.icon} `} />
             More Coming Soon...
         </button>
@@ -39,7 +39,7 @@ function BasicHashAttack() {
     const [x, y, buttonRef] = useMouseProgress();
     useChangedConfig(buttonRef as React.MutableRefObject<HTMLButtonElement | null>, Configuration.BASIC);
     return (
-        <button onClick={() => dispatch(selectedConfig(Configuration.BASIC))} type="button" ref={buttonRef} style={{ '--x': x, '--y': y } as React.CSSProperties} className={`${styles.attackButton} ${rippleStyle.rippleButton} border py-3`}>
+        <button onClick={() => dispatch(selectedConfig(Configuration.BASIC))} type="button" ref={buttonRef} style={{ '--x': x, '--y': y } as React.CSSProperties} className={`text-fl-xs  ${styles.attackButton} ${rippleStyle.rippleButton} `}>
             <BasicIcon className={`${styles.icon} `} />
             Basic Hash Search
         </button>
