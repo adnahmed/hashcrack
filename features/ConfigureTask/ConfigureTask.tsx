@@ -13,7 +13,10 @@ function ConfigureTask() {
             <AccordionItem>
                 <BasicHashAttack />
                 <AccordionContent isHidden={currentConfig !== Configuration.BASIC}>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    <p className="flex flex-col">
+                        <span>We will perform well-balanced basic search of commonly used hash passwords depending on your hash type.</span>
+                        <span>We will run basic search free of charge, but we will ask you to pay 0.0005BTC for the results in case of success.</span>
+                    </p>
                 </AccordionContent>
             </AccordionItem>
             <ComingSoonAttacks />
@@ -56,7 +59,7 @@ function BasicHashAttack() {
             type="button"
             ref={buttonRef}
             style={{ '--x': x, '--y': y } as React.CSSProperties}
-            className={`text-fl-xs  ${styles.attackButton} ${rippleStyle.rippleButton} `}>
+            className={`text-fl-xs ${currentConfig === Configuration.BASIC ? styles.attackButtonSelected : undefined}  ${styles.attackButton} ${rippleStyle.rippleButton} `}>
             <BasicIcon className={`${styles.icon} `} />
             Basic Hash Search
         </button>

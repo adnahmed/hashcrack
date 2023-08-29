@@ -9,7 +9,7 @@ import { selectActiveTab } from '../../features/Navigation/navigationSlice';
 import ConfigureTask from '../ConfigureTask/ConfigureTask';
 import VerifyHashlist from '../VerifyHashlist/VerifyHashlist';
 import { selectWizardStepReached, stepIdReached } from '../Wizard/wizardSlice';
-import { resettedWizard, selectHashlistFile, selectHashlistVerified, selectParsedHashlist, selectRejectedHashlist, selectSelectedHashType, selectVerifyingHashlist } from './newTaskSlice';
+import { resettedWizard, selectAttackConfigured, selectHashlistFile, selectHashlistVerified, selectParsedHashlist, selectRejectedHashlist, selectSelectedHashType, selectVerifyingHashlist } from './newTaskSlice';
 import { verifyHashlist } from './verifyHashlistThunk';
 
 export default function NewTask() {
@@ -18,6 +18,7 @@ export default function NewTask() {
     const hashlistVerified = useAppSelector(selectHashlistVerified);
     const verifyingHashlist = useAppSelector(selectVerifyingHashlist);
     const hashlistFile = useAppSelector(selectHashlistFile);
+    const attackConfigured = useAppSelector(selectAttackConfigured);
     const parsedHashes = useAppSelector(selectParsedHashlist);
     const rejectedHashes = useAppSelector(selectRejectedHashlist);
     const hashlistConsumer = useContext(HashlistContext);
@@ -25,7 +26,7 @@ export default function NewTask() {
     const usingTextArea = hashlistConsumer && hashlistConsumer.hashlist.length !== 0;
     const VerifyStepDisabled = useMemo(() => (hashlistFile === undefined && !usingTextArea) || selectedHashType === '-1', [hashlistFile, usingTextArea, selectedHashType]);
     const ConfigureStepDisabled = useMemo(() => parsedHashes.length === 0, [parsedHashes.length]);
-    const ExtrasStepDisabled = useMemo(() => wizardStepReached === 3, [wizardStepReached]);
+    const ExtrasStepDisabled = useMemo(() => wizardStepReached < 3 || !attackConfigured, [attackConfigured, wizardStepReached]);
     const dispatch = useAppDispatch();
     const usingInput = usingTextArea || hashlistFile !== undefined;
     React.useEffect(() => {
@@ -39,30 +40,31 @@ export default function NewTask() {
                 name: 'Add Hashlist',
                 component: <AddHashlist />,
                 isDisabled: verifyingHashlist || hashlistVerified,
+                canJumpTo: true,
             },
             {
                 id: '2',
                 name: 'Verify Hashlist',
                 component: <VerifyHashlist />,
                 isDisabled: VerifyStepDisabled,
-                canJumpTo: activeTab === 1,
+                canJumpTo: wizardStepReached >= 1,
             },
             {
                 id: '3',
                 name: 'Configure Task',
                 component: <ConfigureTask />,
                 isDisabled: ConfigureStepDisabled,
-                canJumpTo: wizardStepReached === 2 || wizardStepReached === 3 || wizardStepReached === 4,
+                canJumpTo: wizardStepReached >= 2,
             },
             {
                 id: '4',
                 name: 'Extras',
                 component: <div>Extra Sauce?</div>,
                 isDisabled: ExtrasStepDisabled,
-                canJumpTo: wizardStepReached === 3,
+                canJumpTo: wizardStepReached >= 3,
             },
         ],
-        [ConfigureStepDisabled, ExtrasStepDisabled, VerifyStepDisabled, activeTab, hashlistVerified, verifyingHashlist, wizardStepReached]
+        [ConfigureStepDisabled, ExtrasStepDisabled, VerifyStepDisabled, hashlistVerified, verifyingHashlist, wizardStepReached]
     );
 
     const closeWizard = () => {

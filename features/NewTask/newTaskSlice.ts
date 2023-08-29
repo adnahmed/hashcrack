@@ -9,6 +9,7 @@ export enum Configuration {
 }
 interface NewTaskState {
     selectedConfig?: Configuration;
+    attackConfigured: boolean;
     verifyingHashlist: boolean;
     hashlistVerified: boolean;
     selectedHashType: string;
@@ -27,6 +28,7 @@ const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
     state.selectedHashType = "-1";
     state.hashlistFileType = undefined;
     state.hashlistVerified = false;
+    state.attackConfigured = false;
     state.verifyingHashlist = false;
     state.selectedConfig = undefined;
     if (state.hashlistFile) {
@@ -43,6 +45,7 @@ const newTask = createSlice({
     name: "newTask",
     initialState: {
         selectedConfig: undefined,
+        attackConfigured: false,
         verifyingHashlist: false,
         hashlistVerified: false,
         selectedHashType: '-1',
@@ -78,6 +81,12 @@ const newTask = createSlice({
         },
         selectedConfig: (state, action: PayloadAction<Configuration | undefined>) => {
             state.selectedConfig = action.payload;
+            if (action.payload === undefined) {
+                state.attackConfigured = false;
+            }
+            if (action.payload === Configuration.BASIC) {
+                state.attackConfigured = true;
+            }
         },
         resettedWizard: ResetWizard
     },
@@ -130,6 +139,7 @@ export const selectHashlistFile = (state: AppState) => state.newTask.hashlistFil
 export const selectVerifyingHashlist = (state: AppState) => state.newTask.verifyingHashlist;
 export const selectParsedHashlist = (state: AppState) => state.newTask.hashlist;
 export const selectRejectedHashlist = (state: AppState) => state.newTask.rejectedHashlist;
+export const selectAttackConfigured = (state: AppState) => state.newTask.attackConfigured;
 export const selectSelectedConfig = (state: AppState) =>
     state.newTask.selectedConfig; export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard, selectedConfig } = newTask.actions;
 export const { useNewTaskMutation } = extendedApiSlice
