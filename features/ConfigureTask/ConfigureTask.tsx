@@ -1,18 +1,36 @@
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import styles from '@/styles/ConfigureTask.module.css';
 import rippleStyle from '@/styles/RippleEffect.module.scss';
+import { Accordion, AccordionContent, AccordionItem } from '@patternfly/react-core';
 import React, { JSX, SVGProps, useEffect, useRef, useState } from 'react';
 import { Configuration, selectSelectedConfig, selectedConfig } from '../NewTask/newTaskSlice';
 
 function ConfigureTask() {
+    const [expanded, setExpanded] = React.useState('def-list-toggle2');
+    const onToggle = (id: string) => {
+        if (id === expanded) {
+            setExpanded('');
+        } else {
+            setExpanded(id);
+        }
+    };
+    const onClickToggle = () => onToggle('def-list-toggle1');
     return (
-        <div className={styles.attackContainer}>
-            <BasicHashAttack />
+        <Accordion className={styles.attackContainer}>
+            <AccordionItem>
+                <BasicHashAttack expanded={expanded} onClickToggle={onClickToggle} />
+                <AccordionContent id="def-list-expand1" isHidden={expanded !== 'def-list-toggle1'}>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                </AccordionContent>
+            </AccordionItem>
             <ComingSoonAttacks />
-        </div>
+        </Accordion>
     );
 }
-
+interface AttackButtonProps {
+    expanded: string;
+    onClickToggle: () => void;
+}
 function ComingSoonAttacks() {
     const [x, y, buttonRef] = useMouseProgress();
     return (
@@ -22,24 +40,34 @@ function ComingSoonAttacks() {
         </button>
     );
 }
-function useChangedConfig(buttonRef: React.MutableRefObject<HTMLButtonElement | null>, config: Configuration) {
+
+function useChangedConfig(buttonRef: React.MutableRefObject<HTMLButtonElement | null>, config: Configuration, expanded: boolean) {
     const currentConfig = useAppSelector(selectSelectedConfig);
     useEffect(() => {
         const button = buttonRef?.current;
-        const updateTheme = (e) => {
-            if (currentConfig === config) button?.classList.add(`${styles.attackButtonSelected}`);
+        const updateTheme = () => {
+            if (currentConfig === config && expanded) button?.classList.add(`${styles.attackButtonSelected}`);
             else button?.classList.remove(`${styles.attackButtonSelected}`);
         };
         button?.addEventListener('animationend', updateTheme);
         return () => button?.removeEventListener('animationend', updateTheme);
-    }, [buttonRef, config, currentConfig]);
+    }, [buttonRef, config, currentConfig, expanded]);
 }
-function BasicHashAttack() {
+function BasicHashAttack(props: AttackButtonProps) {
     const dispatch = useAppDispatch();
     const [x, y, buttonRef] = useMouseProgress();
-    useChangedConfig(buttonRef as React.MutableRefObject<HTMLButtonElement | null>, Configuration.BASIC);
+    useChangedConfig(buttonRef as React.MutableRefObject<HTMLButtonElement | null>, Configuration.BASIC, props.expanded === 'def-list-toggle1');
     return (
-        <button onClick={() => dispatch(selectedConfig(Configuration.BASIC))} type="button" ref={buttonRef} style={{ '--x': x, '--y': y } as React.CSSProperties} className={`text-fl-xs  ${styles.attackButton} ${rippleStyle.rippleButton} `}>
+        <button
+            id="def-list-toggle1"
+            onClick={() => {
+                dispatch(selectedConfig(Configuration.BASIC));
+                props.onClickToggle();
+            }}
+            type="button"
+            ref={buttonRef}
+            style={{ '--x': x, '--y': y } as React.CSSProperties}
+            className={`text-fl-xs  ${styles.attackButton} ${rippleStyle.rippleButton} `}>
             <BasicIcon className={`${styles.icon} `} />
             Basic Hash Search
         </button>
@@ -69,7 +97,7 @@ const useMouseProgress = () => {
             setX(`${event.offsetX}px`);
             setY(`${event.offsetY}px`);
             button?.classList.add(`${rippleStyle.ripple}`);
-            button?.addEventListener('animationend', (e) => {
+            button?.addEventListener('animationend', () => {
                 button?.classList.remove(`${rippleStyle.ripple}`);
             });
         };
