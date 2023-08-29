@@ -76,3 +76,7 @@
         width: 100%;
     }
 }
+
+.attackContainer p {
+    row-gap: calc(1.97rem + 16.50 * var(--fluid-bp));
+}
