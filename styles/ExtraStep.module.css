@@ -1,0 +1,3 @@
+.textInput {
+    width: calc(27.88rem + 18.00 * var(--fluid-bp));
+}
