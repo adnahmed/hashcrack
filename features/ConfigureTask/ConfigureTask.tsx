@@ -6,19 +6,13 @@ import React, { JSX, SVGProps, useEffect, useRef, useState } from 'react';
 import { Configuration, selectSelectedConfig, selectedConfig } from '../NewTask/newTaskSlice';
 
 function ConfigureTask() {
-    const [expanded, setExpanded] = React.useState('');
-    const onToggle = (id: string) => {
-        if (id === expanded) {
-            setExpanded('');
-        } else {
-            setExpanded(id);
-        }
-    };
+    const currentConfig = useAppSelector(selectSelectedConfig);
+
     return (
         <Accordion className={styles.attackContainer}>
             <AccordionItem>
-                <BasicHashAttack id={Configuration.BASIC.toString()} expanded={expanded} onToggle={onToggle} />
-                <AccordionContent id={Configuration.BASIC.toString()} isHidden={expanded !== Configuration.BASIC.toString()}>
+                <BasicHashAttack />
+                <AccordionContent isHidden={currentConfig !== Configuration.BASIC}>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </AccordionContent>
             </AccordionItem>
@@ -26,11 +20,7 @@ function ConfigureTask() {
         </Accordion>
     );
 }
-interface AttackButtonProps {
-    expanded: string;
-    onToggle: (id: string) => void;
-    id: string;
-}
+
 function ComingSoonAttacks() {
     const [x, y, buttonRef] = useMouseProgress();
     return (
@@ -41,28 +31,27 @@ function ComingSoonAttacks() {
     );
 }
 
-function useChangedConfig(buttonRef: React.MutableRefObject<HTMLButtonElement | null>, config: Configuration, expanded: boolean) {
+function useChangedConfig(buttonRef: React.MutableRefObject<HTMLButtonElement | null>, config: Configuration) {
     const currentConfig = useAppSelector(selectSelectedConfig);
     useEffect(() => {
         const button = buttonRef?.current;
         const updateTheme = () => {
-            if (currentConfig === config && expanded) button?.classList.add(`${styles.attackButtonSelected}`);
+            if (currentConfig === config) button?.classList.add(`${styles.attackButtonSelected}`);
             else button?.classList.remove(`${styles.attackButtonSelected}`);
         };
         button?.addEventListener('animationend', updateTheme);
         return () => button?.removeEventListener('animationend', updateTheme);
-    }, [buttonRef, config, currentConfig, expanded]);
+    }, [buttonRef, config, currentConfig]);
 }
-function BasicHashAttack(props: AttackButtonProps) {
+function BasicHashAttack() {
     const dispatch = useAppDispatch();
+    const currentConfig = useAppSelector(selectSelectedConfig);
     const [x, y, buttonRef] = useMouseProgress();
-    useChangedConfig(buttonRef as React.MutableRefObject<HTMLButtonElement | null>, Configuration.BASIC, props.expanded === props.id);
+    useChangedConfig(buttonRef as React.MutableRefObject<HTMLButtonElement | null>, Configuration.BASIC);
     return (
         <button
-            id="def-list-toggle1"
             onClick={() => {
-                dispatch(selectedConfig(Configuration.BASIC));
-                props.onToggle(props.id);
+                dispatch(currentConfig === Configuration.BASIC ? selectedConfig(undefined) : selectedConfig(Configuration.BASIC));
             }}
             type="button"
             ref={buttonRef}

@@ -76,7 +76,7 @@ const newTask = createSlice({
         hashlistVerificationChanged: (state, action: PayloadAction<boolean>) => {
             state.hashlistVerified = action.payload;
         },
-        selectedConfig: (state, action: PayloadAction<Configuration>) => {
+        selectedConfig: (state, action: PayloadAction<Configuration | undefined>) => {
             state.selectedConfig = action.payload;
         },
         resettedWizard: ResetWizard
