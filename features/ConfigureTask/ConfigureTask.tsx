@@ -6,7 +6,7 @@ import React, { JSX, SVGProps, useEffect, useRef, useState } from 'react';
 import { Configuration, selectSelectedConfig, selectedConfig } from '../NewTask/newTaskSlice';
 
 function ConfigureTask() {
-    const [expanded, setExpanded] = React.useState('def-list-toggle2');
+    const [expanded, setExpanded] = React.useState('');
     const onToggle = (id: string) => {
         if (id === expanded) {
             setExpanded('');
@@ -14,12 +14,11 @@ function ConfigureTask() {
             setExpanded(id);
         }
     };
-    const onClickToggle = () => onToggle('def-list-toggle1');
     return (
         <Accordion className={styles.attackContainer}>
             <AccordionItem>
-                <BasicHashAttack expanded={expanded} onClickToggle={onClickToggle} />
-                <AccordionContent id="def-list-expand1" isHidden={expanded !== 'def-list-toggle1'}>
+                <BasicHashAttack id={Configuration.BASIC.toString()} expanded={expanded} onToggle={onToggle} />
+                <AccordionContent id={Configuration.BASIC.toString()} isHidden={expanded !== Configuration.BASIC.toString()}>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                 </AccordionContent>
             </AccordionItem>
@@ -29,7 +28,8 @@ function ConfigureTask() {
 }
 interface AttackButtonProps {
     expanded: string;
-    onClickToggle: () => void;
+    onToggle: (id: string) => void;
+    id: string;
 }
 function ComingSoonAttacks() {
     const [x, y, buttonRef] = useMouseProgress();
@@ -56,13 +56,13 @@ function useChangedConfig(buttonRef: React.MutableRefObject<HTMLButtonElement | 
 function BasicHashAttack(props: AttackButtonProps) {
     const dispatch = useAppDispatch();
     const [x, y, buttonRef] = useMouseProgress();
-    useChangedConfig(buttonRef as React.MutableRefObject<HTMLButtonElement | null>, Configuration.BASIC, props.expanded === 'def-list-toggle1');
+    useChangedConfig(buttonRef as React.MutableRefObject<HTMLButtonElement | null>, Configuration.BASIC, props.expanded === props.id);
     return (
         <button
             id="def-list-toggle1"
             onClick={() => {
                 dispatch(selectedConfig(Configuration.BASIC));
-                props.onClickToggle();
+                props.onToggle(props.id);
             }}
             type="button"
             ref={buttonRef}
