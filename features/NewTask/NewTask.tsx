@@ -1,5 +1,6 @@
 import HashlistContext from '@/Context/HashlistContext';
 import AddHashlist from '@/components/AddHashlist';
+import ExtraStep from '@/components/ExtraStep';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
 import { Button, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
@@ -59,7 +60,7 @@ export default function NewTask() {
             {
                 id: '4',
                 name: 'Extras',
-                component: <div>Extra Sauce?</div>,
+                component: <ExtraStep />,
                 isDisabled: ExtrasStepDisabled,
                 canJumpTo: wizardStepReached >= 3,
             },
