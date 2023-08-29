@@ -8,7 +8,9 @@ export enum Configuration {
     BASIC
 }
 interface NewTaskState {
+    acceptedTermsAndConditions: boolean;
     selectedConfig?: Configuration;
+    resultEmail: string;
     attackConfigured: boolean;
     verifyingHashlist: boolean;
     hashlistVerified: boolean;
@@ -18,6 +20,7 @@ interface NewTaskState {
     hashlistFileSize?: number;
     hashlist: string[];
     rejectedHashlist: string[]
+    privacyMode: boolean;
 }
 
 const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
@@ -26,6 +29,8 @@ const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
         return;
     }
     state.selectedHashType = "-1";
+    state.privacyMode = false;
+    state.resultEmail = '';
     state.hashlistFileType = undefined;
     state.hashlistVerified = false;
     state.attackConfigured = false;
@@ -45,6 +50,9 @@ const newTask = createSlice({
     name: "newTask",
     initialState: {
         selectedConfig: undefined,
+        resultEmail: '',
+        acceptedTermsAndConditions: false,
+        privacyMode: false,
         attackConfigured: false,
         verifyingHashlist: false,
         hashlistVerified: false,
@@ -62,6 +70,12 @@ const newTask = createSlice({
         failedParsingHash: (state, action: PayloadAction<string>) => {
             state.rejectedHashlist.push(action.payload);
         },
+        changedPrivacyMode: (state, action: PayloadAction<boolean>) => {
+            state.privacyMode = action.payload;
+        },
+        changedResultEmail: (state, action: PayloadAction<string>) => {
+            state.resultEmail = action.payload;
+        },
         selectedHashlistFile: (state, action: PayloadAction<
             {
                 dataUrl: string;
@@ -72,6 +86,9 @@ const newTask = createSlice({
             state.hashlistFile = action.payload.dataUrl;
             state.hashlistFileType = action.payload.type;
             state.hashlistFileSize = action.payload.size;
+        },
+        changedTermsAndConditions: (state, action: PayloadAction<boolean>) => {
+            state.acceptedTermsAndConditions = action.payload
         },
         parsedHash: (state, action: PayloadAction<string>) => {
             state.hashlist.push(action.payload);
@@ -134,6 +151,9 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
 
 export default newTask;
 export const selectSelectedHashType = (state: AppState) => state.newTask.selectedHashType;
+export const selectTermsAndConditions = (state: AppState) => state.newTask.acceptedTermsAndConditions;
+export const selectPrivacyMode = (state: AppState) => state.newTask.privacyMode;
+export const selectResultEmail = (state: AppState) => state.newTask.resultEmail;
 export const selectHashlistVerified = (state: AppState) => state.newTask.hashlistVerified;
 export const selectHashlistFile = (state: AppState) => state.newTask.hashlistFile;
 export const selectVerifyingHashlist = (state: AppState) => state.newTask.verifyingHashlist;
@@ -141,5 +161,5 @@ export const selectParsedHashlist = (state: AppState) => state.newTask.hashlist;
 export const selectRejectedHashlist = (state: AppState) => state.newTask.rejectedHashlist;
 export const selectAttackConfigured = (state: AppState) => state.newTask.attackConfigured;
 export const selectSelectedConfig = (state: AppState) =>
-    state.newTask.selectedConfig; export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard, selectedConfig } = newTask.actions;
+    state.newTask.selectedConfig; export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard, selectedConfig, changedPrivacyMode, changedResultEmail, changedTermsAndConditions } = newTask.actions;
 export const { useNewTaskMutation } = extendedApiSlice
