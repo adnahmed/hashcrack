@@ -12,5 +12,8 @@ namespace NodeJS {
 
     /* Iron-Session (Secure) */
     SECRET_COOKIE_PASSWORD: string;
+
+    /* Business Logic */
+    NEXT_PUBLIC_Privacy_Mode_Price: string;
   }
 }
