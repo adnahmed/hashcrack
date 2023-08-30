@@ -1,15 +1,14 @@
+import applyCors from "@/lib/corsMiddleware";
 import getClientIp from "@/lib/getClientIp";
-import runMiddleware from "@/lib/runMiddleware";
 import type { TurnstileServerValidationResponse } from "@marsidev/react-turnstile";
 import { IsNotEmpty, Length } from "class-validator";
 import Cors from "cors";
-import type { NextApiRequest, NextApiResponse, PageConfig } from "next";
+import type { NextApiRequest, PageConfig } from "next";
 import {
   Body,
   HttpCode,
   Post,
   Req,
-  Res,
   UnprocessableEntityException, ValidationPipe, createHandler
 } from "next-api-decorators";
 import os from "os";
@@ -33,12 +32,11 @@ class TokenValidateInput {
 class TokenValidateHandler {
   @Post()
   @HttpCode(200)
+  @applyCors(cors)()
   async verify(
     @Req() req: NextApiRequest,
-    @Res() res: NextApiResponse,
     @Body(ValidationPipe) body: TokenValidateInput
   ) {
-    await runMiddleware(req, res, cors);
     const { token } = body;
     if (process.env.NODE_ENV === "development") {
       if (token === DUMMY_TOKEN) {
