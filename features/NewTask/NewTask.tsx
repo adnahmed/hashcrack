@@ -1,6 +1,7 @@
 import HashlistContext from '@/Context/HashlistContext';
 import AddHashlist from '@/components/AddHashlist';
 import ExtraStep from '@/components/ExtraStep';
+import FinishStep from '@/components/FinishStep';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
 import { Button, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
@@ -10,7 +11,7 @@ import { selectActiveTab } from '../../features/Navigation/navigationSlice';
 import ConfigureTask from '../ConfigureTask/ConfigureTask';
 import VerifyHashlist from '../VerifyHashlist/VerifyHashlist';
 import { selectWizardStepReached, stepIdReached } from '../Wizard/wizardSlice';
-import { resettedWizard, selectAttackConfigured, selectHashlistFile, selectHashlistVerified, selectParsedHashlist, selectRejectedHashlist, selectSelectedHashType, selectVerifyingHashlist } from './newTaskSlice';
+import { resettedWizard, selectAttackConfigured, selectHashlistFile, selectHashlistVerified, selectParsedHashlist, selectRejectedHashlist, selectSelectedHashType, selectTermsAndConditions, selectVerifyingHashlist } from './newTaskSlice';
 import { verifyHashlist } from './verifyHashlistThunk';
 
 export default function NewTask() {
@@ -24,10 +25,12 @@ export default function NewTask() {
     const rejectedHashes = useAppSelector(selectRejectedHashlist);
     const hashlistConsumer = useContext(HashlistContext);
     const activeTab = useAppSelector(selectActiveTab);
+    const accptedTermsAndConditions = useAppSelector(selectTermsAndConditions);
     const usingTextArea = hashlistConsumer && hashlistConsumer.hashlist.length !== 0;
     const VerifyStepDisabled = useMemo(() => (hashlistFile === undefined && !usingTextArea) || selectedHashType === '-1', [hashlistFile, usingTextArea, selectedHashType]);
     const ConfigureStepDisabled = useMemo(() => parsedHashes.length === 0, [parsedHashes.length]);
     const ExtrasStepDisabled = useMemo(() => wizardStepReached < 3 || !attackConfigured, [attackConfigured, wizardStepReached]);
+    // const FinishStepDisabled = useMemo(() => wizardStepReached < 4 || !accptedTermsAndConditions, [accptedTermsAndConditions, wizardStepReached]);
     const dispatch = useAppDispatch();
     const usingInput = usingTextArea || hashlistFile !== undefined;
     React.useEffect(() => {
@@ -63,6 +66,13 @@ export default function NewTask() {
                 component: <ExtraStep />,
                 isDisabled: ExtrasStepDisabled,
                 canJumpTo: wizardStepReached >= 3,
+            },
+            {
+                id: '5',
+                name: 'Finish',
+                component: <FinishStep />,
+                isDisabled: true,
+                canJumpTo: wizardStepReached >= 4,
             },
         ],
         [ConfigureStepDisabled, ExtrasStepDisabled, VerifyStepDisabled, hashlistVerified, verifyingHashlist, wizardStepReached]
@@ -109,14 +119,27 @@ export default function NewTask() {
         goToStep('1');
     }
     const NextStepDisabled = useMemo(() => (VerifyStepDisabled && wizardStepReached === 1) || (ExtrasStepDisabled && wizardStepReached === 3), [ExtrasStepDisabled, VerifyStepDisabled, wizardStepReached]);
+    const NoHashFound = (id: string | number | undefined) => id === '2' && parsedHashes.length === 0;
     const CustomFooter = (
         <WizardFooter>
             <WizardContextConsumer>
                 {({ activeStep, goToStepByName, onNext, onBack, onClose, goToStepById: goToStep }) => (
                     <>
-                        {activeStep.id === '2' && parsedHashes.length === 0 ? undefined : (
+                        {NoHashFound(activeStep.id) || activeStep.id === '4' ? undefined : (
                             <Button variant="primary" className={NextStepDisabled ? 'pf-m-disabled' : ''} type="submit" onClick={onNext}>
                                 {rejectedHashes.length > 0 && activeStep.id === '2' ? '⚠️ Continue' : 'Next'}
+                            </Button>
+                        )}
+                        {activeStep.id !== '4' ? undefined : (
+                            <Button
+                                variant="primary"
+                                className={!accptedTermsAndConditions ? 'pf-m-disabled' : ''}
+                                type="submit"
+                                isLoading={true}
+                                onClick={() => {
+                                    // Submit Task
+                                }}>
+                                Submit
                             </Button>
                         )}
                         <Button variant="secondary" className={usingInput ? '' : 'pf-m-disabled'} type="submit" onClick={() => resetWizard(goToStep)}>
