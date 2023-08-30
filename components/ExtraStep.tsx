@@ -15,7 +15,7 @@ function ExtraStep() {
         <div className="flex flex-col flex-wrap justify-start gap-fl-xs">
             <Checkbox
                 id="privacy_mode"
-                label={`Privacy Mode (${process.env.NEXT_PUBLIC_Privacy_Mode_Price})`}
+                label={`Privacy Mode (${process.env.NEXT_PUBLIC_Privacy_Mode_Price}BTC)`}
                 isChecked={isPrivacyMode}
                 onChange={() => {
                     dispatch(changedPrivacyMode(!isPrivacyMode));
