@@ -143,8 +143,8 @@ const newTask = createSlice({
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        newTask: builder.mutation({
-            query: (task) => '/task/new'
+        submitTask: builder.mutation<null, undefined>({
+            query: () => '/api/task/submit'
         })
     })
 })
@@ -162,4 +162,4 @@ export const selectRejectedHashlist = (state: AppState) => state.newTask.rejecte
 export const selectAttackConfigured = (state: AppState) => state.newTask.attackConfigured;
 export const selectSelectedConfig = (state: AppState) =>
     state.newTask.selectedConfig; export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard, selectedConfig, changedPrivacyMode, changedResultEmail, changedTermsAndConditions } = newTask.actions;
-export const { useNewTaskMutation } = extendedApiSlice
+export const { useSubmitTaskMutation } = extendedApiSlice
