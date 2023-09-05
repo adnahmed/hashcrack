@@ -6,23 +6,20 @@ import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
 import { Button, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
 import React, { useContext, useMemo } from 'react';
+import toast from 'react-hot-toast';
 import { animateScroll as scroll } from 'react-scroll';
 import { selectActiveTab } from '../../features/Navigation/navigationSlice';
 import ConfigureTask from '../ConfigureTask/ConfigureTask';
 import VerifyHashlist from '../VerifyHashlist/VerifyHashlist';
 import { selectWizardStepReached, stepIdReached } from '../Wizard/wizardSlice';
-import { resettedWizard, selectAttackConfigured, selectHashlistFile, selectHashlistVerified, selectParsedHashlist, selectRejectedHashlist, selectSelectedHashType, selectTermsAndConditions, selectVerifyingHashlist } from './newTaskSlice';
+import { createdTask, resettedWizard, selectParsedHashlist, selectTaskData, selectTermsAndConditions, useSubmitTaskMutation } from './newTaskSlice';
 import { verifyHashlist } from './verifyHashlistThunk';
 
 export default function NewTask() {
     const wizardStepReached = useAppSelector(selectWizardStepReached);
-    const selectedHashType = useAppSelector(selectSelectedHashType);
-    const hashlistVerified = useAppSelector(selectHashlistVerified);
-    const verifyingHashlist = useAppSelector(selectVerifyingHashlist);
-    const hashlistFile = useAppSelector(selectHashlistFile);
-    const attackConfigured = useAppSelector(selectAttackConfigured);
+    const [submitTask, { isError: failedTaskSubmission, isSuccess: submittedTask, error: failedSubmissionError, isLoading: isSubmittingTask }] = useSubmitTaskMutation();
+    const { selectedHashType, hashlistVerified, verifyingHashlist, hashlistFile, attackConfigured, rejectedHashlist: rejectedHashes, ...taskData } = useAppSelector(selectTaskData);
     const parsedHashes = useAppSelector(selectParsedHashlist);
-    const rejectedHashes = useAppSelector(selectRejectedHashlist);
     const hashlistConsumer = useContext(HashlistContext);
     const activeTab = useAppSelector(selectActiveTab);
     const accptedTermsAndConditions = useAppSelector(selectTermsAndConditions);
@@ -135,9 +132,26 @@ export default function NewTask() {
                                 variant="primary"
                                 className={!accptedTermsAndConditions ? 'pf-m-disabled' : ''}
                                 type="submit"
-                                isLoading={true}
-                                onClick={() => {
+                                isLoading={isSubmittingTask}
+                                onClick={async () => {
                                     // Submit Task
+                                    try {
+                                        const response = await submitTask({
+                                            ...taskData,
+                                            attackConfigured,
+                                            hashlistVerified,
+                                            selectedHashType,
+                                            rejectedHashlist: rejectedHashes,
+                                        }).unwrap();
+                                        if (response.success && submittedTask) {
+                                            dispatch(createdTask(response.task));
+                                            dispatch(stepIdReached(5));
+                                        }
+                                        if (failedTaskSubmission) toast.error(`Error occurred while submitting task , Please try again.`);
+                                    } catch (err) {
+                                        //TODO: Log the error
+                                        toast.error(`Error occurred while submitting task, Please try again.`);
+                                    }
                                 }}>
                                 Submit
                             </Button>
