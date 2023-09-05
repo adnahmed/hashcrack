@@ -25,13 +25,13 @@ class TaskSubmissionHandler {
     async submit(@Req() req: NextApiRequest, @Res() res: NextApiResponse) {
         const sessionData = await getSessionData(req, res);
         // TODO: Create task in db.
-        return {
+        res.status(200).send({
             ...sessionData,
             success: true,
             task: {
                 id: 1,
             },
-        };
+        });
     }
 }
 
