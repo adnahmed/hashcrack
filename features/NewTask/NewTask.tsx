@@ -68,11 +68,11 @@ export default function NewTask() {
                 id: '5',
                 name: 'Finish',
                 component: <FinishStep />,
-                isDisabled: true,
+                isDisabled: !submittedTask,
                 canJumpTo: wizardStepReached >= 4,
             },
         ],
-        [ConfigureStepDisabled, ExtrasStepDisabled, VerifyStepDisabled, hashlistVerified, verifyingHashlist, wizardStepReached]
+        [ConfigureStepDisabled, ExtrasStepDisabled, VerifyStepDisabled, hashlistVerified, submittedTask, verifyingHashlist, wizardStepReached]
     );
 
     const closeWizard = () => {
