@@ -31,7 +31,7 @@ interface NewTaskState {
     privacyMode: boolean;
 }
 
-export type TaskData = Omit<NewTaskState, 'verifyingHashlist'>;
+export type TaskData = Omit<NewTaskState, 'verifyingHashlist' | 'createdTasks'>;
 
 const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
     // TODO: replace magic number 1 with Tabs Label enum.
