@@ -86,7 +86,6 @@ export default function NewTask() {
                 id = parseInt(id);
             }
             const nextStep = (id: number) => dispatch(stepIdReached(wizardStepReached < id ? id : wizardStepReached));
-            console.log(wizardStepReached);
             if (id === 2) {
                 if (usingTextArea) {
                     const hashlist = getHashlist(hashlistConsumer.hashlist);
