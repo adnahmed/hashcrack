@@ -157,7 +157,7 @@ const newTask = createSlice({
 export const extendedApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
         submitTask: builder.mutation<SubmittedTaskResponse, TaskData>({
-            query: () => '/api/task/submit',
+            query: (body) => ({ url: '/api/task/submit', method: 'POST', body }),
         }),
     }),
 });
