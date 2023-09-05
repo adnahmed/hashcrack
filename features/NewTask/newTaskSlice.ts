@@ -1,13 +1,21 @@
-import { AppState } from "@/lib/redux/store";
-import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import toast from "react-hot-toast";
-import { activeTabChanged } from "../Navigation/navigationSlice";
-import { apiSlice } from "../api/apiSlice";
-import { verifyHashlist } from "./verifyHashlistThunk";
+import { AppState } from '@/lib/redux/store';
+import { SubmittedTaskResponse } from '@/pages/api/task/submit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import toast from 'react-hot-toast';
+import { activeTabChanged } from '../Navigation/navigationSlice';
+import { apiSlice } from '../api/apiSlice';
+import { verifyHashlist } from './verifyHashlistThunk';
 export enum Configuration {
-    BASIC
+    BASIC,
 }
+
+export interface Task {
+    id: string;
+    created_by: string;
+}
+
 interface NewTaskState {
+    createdTasks: Task[];
     acceptedTermsAndConditions: boolean;
     selectedConfig?: Configuration;
     resultEmail: string;
@@ -19,16 +27,18 @@ interface NewTaskState {
     hashlistFileType?: string;
     hashlistFileSize?: number;
     hashlist: string[];
-    rejectedHashlist: string[]
+    rejectedHashlist: string[];
     privacyMode: boolean;
 }
+
+export type TaskData = Omit<NewTaskState, 'verifyingHashlist'>;
 
 const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
     // TODO: replace magic number 1 with Tabs Label enum.
     if (action.type === `${activeTabChanged.name}/activeTabChanged` && action.payload === 1 /* Add New Task Tab */) {
         return;
     }
-    state.selectedHashType = "-1";
+    state.selectedHashType = '-1';
     state.privacyMode = false;
     state.resultEmail = '';
     state.hashlistFileType = undefined;
@@ -39,17 +49,18 @@ const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
     if (state.hashlistFile) {
         state.hashlistFileType = undefined;
         state.hashlistFileSize = undefined;
-        URL.revokeObjectURL(state.hashlistFile)
+        URL.revokeObjectURL(state.hashlistFile);
     }
     state.hashlistFile = undefined;
     state.hashlist = [];
     state.rejectedHashlist = [];
-}
+};
 
 const newTask = createSlice({
-    name: "newTask",
+    name: 'newTask',
     initialState: {
         selectedConfig: undefined,
+        createdTasks: [],
         resultEmail: '',
         acceptedTermsAndConditions: false,
         privacyMode: false,
@@ -76,22 +87,26 @@ const newTask = createSlice({
         changedResultEmail: (state, action: PayloadAction<string>) => {
             state.resultEmail = action.payload;
         },
-        selectedHashlistFile: (state, action: PayloadAction<
-            {
+        selectedHashlistFile: (
+            state,
+            action: PayloadAction<{
                 dataUrl: string;
                 type: string;
                 size: number;
-            }
-        >) => {
+            }>
+        ) => {
             state.hashlistFile = action.payload.dataUrl;
             state.hashlistFileType = action.payload.type;
             state.hashlistFileSize = action.payload.size;
         },
         changedTermsAndConditions: (state, action: PayloadAction<boolean>) => {
-            state.acceptedTermsAndConditions = action.payload
+            state.acceptedTermsAndConditions = action.payload;
         },
         parsedHash: (state, action: PayloadAction<string>) => {
             state.hashlist.push(action.payload);
+        },
+        createdTask: (state, action: PayloadAction<SubmittedTaskResponse['task']>) => {
+            state.createdTasks.push(action.payload);
         },
         hashlistVerificationChanged: (state, action: PayloadAction<boolean>) => {
             state.hashlistVerified = action.payload;
@@ -105,7 +120,7 @@ const newTask = createSlice({
                 state.attackConfigured = true;
             }
         },
-        resettedWizard: ResetWizard
+        resettedWizard: ResetWizard,
     },
 
     extraReducers: (builder) => {
@@ -116,7 +131,7 @@ const newTask = createSlice({
                 if (state.hashlistFile) {
                     state.hashlistFileType = undefined;
                     state.hashlistFileSize = undefined;
-                    URL.revokeObjectURL(state.hashlistFile)
+                    URL.revokeObjectURL(state.hashlistFile);
                 }
             })
             .addCase(verifyHashlist.rejected, (state, action: PayloadAction<any>) => {
@@ -126,7 +141,7 @@ const newTask = createSlice({
                 if (state.hashlistFile) {
                     state.hashlistFileType = undefined;
                     state.hashlistFileSize = undefined;
-                    URL.revokeObjectURL(state.hashlistFile)
+                    URL.revokeObjectURL(state.hashlistFile);
                 }
             })
             .addCase(verifyHashlist.pending, (state) => {
@@ -135,21 +150,21 @@ const newTask = createSlice({
                 state.rejectedHashlist = [];
                 state.hashlistVerified = false;
             })
-            .addCase(activeTabChanged, ResetWizard)
-    }
+            .addCase(activeTabChanged, ResetWizard);
+    },
 });
 
-
-
 export const extendedApiSlice = apiSlice.injectEndpoints({
-    endpoints: builder => ({
-        submitTask: builder.mutation<null, undefined>({
-            query: () => '/api/task/submit'
-        })
-    })
-})
+    endpoints: (builder) => ({
+        submitTask: builder.mutation<SubmittedTaskResponse, TaskData>({
+            query: () => '/api/task/submit',
+        }),
+    }),
+});
 
 export default newTask;
+export const selectTaskData = (state: AppState) => state.newTask;
+export const createdTasks = (state: AppState) => state.newTask.createdTasks;
 export const selectSelectedHashType = (state: AppState) => state.newTask.selectedHashType;
 export const selectTermsAndConditions = (state: AppState) => state.newTask.acceptedTermsAndConditions;
 export const selectPrivacyMode = (state: AppState) => state.newTask.privacyMode;
@@ -160,6 +175,6 @@ export const selectVerifyingHashlist = (state: AppState) => state.newTask.verify
 export const selectParsedHashlist = (state: AppState) => state.newTask.hashlist;
 export const selectRejectedHashlist = (state: AppState) => state.newTask.rejectedHashlist;
 export const selectAttackConfigured = (state: AppState) => state.newTask.attackConfigured;
-export const selectSelectedConfig = (state: AppState) =>
-    state.newTask.selectedConfig; export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard, selectedConfig, changedPrivacyMode, changedResultEmail, changedTermsAndConditions } = newTask.actions;
-export const { useSubmitTaskMutation } = extendedApiSlice
+export const selectSelectedConfig = (state: AppState) => state.newTask.selectedConfig;
+export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard, selectedConfig, changedPrivacyMode, changedResultEmail, changedTermsAndConditions, createdTask } = newTask.actions;
+export const { useSubmitTaskMutation } = extendedApiSlice;
