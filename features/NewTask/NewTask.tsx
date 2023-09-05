@@ -147,9 +147,13 @@ export default function NewTask() {
                                             dispatch(createdTask(response.task));
                                             dispatch(stepIdReached(5));
                                         }
-                                        if (failedTaskSubmission) toast.error(`Error occurred while submitting task , Please try again.`);
+                                        if (failedTaskSubmission) {
+                                            toast.dismiss();
+                                            toast.error(`Error occurred while submitting task , Please try again.`);
+                                        }
                                     } catch (err) {
                                         //TODO: Log the error
+                                        toast.dismiss();
                                         toast.error(`Error occurred while submitting task, Please try again.`);
                                     }
                                 }}>
