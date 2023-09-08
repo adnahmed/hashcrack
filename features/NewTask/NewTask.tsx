@@ -27,7 +27,7 @@ export default function NewTask() {
     const VerifyStepDisabled = useMemo(() => (hashlistFile === undefined && !usingTextArea) || selectedHashType === '-1', [hashlistFile, usingTextArea, selectedHashType]);
     const ConfigureStepDisabled = useMemo(() => parsedHashes.length === 0, [parsedHashes.length]);
     const ExtrasStepDisabled = useMemo(() => wizardStepReached < 3 || !attackConfigured, [attackConfigured, wizardStepReached]);
-    // const FinishStepDisabled = useMemo(() => wizardStepReached < 4 || !accptedTermsAndConditions, [accptedTermsAndConditions, wizardStepReached]);
+    const FinishStepDisabled = useMemo(() => wizardStepReached <= 4 || !accptedTermsAndConditions, [accptedTermsAndConditions, submittedTask, wizardStepReached]);
     const dispatch = useAppDispatch();
     const usingInput = usingTextArea || hashlistFile !== undefined;
     React.useEffect(() => {
@@ -68,11 +68,11 @@ export default function NewTask() {
                 id: '5',
                 name: 'Finish',
                 component: <FinishStep />,
-                isDisabled: !submittedTask,
+                isDisabled: FinishStepDisabled,
                 canJumpTo: wizardStepReached >= 4,
             },
         ],
-        [ConfigureStepDisabled, ExtrasStepDisabled, VerifyStepDisabled, hashlistVerified, submittedTask, verifyingHashlist, wizardStepReached]
+        [ConfigureStepDisabled, ExtrasStepDisabled, FinishStepDisabled, VerifyStepDisabled, hashlistVerified, verifyingHashlist, wizardStepReached]
     );
 
     const closeWizard = () => {
@@ -119,51 +119,58 @@ export default function NewTask() {
     const CustomFooter = (
         <WizardFooter>
             <WizardContextConsumer>
-                {({ activeStep, goToStepByName, onNext, onBack, onClose, goToStepById: goToStep }) => (
-                    <>
-                        {NoHashFound(activeStep.id) || activeStep.id === '4' ? undefined : (
-                            <Button variant="primary" className={NextStepDisabled ? 'pf-m-disabled' : ''} type="submit" onClick={onNext}>
-                                {rejectedHashes.length > 0 && activeStep.id === '2' ? '⚠️ Continue' : 'Next'}
-                            </Button>
-                        )}
-                        {activeStep.id !== '4' ? undefined : (
-                            <Button
-                                variant="primary"
-                                className={!accptedTermsAndConditions ? 'pf-m-disabled' : ''}
-                                type="submit"
-                                isLoading={isSubmittingTask}
-                                onClick={async () => {
-                                    // Submit Task
-                                    try {
-                                        const response = await submitTask({
-                                            ...taskData,
-                                            attackConfigured,
-                                            hashlistVerified,
-                                            selectedHashType,
-                                            rejectedHashlist: rejectedHashes,
-                                        }).unwrap();
-                                        if (response.success && submittedTask) {
-                                            dispatch(createdTask(response.task));
-                                            dispatch(stepIdReached(5));
-                                        }
-                                        if (failedTaskSubmission) {
+                {({ activeStep, goToStepByName, onNext, onBack, onClose, goToStepById: goToStep }) => {
+                    return (
+                        <>
+                            {NoHashFound(activeStep.id) || ['4', '3', '5'].includes(activeStep.id as string) ? undefined : (
+                                <Button variant="primary" className={NextStepDisabled && parsedHashes.length === 0 ? 'pf-m-disabled' : ''} type="submit" onClick={onNext}>
+                                    {rejectedHashes.length > 0 && activeStep.id === '2' ? '⚠️ Continue' : 'Next'}
+                                </Button>
+                            )}
+                            {activeStep.id === '4' ? (
+                                <Button
+                                    variant="primary"
+                                    className={!accptedTermsAndConditions ? 'pf-m-disabled' : submittedTask ? 'bg-green-400' : ''}
+                                    type="submit"
+                                    isLoading={isSubmittingTask}
+                                    onClick={async () => {
+                                        // Submit Task
+                                        try {
+                                            const response = await submitTask({
+                                                ...taskData,
+                                                attackConfigured,
+                                                hashlistVerified,
+                                                selectedHashType,
+                                                rejectedHashlist: rejectedHashes,
+                                            }).unwrap();
+                                            if (response.success) {
+                                                dispatch(createdTask(response.task));
+                                                goToStep('5');
+                                            }
+                                            if (failedTaskSubmission) {
+                                                toast.dismiss();
+                                                toast.error(`Error occurred while submitting task , Please try again.`);
+                                            }
+                                        } catch (err) {
+                                            //TODO: Log the error
                                             toast.dismiss();
-                                            toast.error(`Error occurred while submitting task , Please try again.`);
+                                            toast.error(`Error occurred while submitting task, Please try again.`);
                                         }
-                                    } catch (err) {
-                                        //TODO: Log the error
-                                        toast.dismiss();
-                                        toast.error(`Error occurred while submitting task, Please try again.`);
-                                    }
-                                }}>
-                                Submit
+                                    }}>
+                                    {submittedTask ? 'Submitted' : 'Submit'}
+                                </Button>
+                            ) : undefined}
+                            {parseInt(activeStep.id as string) > 2 ? (
+                                <Button onClick={onBack} variant="secondary">
+                                    Back
+                                </Button>
+                            ) : undefined}
+                            <Button variant="tertiary" className={usingInput ? '' : 'pf-m-disabled'} type="submit" onClick={() => resetWizard(goToStep)}>
+                                Reset
                             </Button>
-                        )}
-                        <Button variant="secondary" className={usingInput ? '' : 'pf-m-disabled'} type="submit" onClick={() => resetWizard(goToStep)}>
-                            Reset
-                        </Button>
-                    </>
-                )}
+                        </>
+                    );
+                }}
             </WizardContextConsumer>
         </WizardFooter>
     );

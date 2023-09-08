@@ -1,7 +1,7 @@
-import { AppState } from "@/lib/redux/store";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { activeTabChanged } from "../Navigation/navigationSlice";
-
+import { AppState } from '@/lib/redux/store';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { activeTabChanged } from '../Navigation/navigationSlice';
+import { extendedApiSlice as newTaskApi } from '../NewTask/newTaskSlice';
 interface WizardState {
     wizardStepIdReached: number;
 }
@@ -16,14 +16,18 @@ const wizard = createSlice({
         },
     },
     extraReducers: (builder) => {
-        builder.addCase(activeTabChanged, (state, action) => {
-            if (action.payload === 1) {
-                return;
-            }
-            state.wizardStepIdReached = 1;
-        })
-    }
-})
+        builder
+            .addCase(activeTabChanged, (state, action) => {
+                if (action.payload === 1) {
+                    return;
+                }
+                state.wizardStepIdReached = 1;
+            })
+            .addMatcher(newTaskApi.endpoints.submitTask.matchFulfilled, (state, { payload }) => {
+                state.wizardStepIdReached = 5;
+            });
+    },
+});
 
 export default wizard;
 

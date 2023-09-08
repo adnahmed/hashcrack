@@ -56,6 +56,14 @@ const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
     state.rejectedHashlist = [];
 };
 
+export const extendedApiSlice = apiSlice.injectEndpoints({
+    endpoints: (builder) => ({
+        submitTask: builder.mutation<SubmittedTaskResponse, TaskData>({
+            query: (body) => ({ url: '/api/task/submit', method: 'POST', body }),
+        }),
+    }),
+});
+
 const newTask = createSlice({
     name: 'newTask',
     initialState: {
@@ -152,14 +160,6 @@ const newTask = createSlice({
             })
             .addCase(activeTabChanged, ResetWizard);
     },
-});
-
-export const extendedApiSlice = apiSlice.injectEndpoints({
-    endpoints: (builder) => ({
-        submitTask: builder.mutation<SubmittedTaskResponse, TaskData>({
-            query: (body) => ({ url: '/api/task/submit', method: 'POST', body }),
-        }),
-    }),
 });
 
 export default newTask;

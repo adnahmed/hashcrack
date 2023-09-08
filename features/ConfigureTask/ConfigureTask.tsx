@@ -1,13 +1,13 @@
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import styles from '@/styles/ConfigureTask.module.css';
 import rippleStyle from '@/styles/RippleEffect.module.scss';
-import { Accordion, AccordionContent, AccordionItem } from '@patternfly/react-core';
+import { Accordion, AccordionContent, AccordionItem, Button, WizardContextConsumer } from '@patternfly/react-core';
 import React, { JSX, SVGProps, useEffect, useRef, useState } from 'react';
 import { Configuration, selectSelectedConfig, selectedConfig } from '../NewTask/newTaskSlice';
+import { stepIdReached } from '../Wizard/wizardSlice';
 
 function ConfigureTask() {
     const currentConfig = useAppSelector(selectSelectedConfig);
-
     return (
         <Accordion className={styles.attackContainer}>
             <AccordionItem>
@@ -17,10 +17,36 @@ function ConfigureTask() {
                         <span>We will perform well-balanced basic search of commonly used hash passwords depending on your hash type.</span>
                         <span>We will run basic search free of charge, but we will ask you to pay 0.0005BTC for the results in case of success.</span>
                     </p>
+                    <ConfigurationCompleteButton />
                 </AccordionContent>
             </AccordionItem>
             <ComingSoonAttacks />
         </Accordion>
+    );
+}
+
+function ConfigurationCompleteButton() {
+    const dispatch = useAppDispatch();
+    return (
+        <WizardContextConsumer>
+            {({ activeStep, goToStepByName, onNext, onBack, onClose, goToStepById: goToStep }) => (
+                <div
+                    style={{
+                        marginTop: '1.25rem',
+                    }}
+                    className="flex justify-end">
+                    <Button
+                        variant="primary"
+                        type="submit"
+                        onClick={() => {
+                            dispatch(stepIdReached(4));
+                            goToStep('4');
+                        }}>
+                        Next
+                    </Button>
+                </div>
+            )}
+        </WizardContextConsumer>
     );
 }
 
