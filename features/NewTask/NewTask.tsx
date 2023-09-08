@@ -4,7 +4,7 @@ import ExtraStep from '@/components/ExtraStep';
 import FinishStep from '@/components/FinishStep';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
-import { Button, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
+import { Button, Modal, ModalVariant, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
 import React, { useContext, useMemo } from 'react';
 import toast from 'react-hot-toast';
 import { animateScroll as scroll } from 'react-scroll';
@@ -116,6 +116,7 @@ export default function NewTask() {
     }
     const NextStepDisabled = useMemo(() => (VerifyStepDisabled && wizardStepReached === 1) || (ExtrasStepDisabled && wizardStepReached === 3), [ExtrasStepDisabled, VerifyStepDisabled, wizardStepReached]);
     const NoHashFound = (id: string | number | undefined) => id === '2' && parsedHashes.length === 0;
+    const [isResetModalOpen, setIsResetModalOpen] = React.useState(false);
     const CustomFooter = (
         <WizardFooter>
             <WizardContextConsumer>
@@ -165,9 +166,30 @@ export default function NewTask() {
                                     Back
                                 </Button>
                             ) : undefined}
-                            <Button variant="tertiary" className={usingInput ? '' : 'pf-m-disabled'} type="submit" onClick={() => resetWizard(goToStep)}>
+                            <Button variant="tertiary" className={usingInput ? '' : 'pf-m-disabled'} type="submit" onClick={() => setIsResetModalOpen(true)}>
                                 Reset
                             </Button>
+                            <Modal
+                                variant={ModalVariant.small}
+                                title="Reset Wizard"
+                                isOpen={isResetModalOpen}
+                                onClose={() => setIsResetModalOpen(false)}
+                                actions={[
+                                    <Button
+                                        key="confirm"
+                                        variant="primary"
+                                        onClick={() => {
+                                            resetWizard(goToStep);
+                                            setIsResetModalOpen(false);
+                                        }}>
+                                        Confirm
+                                    </Button>,
+                                    <Button key="cancel" variant="link" onClick={() => setIsResetModalOpen(false)}>
+                                        Cancel
+                                    </Button>,
+                                ]}>
+                                Are you sure you want to reset this wizard?
+                            </Modal>
                         </>
                     );
                 }}
