@@ -17,7 +17,7 @@ import { verifyHashlist } from './verifyHashlistThunk';
 
 export default function NewTask() {
     const wizardStepReached = useAppSelector(selectWizardStepReached);
-    const [submitTask, { isError: failedTaskSubmission, isSuccess: submittedTask, error: failedSubmissionError, isLoading: isSubmittingTask }] = useSubmitTaskMutation();
+    const [submitTask, { isError: failedTaskSubmission, isSuccess: submittedTask, error: failedSubmissionError, isLoading: isSubmittingTask, reset: ResetSubmitted }] = useSubmitTaskMutation();
     const { selectedHashType, hashlistVerified, verifyingHashlist, hashlistFile, attackConfigured, rejectedHashlist: rejectedHashes, ...taskData } = useAppSelector(selectTaskData);
     const parsedHashes = useAppSelector(selectParsedHashlist);
     const hashlistConsumer = useContext(HashlistContext);
@@ -27,7 +27,7 @@ export default function NewTask() {
     const VerifyStepDisabled = useMemo(() => (hashlistFile === undefined && !usingTextArea) || selectedHashType === '-1', [hashlistFile, usingTextArea, selectedHashType]);
     const ConfigureStepDisabled = useMemo(() => parsedHashes.length === 0, [parsedHashes.length]);
     const ExtrasStepDisabled = useMemo(() => wizardStepReached < 3 || !attackConfigured, [attackConfigured, wizardStepReached]);
-    const FinishStepDisabled = useMemo(() => wizardStepReached <= 4 || !accptedTermsAndConditions, [accptedTermsAndConditions, submittedTask, wizardStepReached]);
+    const FinishStepDisabled = useMemo(() => wizardStepReached < 4 || !accptedTermsAndConditions || !submittedTask, [accptedTermsAndConditions, submittedTask, wizardStepReached]);
     const dispatch = useAppDispatch();
     const usingInput = usingTextArea || hashlistFile !== undefined;
     React.useEffect(() => {
@@ -110,6 +110,7 @@ export default function NewTask() {
 
     function resetWizard(goToStep: (step: string) => void) {
         hashlistConsumer?.setHashlist('');
+        ResetSubmitted();
         dispatch(stepIdReached(1));
         dispatch(resettedWizard(2));
         goToStep('1');
@@ -130,12 +131,16 @@ export default function NewTask() {
                             )}
                             {activeStep.id === '4' ? (
                                 <Button
-                                    variant="primary"
-                                    className={!accptedTermsAndConditions ? 'pf-m-disabled' : submittedTask ? 'bg-green-400' : ''}
+                                    variant={failedTaskSubmission ? 'warning' : 'primary'}
+                                    className={!accptedTermsAndConditions ? 'pf-m-disabled' : ''}
                                     type="submit"
                                     isLoading={isSubmittingTask}
                                     onClick={async () => {
                                         // Submit Task
+                                        if (submittedTask) {
+                                            goToStep('5');
+                                            return;
+                                        }
                                         try {
                                             const response = await submitTask({
                                                 ...taskData,
@@ -158,7 +163,7 @@ export default function NewTask() {
                                             toast.error(`Error occurred while submitting task, Please try again.`);
                                         }
                                     }}>
-                                    {submittedTask ? 'Submitted' : 'Submit'}
+                                    {submittedTask ? 'Next' : failedTaskSubmission ? 'Retry' : 'Submit'}
                                 </Button>
                             ) : undefined}
                             {parseInt(activeStep.id as string) > 2 ? (
