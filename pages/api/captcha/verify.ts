@@ -23,7 +23,7 @@ class TokenValidateInput {
     @Length(1, 2048)
     token!: string;
 }
-
+// TODO: add request rate limiting
 class TokenValidateHandler {
     @Post()
     @HttpCode(200)
