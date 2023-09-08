@@ -23,7 +23,6 @@ export function withSessionSsr<P extends { [key: string]: unknown } = { [key: st
 
 interface GeoIP {
     ip_address: string;
-    city?: string;
     country?: string;
 }
 export interface SessionData {

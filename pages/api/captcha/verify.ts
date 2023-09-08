@@ -48,25 +48,25 @@ class TokenValidateHandler {
         }
 
         // Verifying Client IP
-        const clientIp = await getClientIp(req);
-        if (clientIp === null) throw new UnprocessableEntityException('Could not determine ip address');
+        const ip_address = await getClientIp(req);
+        if (ip_address === null) throw new UnprocessableEntityException('Could not determine ip address');
         // Verifying Client IP End
 
         // Validating Token
         const response = await fetch(verifyEndpoint, {
             method: 'POST',
-            body: `secret=${encodeURIComponent(process.env.CFSECRET_KEY)}&response=${encodeURIComponent(token)}&remoteip=${encodeURIComponent(clientIp)}`,
+            body: `secret=${encodeURIComponent(process.env.CFSECRET_KEY)}&response=${encodeURIComponent(token)}&remoteip=${encodeURIComponent(ip_address)}`,
             headers: {
                 'content-type': 'application/x-www-form-urlencoded',
             },
         });
         const validationResponse = (await response.json()) as TurnstileServerValidationResponse;
+        const country = geoIp.country(ip_address).country?.names.en;
         const sessionData: SessionData = {
             user_id: ulid(),
             geo_ip: {
-                ip_address: clientIp,
-                country: geoIp.country(clientIp).country?.names.en,
-                city: geoIp.city(clientIp).city?.names.en,
+                ip_address,
+                country,
             },
         };
         req.session = {
