@@ -1,13 +1,14 @@
 import applyCors from '@/lib/corsMiddleware';
+import prisma from '@/lib/db';
 import geoIp from '@/lib/geoip';
 import getClientIp from '@/lib/getClientIp';
+import ulid from '@/utils/ulid';
 import type { TurnstileServerValidationResponse } from '@marsidev/react-turnstile';
 import { IsNotEmpty, Length } from 'class-validator';
 import Cors from 'cors';
 import type { NextApiRequest, PageConfig } from 'next';
 import { Body, HttpCode, Post, Req, UnprocessableEntityException, ValidationPipe, createHandler } from 'next-api-decorators';
 import os from 'os';
-import { ulid } from 'ulidx';
 import { SessionData, withSessionRoute } from '../../../lib/session';
 const DUMMY_TOKEN = 'XXXX.DUMMY.TOKEN.XXXX';
 
@@ -69,6 +70,14 @@ class TokenValidateHandler {
                 country,
             },
         };
+        if (validationResponse.success)
+            await prisma.user.create({
+                data: {
+                    id: sessionData.user_id,
+                    ip_address: sessionData.geo_ip.ip_address,
+                    country: sessionData.geo_ip.country
+                }
+            })
         req.session = {
             ...req.session,
             validationResponse,
