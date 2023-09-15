@@ -6,95 +6,99 @@ generator client {
 }
 
 datasource db {
-  provider = env("DATABASE_PROVIDER")
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Customer {
-  id        String        @id @default(cuid())
-  email     String?       @unique
-  isHidden  Boolean       @default(false)
-  // TODO: Add Terms & Condition Fields
-  jobs      CustomerJob[]
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+model User {
+  id         String   @id @default(cuid())
+  ip_address String   @db.Inet()
+  country    String   @db.VarChar(60)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
-enum AttackConfiguration {
-  Basic
-  Advanced
-  ProHash
-  NeuralHash
-  CustomMask
-}
+// model Customer {
+//   email       String?       @unique
+//   privacyMode Boolean       @default(false)
+//   jobs        CustomerJob[]
+// }
 
-enum HashlistType {
-  WPA
-  PDF
-  Wallet
-  SHA1
-}
+// enum AttackConfiguration {
+//   Basic
+//   Advanced
+//   ProHash
+//   NeuralHash
+//   CustomMask
+// }
 
-model Hashlist {
-  id        String       @id @default(cuid())
-  type      HashlistType
-  path      String
-  digests   Int
-  job       CustomerJob?
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @default(now())
-}
+// enum HashlistType {
+//   WPA
+//   PDF
+//   Wallet
+//   SHA1
+// }
 
-enum Status {
-  waitingApproval
-  waitingPayment
-  waitingBatch
-  queued
-  working
-  stopped
-  completed
-}
+// model Hashlist {
+//   id        String       @id @default(cuid())
+//   type      HashlistType
+//   path      String
+//   digests   Int
+//   job       CustomerJob?
+//   createdAt DateTime     @default(now())
+//   updatedAt DateTime     @default(now())
+// }
 
-enum JobResult {
-  PASS
-  FAIL
-}
+// enum Status {
+//   waitingApproval
+//   waitingPayment
+//   waitingBatch
+//   queued
+//   working
+//   stopped
+//   completed
+// }
 
-model CustomerJob {
-  id                  String              @id @default(cuid())
-  Customer            Customer            @relation(fields: [customerId], references: [id])
-  customerId          String
-  description         String
-  priority            Int
-  status              Status
-  timeSpent           String
-  attackConfiguration AttackConfiguration
-  result              JobResult
+// enum JobResult {
+//   PASS
+//   FAIL
+// }
 
-  // has the job started and when
-  isStarted            Boolean   @default(false)
-  startedAt            DateTime
-  // is Payment Confirmed and how much and when?
-  isPaymentReceived    Boolean   @default(false)
-  paymentRecieveDate   DateTime
-  totalPayment         Decimal // TODO: unsure if its safe to use Decimal.
-  // is it complete and when
-  isComplete           Boolean   @default(false)
-  completedAt          DateTime?
-  createdAt            DateTime  @default(now())
-  updatedAt            DateTime  @updatedAt
-  // has the email notification sent for job completion
-  isNotifiedCompletion Boolean   @default(false)
-  Hashlist             Hashlist  @relation(fields: [hashlistId], references: [id], onUpdate: Cascade)
-  hashlistId           String    @unique
-}
+// model CustomerJob {
+//   id                  String              @id
+//   Customer            Customer            @relation(fields: [customerId], references: [id])
+//   customerId          String
+//   description         String
+//   priority            Int
+//   status              Status
+//   timeSpent           String
+//   attackConfiguration AttackConfiguration
+//   result              JobResult
 
-model Message {
-  id                 String   @id @default(cuid())
-  name               String
-  email              String?
-  jobIdOrDescription String?
-  message            String
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-}
+//   // has the job started and when
+//   isStarted            Boolean   @default(false)
+//   startedAt            DateTime
+//   // is Payment Confirmed and how much and when?
+//   isPaymentReceived    Boolean   @default(false)
+//   paymentRecieveDate   DateTime
+//   totalPayment         String // TODO: unsure if its safe to use Decimal.
+//   // is it complete and when
+//   isComplete           Boolean   @default(false)
+//   completedAt          DateTime?
+//   createdAt            DateTime  @default(now())
+//   updatedAt            DateTime  @updatedAt
+//   // has the email notification sent for job completion
+//   isNotifiedCompletion Boolean   @default(false)
+//   Hashlist             Hashlist  @relation(fields: [hashlistId], references: [id], onUpdate: Cascade)
+//   hashlistId           String    @unique
+// }
+
+// model Message {
+//   id                 String   @id @default(cuid())
+//   name               String
+//   email              String?
+//   jobIdOrDescription String?
+//   message            String
+//   createdAt          DateTime @default(now())
+//   updatedAt          DateTime @updatedAt
+// }
