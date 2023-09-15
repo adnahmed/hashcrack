@@ -50,6 +50,7 @@
     "modern-normalize": "^2.0.0",
     "msw": "^1.2.1",
     "nanoclamp": "^2.0.5",
+    "nanoid": "^5.0.1",
     "next": "13.4.4",
     "next-api-decorators": "^2.0.2",
     "next-images": "^1.8.5",
