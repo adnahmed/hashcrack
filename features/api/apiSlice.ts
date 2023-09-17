@@ -1,6 +1,20 @@
 // Import the RTK Query methods from the React-specific entry point
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { BaseQueryFn, FetchArgs, createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { HYDRATE } from "next-redux-wrapper";
+
+export type FetchError = {
+  data: {
+    errors?: string[];
+    message?: string;
+    stack: string;
+    statusCode: number;
+  };
+  status: number;
+}
+
+export const isFetchError = (err: unknown): err is FetchError => {
+  return (err as FetchError).data !== undefined;
+}
 
 /* Pagination */
 export interface ListResponse<T> {
@@ -18,10 +32,10 @@ export const apiSlice = createApi({
   },
   tagTypes: [],
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({
+  baseQuery: <BaseQueryFn<string | FetchArgs, unknown, FetchError>>(fetchBaseQuery({
     baseUrl: "/",
     credentials: "include",
-  }),
+  })),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   endpoints: (builder) => ({
     /* Global Endpoints */
