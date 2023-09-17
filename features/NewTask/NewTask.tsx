@@ -2,6 +2,7 @@ import HashlistContext from '@/Context/HashlistContext';
 import AddHashlist from '@/components/AddHashlist';
 import ExtraStep from '@/components/ExtraStep';
 import FinishStep from '@/components/FinishStep';
+import { isErrorWithMessage } from '@/lib/error';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
 import { Button, Modal, ModalVariant, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
@@ -12,9 +13,9 @@ import { selectActiveTab } from '../../features/Navigation/navigationSlice';
 import ConfigureTask from '../ConfigureTask/ConfigureTask';
 import VerifyHashlist from '../VerifyHashlist/VerifyHashlist';
 import { selectWizardStepReached, stepIdReached } from '../Wizard/wizardSlice';
-import { createdTask, resettedWizard, selectParsedHashlist, selectTaskData, selectTermsAndConditions, useSubmitTaskMutation } from './newTaskSlice';
+import { isFetchError } from '../api/apiSlice';
+import { TaskData, createdTask, resettedWizard, selectParsedHashlist, selectTaskData, selectTermsAndConditions, useSubmitTaskMutation } from './newTaskSlice';
 import { verifyHashlist } from './verifyHashlistThunk';
-
 export default function NewTask() {
     const wizardStepReached = useAppSelector(selectWizardStepReached);
     const [submitTask, { isError: failedTaskSubmission, isSuccess: submittedTask, error: failedSubmissionError, isLoading: isSubmittingTask, reset: ResetSubmitted }] = useSubmitTaskMutation();
@@ -60,7 +61,7 @@ export default function NewTask() {
             {
                 id: '4',
                 name: 'Extras',
-                component: <ExtraStep />,
+                component: <ExtraStep submittedTask={submittedTask} submittingTask={isSubmittingTask} />,
                 isDisabled: ExtrasStepDisabled,
                 canJumpTo: wizardStepReached >= 3,
             },
@@ -118,6 +119,37 @@ export default function NewTask() {
     const NextStepDisabled = useMemo(() => (VerifyStepDisabled && wizardStepReached === 1) || (ExtrasStepDisabled && wizardStepReached === 3), [ExtrasStepDisabled, VerifyStepDisabled, wizardStepReached]);
     const NoHashFound = (id: string | number | undefined) => id === '2' && parsedHashes.length === 0;
     const [isResetModalOpen, setIsResetModalOpen] = React.useState(false);
+    const onClickSubmit = async (goToStep: (step: string) => void) => {
+        toast.dismiss();
+        // Submit Task
+        if (submittedTask) {
+            goToStep('5');
+            return;
+        }
+        try {
+            const task: TaskData = {
+                ...taskData,
+                selectedHashType,
+                rejectedHashlist: rejectedHashes,
+            };
+            const response = await submitTask(task).unwrap();
+            if (response.success) {
+                dispatch(createdTask(response));
+                goToStep('5');
+                toast.success('Task submitted successfully.');
+            }
+        } catch (err) {
+            //TODO: Log the error
+            const defaultError = `Error occurred while submitting task, Please try again.`;
+            if (isFetchError(err)) {
+                const errors = err.data.errors;
+                if (errors && errors.length > 0) {
+                    errors.forEach((err) => toast.error(err));
+                }
+            } else if (isErrorWithMessage(err)) toast.error(err.message);
+            else toast.error(defaultError);
+        }
+    };
     const CustomFooter = (
         <WizardFooter>
             <WizardContextConsumer>
@@ -130,40 +162,8 @@ export default function NewTask() {
                                 </Button>
                             )}
                             {activeStep.id === '4' ? (
-                                <Button
-                                    variant={failedTaskSubmission ? 'warning' : 'primary'}
-                                    className={!accptedTermsAndConditions ? 'pf-m-disabled' : ''}
-                                    type="submit"
-                                    isLoading={isSubmittingTask}
-                                    onClick={async () => {
-                                        // Submit Task
-                                        if (submittedTask) {
-                                            goToStep('5');
-                                            return;
-                                        }
-                                        try {
-                                            const response = await submitTask({
-                                                ...taskData,
-                                                attackConfigured,
-                                                hashlistVerified,
-                                                selectedHashType,
-                                                rejectedHashlist: rejectedHashes,
-                                            }).unwrap();
-                                            if (response.success) {
-                                                dispatch(createdTask(response.task));
-                                                goToStep('5');
-                                            }
-                                            if (failedTaskSubmission) {
-                                                toast.dismiss();
-                                                toast.error(`Error occurred while submitting task , Please try again.`);
-                                            }
-                                        } catch (err) {
-                                            //TODO: Log the error
-                                            toast.dismiss();
-                                            toast.error(`Error occurred while submitting task, Please try again.`);
-                                        }
-                                    }}>
-                                    {submittedTask ? 'Next' : failedTaskSubmission ? 'Retry' : 'Submit'}
+                                <Button variant={failedTaskSubmission ? 'warning' : 'primary'} className={(!accptedTermsAndConditions ? 'pf-m-disabled' : '') + (failedSubmissionError ? 'text-[var(--theme)]' : '')} type="submit" isLoading={isSubmittingTask} onClick={() => onClickSubmit(goToStep)}>
+                                    {submittedTask ? 'Next' : isSubmittingTask ? 'Submitting' : failedTaskSubmission ? 'Retry' : 'Submit'}
                                 </Button>
                             ) : undefined}
                             {parseInt(activeStep.id as string) > 2 ? (
