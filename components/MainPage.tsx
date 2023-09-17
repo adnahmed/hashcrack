@@ -20,11 +20,14 @@ const MainPage = () => {
     const isWizardTab = useAppSelector(selectActiveWizardTab);
     const isSmartPhone = useBreakpoint('sm');
     const isDesktop = useBreakpoint('mdx');
+    const [clickedOutside, setClickedOutside] = useState(false);
     useEffect(() => {
         if (isDesktop) setOpenNavbar(true);
         else setOpenNavbar(false);
     }, [isDesktop]);
-
+    useEffect(() => {
+        if (clickedOutside) setOpenNavbar(false);
+    }, [clickedOutside]);
     return (
         <>
             <div
@@ -69,7 +72,9 @@ const MainPage = () => {
                             <button
                                 ref={ref}
                                 onClick={() => {
-                                    setOpenNavbar(!openNavbar);
+                                    if (clickedOutside) {
+                                        setClickedOutside(false);
+                                    } else setOpenNavbar(!openNavbar);
                                 }}
                                 className={`hamburger hamburger--collapse ${openNavbar && 'is-active'}`}
                                 type="button">
@@ -82,8 +87,9 @@ const MainPage = () => {
                         renderElement={(ref) =>
                             openNavbar && (
                                 <OutsideClickHandler
-                                    onOutsideClick={() => {
-                                        setOpenNavbar(!openNavbar);
+                                    onOutsideClick={(e) => {
+                                        setClickedOutside(true);
+                                        // setOpenNavbar(false);
                                     }}>
                                     <Navbar ref={ref} TabLabels={TabLabels} activeTab={activeTab} />
                                 </OutsideClickHandler>
