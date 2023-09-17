@@ -37,10 +37,11 @@ const CustomToaster = () => (
                 toast={t}
                 style={{
                     ...t.style,
+                    alignItems: 'baseline',
                 }}>
                 {({ icon, message }) => (
                     <>
-                        <div aria-label="Close Notification" style={{ cursor: 'pointer' }} onClick={() => toast.dismiss(t.id)}>
+                        <div aria-label="Close Notification" style={{ cursor: 'pointer', top: '0px' }} onClick={() => toast.dismiss(t.id)}>
                             {icon}
                         </div>
                         {message}
