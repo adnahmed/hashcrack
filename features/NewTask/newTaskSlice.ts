@@ -1,5 +1,5 @@
 import { AppState } from '@/lib/redux/store';
-import { SubmittedTaskResponse } from '@/pages/api/task/submit';
+import { SubmittedTask } from '@/pages/api/task/submit';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import toast from 'react-hot-toast';
 import { activeTabChanged } from '../Navigation/navigationSlice';
@@ -9,29 +9,26 @@ export enum Configuration {
     BASIC,
 }
 
-export interface Task {
-    id: string;
-    created_by: string;
-}
-
-interface NewTaskState {
-    createdTasks: Task[];
+type ConfigurationData = unknown;
+export interface TaskData {
     acceptedTermsAndConditions: boolean;
     selectedConfig?: Configuration;
+    configData?: ConfigurationData;
     resultEmail: string;
-    attackConfigured: boolean;
-    verifyingHashlist: boolean;
-    hashlistVerified: boolean;
     selectedHashType: string;
-    hashlistFile?: string;
-    hashlistFileType?: string;
-    hashlistFileSize?: number;
     hashlist: string[];
     rejectedHashlist: string[];
     privacyMode: boolean;
 }
-
-export type TaskData = Omit<NewTaskState, 'verifyingHashlist' | 'createdTasks'>;
+export interface NewTaskState extends TaskData {
+    hashlistVerified: boolean;
+    attackConfigured: boolean;
+    createdTasks: SubmittedTask[];
+    verifyingHashlist: boolean;
+    hashlistFile?: string;
+    hashlistFileType?: string;
+    hashlistFileSize?: number;
+}
 
 const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
     // TODO: replace magic number 1 with Tabs Label enum.
@@ -58,7 +55,7 @@ const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
 
 export const extendedApiSlice = apiSlice.injectEndpoints({
     endpoints: (builder) => ({
-        submitTask: builder.mutation<SubmittedTaskResponse, TaskData>({
+        submitTask: builder.mutation<SubmittedTask, TaskData>({
             query: (body) => ({ url: '/api/task/submit', method: 'POST', body }),
         }),
     }),
@@ -113,7 +110,7 @@ const newTask = createSlice({
         parsedHash: (state, action: PayloadAction<string>) => {
             state.hashlist.push(action.payload);
         },
-        createdTask: (state, action: PayloadAction<SubmittedTaskResponse['task']>) => {
+        createdTask: (state, action: PayloadAction<SubmittedTask>) => {
             state.createdTasks.push(action.payload);
         },
         hashlistVerificationChanged: (state, action: PayloadAction<boolean>) => {
@@ -158,7 +155,7 @@ const newTask = createSlice({
                 state.rejectedHashlist = [];
                 state.hashlistVerified = false;
             })
-            .addCase(activeTabChanged, ResetWizard);
+            .addCase(activeTabChanged, ResetWizard)
     },
 });
 
