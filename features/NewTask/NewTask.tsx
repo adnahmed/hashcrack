@@ -49,7 +49,7 @@ export default function NewTask() {
                 name: 'Verify Hashlist',
                 component: <VerifyHashlist />,
                 isDisabled: VerifyStepDisabled,
-                canJumpTo: wizardStepReached >= 1,
+                canJumpTo: wizardStepReached > 1,
             },
             {
                 id: '3',
