@@ -19,13 +19,13 @@ import { verifyHashlist } from './verifyHashlistThunk';
 export default function NewTask() {
     const wizardStepReached = useAppSelector(selectWizardStepReached);
     const [submitTask, { isError: failedTaskSubmission, isSuccess: submittedTask, error: failedSubmissionError, isLoading: isSubmittingTask, reset: ResetSubmitted }] = useSubmitTaskMutation();
-    const { selectedHashType, hashlistVerified, verifyingHashlist, hashlistFile, attackConfigured, rejectedHashlist: rejectedHashes, ...taskData } = useAppSelector(selectTaskData);
+    const { selectedHashType, hashlistVerified, verifyingHashlist, hashlistFile, hashlistFileSize, attackConfigured, rejectedHashlist: rejectedHashes, ...taskData } = useAppSelector(selectTaskData);
     const parsedHashes = useAppSelector(selectParsedHashlist);
     const hashlistConsumer = useContext(HashlistContext);
     const activeTab = useAppSelector(selectActiveTab);
     const accptedTermsAndConditions = useAppSelector(selectTermsAndConditions);
     const usingTextArea = hashlistConsumer && hashlistConsumer.hashlist.length !== 0;
-    const VerifyStepDisabled = useMemo(() => (hashlistFile === undefined && !usingTextArea) || selectedHashType === '-1', [hashlistFile, usingTextArea, selectedHashType]);
+    const VerifyStepDisabled = useMemo(() => (hashlistFile === undefined && !usingTextArea) || selectedHashType === '-1' || (hashlistFileSize !== undefined && hashlistFileSize === 0), [hashlistFile, hashlistFileSize, usingTextArea, selectedHashType]);
     const ConfigureStepDisabled = useMemo(() => parsedHashes.length === 0, [parsedHashes.length]);
     const ExtrasStepDisabled = useMemo(() => wizardStepReached < 3 || !attackConfigured, [attackConfigured, wizardStepReached]);
     const FinishStepDisabled = useMemo(() => wizardStepReached < 4 || !accptedTermsAndConditions || !submittedTask, [accptedTermsAndConditions, submittedTask, wizardStepReached]);
