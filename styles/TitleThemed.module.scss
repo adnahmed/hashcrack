@@ -1,592 +1,229 @@
-@use "compass";
+@use 'compass';
 /* http://www.vis4.net/palettes/#/20|s|ff0069,9e004b,ffffe0|ffffe0,ff005e,9da818a3a|1|1 */
-$palette: (
-  #ff0069,
-  #d56479,
-  #d66e7f,
-  #d87884,
-  #da818a,
-  #dc8a90,
-  #de9395,
-  #e19c9b,
-  #e3a4a1,
-  #e6ada6,
-  #e8b5ac,
-  #ebbdb2,
-  #edc5b8,
-  #f0cebd,
-  #f2d6c3,
-  #f5dec9,
-  #f7e6cf,
-  #faefd4,
-  #fcf7da,
-  #ffffe0
-);
+$palette: (#ff0069, #d56479, #d66e7f, #d87884, #da818a, #dc8a90, #de9395, #e19c9b, #e3a4a1, #e6ada6, #e8b5ac, #ebbdb2, #edc5b8, #f0cebd, #f2d6c3, #f5dec9, #f7e6cf, #faefd4, #fcf7da, #ffffe0);
 
 $palette-length: length($palette);
 
 @function shadow($s-color, $s-start, $s-width) {
-  $output: "";
-  $a: $s-start;
-  $x: $a;
-  $y: $a;
-  $i: 0.0025em;
-  $s-size: $s-width + $s-start;
+    $output: '';
+    $a: $s-start;
+    $x: $a;
+    $y: $a;
+    $i: 0.0025em;
+    $s-size: $s-width + $s-start;
 
-  @while $x <=($s-size + $i) {
-    $output: $output + "#{$x} #{$y} 0 #{$s-color}";
+    @while $x <=($s-size + $i) {
+        $output: $output + '#{$x} #{$y} 0 #{$s-color}';
 
-    @if ($s-size + 0) >=$x {
-      $output: $output + ", ";
+        @if ($s-size + 0) >=$x {
+            $output: $output + ', ';
+        }
+
+        $y: $y + $i;
+        $x: $x + $i;
     }
 
-    $y: $y + $i;
-    $x: $x + $i;
-  }
-
-  @return unquote($output);
+    @return unquote($output);
 }
 
 .title {
-  font-family: Intro, sans-serif;
-  color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-  position: relative;
-  transition: transform 0.05s ease-in-out;
-  background-color: #ffffe0;
-  $max: 50;
-  $i: 1;
-  $per: 0%;
-  $gradient: (unquote("#{nth($palette, $i)} 0%"));
-  $per: 10%;
-  @while $per < $max {
-    $gradient: append(
-      $gradient,
-      unquote("#{nth($palette, $i+1)} #{$per}"),
-      comma
-    );
+    font-family: Intro, sans-serif;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    position: relative;
+    transition: transform 0.05s ease-in-out;
+    background-color: #ffffe0;
+    $max: 50;
+    $i: 1;
+    $per: 0%;
+    $gradient: (unquote('#{nth($palette, $i)} 0%'));
+    $per: 10%;
+    @while $per < $max {
+        $gradient: append($gradient, unquote('#{nth($palette, $i+1)} #{$per}'), comma);
 
-    $gradient: append(
-      $gradient,
-      unquote("#{nth($palette, $i+2)} #{$per}"),
-      comma
-    );
+        $gradient: append($gradient, unquote('#{nth($palette, $i+2)} #{$per}'), comma);
 
-    $i: ($i + $palette-length/($max/10)) % $palette-length;
+        $i: ($i + $palette-length/($max/10)) % $palette-length;
 
-    $per: $per + 10%;
-  }
+        $per: $per + 10%;
+    }
 
-  $gradient: append($gradient, unquote("#{nth($palette, 1)} 100%"));
+    $gradient: append($gradient, unquote('#{nth($palette, 1)} 100%'));
 
-  background: linear-gradient(to left, $gradient, nth($palette, 1));
-  background-repeat: no-repeat;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-stroke: 0.01em #e00;
-  animation: flip 2s linear infinite;
+    background: linear-gradient(to left, $gradient, nth($palette, 1));
+    background-repeat: no-repeat;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-stroke: 0.01em #e00;
+    animation: flip 2s linear infinite;
 
-  &::selection {
-    @include compass.text-shadow(shadow(var(--theme), 0, 0.1em));
-    color: #ffffe0;
-  }
+    &::selection {
+        @include compass.text-shadow(shadow(var(--theme), 0, 0.1em));
+        color: #ffffe0;
+    }
 }
 
 @media screen and (prefers-reduced-motion: no-preference) {
-  .title {
-    animation: flip 2s linear infinite;
-  }
+    .title {
+        animation: flip 2s linear infinite;
+    }
 }
 
 @keyframes flip {
-  0% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 90%,
-        #ff0069 90%,
-        #ff0069 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    0% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 90%, #ff0069 90%, #ff0069 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  4% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 80%,
-        #ff0069 80%,
-        #ff0069 90%,
-        #d87884 90%,
-        #d87884 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    4% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 80%, #ff0069 80%, #ff0069 90%, #d87884 90%, #d87884 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  8% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 70%,
-        #ff0069 70%,
-        #ff0069 80%,
-        #d87884 80%,
-        #d87884 90%,
-        #e19c9b 90%,
-        #e19c9b 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    8% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 70%, #ff0069 70%, #ff0069 80%, #d87884 80%, #d87884 90%, #e19c9b 90%, #e19c9b 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  12% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 60%,
-        #ff0069 60%,
-        #ff0069 70%,
-        #d87884 70%,
-        #d87884 80%,
-        #e19c9b 80%,
-        #e19c9b 90%,
-        #d66e7f 90%,
-        #d66e7f 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    12% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 60%, #ff0069 60%, #ff0069 70%, #d87884 70%, #d87884 80%, #e19c9b 80%, #e19c9b 90%, #d66e7f 90%, #d66e7f 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  16% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 50%,
-        #ff0069 50%,
-        #ff0069 60%,
-        #d87884 60%,
-        #d87884 70%,
-        #e19c9b 70%,
-        #e19c9b 80%,
-        #d66e7f 80%,
-        #d66e7f 90%,
-        #da818a 90%,
-        #da818a 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    16% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 50%, #ff0069 50%, #ff0069 60%, #d87884 60%, #d87884 70%, #e19c9b 70%, #e19c9b 80%, #d66e7f 80%, #d66e7f 90%, #da818a 90%, #da818a 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  20% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 40%,
-        #ff0069 40%,
-        #ff0069 50%,
-        #d87884 50%,
-        #d87884 60%,
-        #e19c9b 60%,
-        #e19c9b 70%,
-        #d66e7f 70%,
-        #d66e7f 80%,
-        #da818a 80%,
-        #da818a 90%,
-        #ffffe0 90%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    20% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 40%, #ff0069 40%, #ff0069 50%, #d87884 50%, #d87884 60%, #e19c9b 60%, #e19c9b 70%, #d66e7f 70%, #d66e7f 80%, #da818a 80%, #da818a 90%, #ffffe0 90%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  24% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 30%,
-        #ff0069 30%,
-        #ff0069 40%,
-        #d87884 40%,
-        #d87884 50%,
-        #e19c9b 50%,
-        #e19c9b 60%,
-        #d66e7f 60%,
-        #d66e7f 70%,
-        #da818a 70%,
-        #da818a 80%,
-        #ffffe0 80%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    24% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 30%, #ff0069 30%, #ff0069 40%, #d87884 40%, #d87884 50%, #e19c9b 50%, #e19c9b 60%, #d66e7f 60%, #d66e7f 70%, #da818a 70%, #da818a 80%, #ffffe0 80%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  28% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 20%,
-        #ff0069 20%,
-        #ff0069 30%,
-        #d87884 30%,
-        #d87884 40%,
-        #e19c9b 40%,
-        #e19c9b 50%,
-        #d66e7f 50%,
-        #d66e7f 60%,
-        #da818a 60%,
-        #da818a 70%,
-        #ffffe0 70%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    28% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 20%, #ff0069 20%, #ff0069 30%, #d87884 30%, #d87884 40%, #e19c9b 40%, #e19c9b 50%, #d66e7f 50%, #d66e7f 60%, #da818a 60%, #da818a 70%, #ffffe0 70%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  32% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 10%,
-        #ff0069 10%,
-        #ff0069 20%,
-        #d87884 20%,
-        #d87884 30%,
-        #e19c9b 30%,
-        #e19c9b 40%,
-        #d66e7f 40%,
-        #d66e7f 50%,
-        #da818a 50%,
-        #da818a 60%,
-        #ffffe0 60%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    32% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 10%, #ff0069 10%, #ff0069 20%, #d87884 20%, #d87884 30%, #e19c9b 30%, #e19c9b 40%, #d66e7f 40%, #d66e7f 50%, #da818a 50%, #da818a 60%, #ffffe0 60%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  36% {
-    background: linear-gradient(
-        to left,
-        #ff0069 0%,
-        #ff0069 10%,
-        #e19c9b 10%,
-        #e19c9b 20%,
-        #d66e7f 20%,
-        #d66e7f 30%,
-        #da818a 30%,
-        #da818a 40%,
-        #ffffe0 40%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    36% {
+        background: linear-gradient(to left, #ff0069 0%, #ff0069 10%, #e19c9b 10%, #e19c9b 20%, #d66e7f 20%, #d66e7f 30%, #da818a 30%, #da818a 40%, #ffffe0 40%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  40% {
-    background: linear-gradient(
-        to left,
-        #ff0069 0%,
-        #ff0069 10%,
-        #d66e7f 10%,
-        #d66e7f 20%,
-        #da818a 20%,
-        #da818a 30%,
-        #ffffe0 30%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    40% {
+        background: linear-gradient(to left, #ff0069 0%, #ff0069 10%, #d66e7f 10%, #d66e7f 20%, #da818a 20%, #da818a 30%, #ffffe0 30%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  44% {
-    background: linear-gradient(
-        to left,
-        #ff0069 0%,
-        #ff0069 10%,
-        #da818a 10%,
-        #da818a 20%,
-        #ffffe0 20%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    44% {
+        background: linear-gradient(to left, #ff0069 0%, #ff0069 10%, #da818a 10%, #da818a 20%, #ffffe0 20%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  48% {
-    background: linear-gradient(
-        to left,
-        #ff0069 0%,
-        #ff0069 10%,
-        #ffffe0 10%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    48% {
+        background: linear-gradient(to left, #ff0069 0%, #ff0069 10%, #ffffe0 10%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  52% {
-    background: linear-gradient(
-        to left,
-        #d87884 0%,
-        #d87884 10%,
-        #ff0069 10%,
-        #ff0069 20%,
-        #ffffe0 20%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    52% {
+        background: linear-gradient(to left, #d87884 0%, #d87884 10%, #ff0069 10%, #ff0069 20%, #ffffe0 20%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  56% {
-    background: linear-gradient(
-        to left,
-        #e19c9b 0%,
-        #e19c9b 10%,
-        #d87884 10%,
-        #d87884 20%,
-        #ff0069 20%,
-        #ff0069 30%,
-        #ffffe0 30%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    56% {
+        background: linear-gradient(to left, #e19c9b 0%, #e19c9b 10%, #d87884 10%, #d87884 20%, #ff0069 20%, #ff0069 30%, #ffffe0 30%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  60% {
-    background: linear-gradient(
-        to left,
-        #d66e7f 0%,
-        #d66e7f 10%,
-        #e19c9b 10%,
-        #e19c9b 20%,
-        #d87884 20%,
-        #d87884 30%,
-        #ff0069 30%,
-        #ff0069 40%,
-        #ffffe0 40%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    60% {
+        background: linear-gradient(to left, #d66e7f 0%, #d66e7f 10%, #e19c9b 10%, #e19c9b 20%, #d87884 20%, #d87884 30%, #ff0069 30%, #ff0069 40%, #ffffe0 40%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  64% {
-    background: linear-gradient(
-        to left,
-        #da818a 0%,
-        #da818a 10%,
-        #d66e7f 10%,
-        #d66e7f 20%,
-        #e19c9b 20%,
-        #e19c9b 30%,
-        #d87884 30%,
-        #d87884 40%,
-        #ff0069 40%,
-        #ff0069 50%,
-        #ffffe0 50%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    64% {
+        background: linear-gradient(to left, #da818a 0%, #da818a 10%, #d66e7f 10%, #d66e7f 20%, #e19c9b 20%, #e19c9b 30%, #d87884 30%, #d87884 40%, #ff0069 40%, #ff0069 50%, #ffffe0 50%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  68% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 10%,
-        #da818a 10%,
-        #da818a 20%,
-        #d66e7f 20%,
-        #d66e7f 30%,
-        #e19c9b 30%,
-        #e19c9b 40%,
-        #d87884 40%,
-        #d87884 50%,
-        #ff0069 50%,
-        #ff0069 60%,
-        #ffffe0 60%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    68% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 10%, #da818a 10%, #da818a 20%, #d66e7f 20%, #d66e7f 30%, #e19c9b 30%, #e19c9b 40%, #d87884 40%, #d87884 50%, #ff0069 50%, #ff0069 60%, #ffffe0 60%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  72% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 20%,
-        #da818a 20%,
-        #da818a 30%,
-        #d66e7f 30%,
-        #d66e7f 40%,
-        #e19c9b 40%,
-        #e19c9b 50%,
-        #d87884 50%,
-        #d87884 60%,
-        #ff0069 60%,
-        #ff0069 70%,
-        #ffffe0 70%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    72% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 20%, #da818a 20%, #da818a 30%, #d66e7f 30%, #d66e7f 40%, #e19c9b 40%, #e19c9b 50%, #d87884 50%, #d87884 60%, #ff0069 60%, #ff0069 70%, #ffffe0 70%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  76% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 30%,
-        #da818a 30%,
-        #da818a 40%,
-        #d66e7f 40%,
-        #d66e7f 50%,
-        #e19c9b 50%,
-        #e19c9b 60%,
-        #d87884 60%,
-        #d87884 70%,
-        #ff0069 70%,
-        #ff0069 80%,
-        #ffffe0 80%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    76% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 30%, #da818a 30%, #da818a 40%, #d66e7f 40%, #d66e7f 50%, #e19c9b 50%, #e19c9b 60%, #d87884 60%, #d87884 70%, #ff0069 70%, #ff0069 80%, #ffffe0 80%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  80% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 40%,
-        #da818a 40%,
-        #da818a 50%,
-        #d66e7f 50%,
-        #d66e7f 60%,
-        #e19c9b 60%,
-        #e19c9b 70%,
-        #d87884 70%,
-        #d87884 80%,
-        #ff0069 80%,
-        #ff0069 90%,
-        #ffffe0 90%,
-        #ffffe0 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    80% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 40%, #da818a 40%, #da818a 50%, #d66e7f 50%, #d66e7f 60%, #e19c9b 60%, #e19c9b 70%, #d87884 70%, #d87884 80%, #ff0069 80%, #ff0069 90%, #ffffe0 90%, #ffffe0 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  84% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 50%,
-        #da818a 50%,
-        #da818a 60%,
-        #d66e7f 60%,
-        #d66e7f 70%,
-        #e19c9b 70%,
-        #e19c9b 80%,
-        #d87884 80%,
-        #d87884 90%,
-        #ff0069 90%,
-        #ff0069 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    84% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 50%, #da818a 50%, #da818a 60%, #d66e7f 60%, #d66e7f 70%, #e19c9b 70%, #e19c9b 80%, #d87884 80%, #d87884 90%, #ff0069 90%, #ff0069 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  88% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 60%,
-        #da818a 60%,
-        #da818a 70%,
-        #d66e7f 70%,
-        #d66e7f 80%,
-        #e19c9b 80%,
-        #e19c9b 90%,
-        #ff0069 90%,
-        #ff0069 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    88% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 60%, #da818a 60%, #da818a 70%, #d66e7f 70%, #d66e7f 80%, #e19c9b 80%, #e19c9b 90%, #ff0069 90%, #ff0069 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  92% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 70%,
-        #da818a 70%,
-        #da818a 80%,
-        #d66e7f 80%,
-        #d66e7f 90%,
-        #ff0069 90%,
-        #ff0069 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    92% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 70%, #da818a 70%, #da818a 80%, #d66e7f 80%, #d66e7f 90%, #ff0069 90%, #ff0069 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  96% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 80%,
-        #da818a 80%,
-        #da818a 90%,
-        #ff0069 90%,
-        #ff0069 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    96% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 80%, #da818a 80%, #da818a 90%, #ff0069 90%, #ff0069 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 
-  100% {
-    background: linear-gradient(
-        to left,
-        #ffffe0 0%,
-        #ffffe0 90%,
-        #ff0069 90%,
-        #ff0069 100%
-      ),
-      #ffffe0;
-    background-clip: text;
-    -webkit-background-clip: text;
-  }
+    100% {
+        background: linear-gradient(to left, #ffffe0 0%, #ffffe0 90%, #ff0069 90%, #ff0069 100%), #ffffe0;
+        background-clip: text;
+        -webkit-background-clip: text;
+    }
 }
