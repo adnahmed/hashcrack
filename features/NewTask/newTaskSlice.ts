@@ -9,9 +9,17 @@ export enum Configuration {
     BASIC,
 }
 
+interface WPAInfo {
+    essid: string;
+    bssid: string;
+    stmac: string;
+    mic: string;
+    authenticated: boolean;
+}
 type ConfigurationData = unknown;
 export interface TaskData {
     acceptedTermsAndConditions: boolean;
+    wpaInfo?: WPAInfo[];
     selectedConfig?: Configuration;
     configData?: ConfigurationData;
     resultEmail: string;
@@ -36,6 +44,7 @@ const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
         return;
     }
     state.selectedHashType = '-1';
+    state.wpaInfo = undefined;
     state.privacyMode = false;
     state.resultEmail = '';
     state.hashlistFileType = undefined;
@@ -69,6 +78,7 @@ const newTask = createSlice({
         resultEmail: '',
         acceptedTermsAndConditions: false,
         privacyMode: false,
+        wpaInfo: undefined,
         attackConfigured: false,
         verifyingHashlist: false,
         hashlistVerified: false,
@@ -91,6 +101,9 @@ const newTask = createSlice({
         },
         changedResultEmail: (state, action: PayloadAction<string>) => {
             state.resultEmail = action.payload;
+        },
+        setWpaInfo: (state, action: PayloadAction<WPAInfo[]>) => {
+            state.wpaInfo = action.payload;
         },
         selectedHashlistFile: (
             state,
@@ -173,5 +186,5 @@ export const selectParsedHashlist = (state: AppState) => state.newTask.hashlist;
 export const selectRejectedHashlist = (state: AppState) => state.newTask.rejectedHashlist;
 export const selectAttackConfigured = (state: AppState) => state.newTask.attackConfigured;
 export const selectSelectedConfig = (state: AppState) => state.newTask.selectedConfig;
-export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard, selectedConfig, changedPrivacyMode, changedResultEmail, changedTermsAndConditions, createdTask } = newTask.actions;
+export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard, selectedConfig, changedPrivacyMode, changedResultEmail, changedTermsAndConditions, createdTask, setWpaInfo } = newTask.actions;
 export const { useSubmitTaskMutation } = extendedApiSlice;
