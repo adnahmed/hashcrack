@@ -3,9 +3,29 @@ import { AppState } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
 import { HashType } from '@/nth/HashTypeObj';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import KataiStream from 'kaitai-struct/KaitaiStream';
 import toast from 'react-hot-toast';
 import { WPACaptureFileTypes } from '../HashInput/HashTypes/Wireless/EAPOL';
-import { failedParsingHash, hashlistVerificationChanged, parsedHash } from './newTaskSlice';
+import Hccapx from './Hccapx';
+import { failedParsingHash, hashlistVerificationChanged, parsedHash, setWpaInfo } from './newTaskSlice';
+interface HccapxRecord {
+    magic: Uint8Array;
+    version: number;
+    ignoreReplayCounter: boolean;
+    messagePair: number;
+    lenEssid: number;
+    essid: Uint8Array;
+    padding1: Uint8Array;
+    keyver: number;
+    keymic: Uint8Array;
+    macAp: Uint8Array;
+    nonceAp: Uint8Array;
+    macStation: Uint8Array;
+    nonceStation: Uint8Array;
+    lenEapol: number;
+    eapol: Uint8Array;
+    padding2: Uint8Array;
+}
 interface VerifyHashlistArgs {
     inputMethod: 'textarea' | 'file';
     hashlist?: string[];
@@ -76,26 +96,35 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                 };
                 if (selectedHashType === '2500' && !WPACaptureFileTypes.includes(`.${type}`)) return thunkAPI.rejectWithValue(`Invalid File, expected ${WPACaptureFileTypes.join(', ')}, got ${type}`);
                 if (WPACaptureFileTypes.includes(`.${type}`)) {
-                    const reader = new FileReader();
-                    reader.onload = async function () {
-                        if (text.substring(0, 5) == 'HCPX' && size % 393 == 0) {
-                            const out = '';
-                            for (let i = 0; i < size / 393; i++) {
-                                const pos = i * 393;
-                                const essid = text.substring(pos + 10, 33).replace('\x00', '');
-                                const bssid = macEncode(text.substring(pos + 59, 7));
-                                const stmac = macEncode(text.substring(pos + 97, 7));
-                                const mic = hexEncode(text.substring(pos + 43, 17));
-                            }
-                        } else if (size == 392) {
-                            const essid = text.substring(0, 33).replace('\x00', '');
-                            const bssid = macEncode(text.substring(36, 7));
-                            const stmac = macEncode(text.substring(42, 7));
-                            const mic = hexEncode(text.substring(text.length - 15));
+                    const essid = [], bssid = [], stmac = [], mic = [];
+                    if (text.substring(0, 4) == 'HCPX' && size % 393 == 0) {
+                        for (let i = 0; i < size / 393; i++) {
+                            const pos = i * 393;
+                            essid.push(text.substring(pos + 10, 35).replace('\x00', ''));
+                            bssid.push(macEncode(text.substring(pos + 59, 7)));
+                            stmac.push(macEncode(text.substring(pos + 97, 7)));
+                            mic.push(hexEncode(text.substring(pos + 43, 17)));
                         }
-                        // const data = new Hccapx(new KataiStream());
-                        thunkAPI.fulfillWithValue(true); // TODO: change true to data
-                    };
+                    } else if (size == 392) {
+                        essid.push(text.substring(0, 33).replace('\x00', ''));
+                        bssid.push(macEncode(text.substring(36, 7)));
+                        stmac.push(macEncode(text.substring(42, 7)));
+                        mic.push(hexEncode(text.substring(text.length - 15)));
+                    }
+                    const parsed = new Hccapx(new KataiStream(buffer));
+                    if (parsed.records) {
+                        const hccapxRecords = parsed.records as HccapxRecord[];
+                        const wpaInfo = hccapxRecords.map(record => ({
+                            essid: Buffer.from(record.essid).toString().replace('\x00', ''),
+                            bssid: Buffer.from(record.macAp).toString('hex'),
+                            stmac: Buffer.from(record.macStation).toString('hex'),
+                            mic: Buffer.from(record.keymic).toString('hex'),
+                            authenticated: [3, 4].includes(record.messagePair),
+                        }));
+                        dispatch(setWpaInfo(wpaInfo));
+                    }
+                    // const data = new Hccapx(new KataiStream());
+                    thunkAPI.fulfillWithValue(true); // TODO: change true to data
                 } else {
                     // We found another file type say text.
                     const hashes = getHashlist(text);
@@ -106,10 +135,4 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
     } catch (err) {
         toast.error(`Error Occurred: ${err}`);
     }
-    // parse and update count of parsed hashes
-
-    // also update the amount of read lines
-    // after completion,
-    // if errors then report them to the user with a modal.
-    // else update allowVerificationPage state to true
 });
