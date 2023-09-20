@@ -111,6 +111,8 @@ export default function NewTask() {
 
     function resetWizard(goToStep: (step: string) => void) {
         hashlistConsumer?.setHashlist('');
+        if (hashlistFile)
+        URL.revokeObjectURL(hashlistFile);
         ResetSubmitted();
         dispatch(stepIdReached(1));
         dispatch(resettedWizard(2));
