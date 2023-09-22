@@ -31,7 +31,6 @@ const HashlistDnD = ({ wireless = false }: HashlistDnDProps) => {
             }
             setCurrentHashlistFile(accFile);
             dispatch(selectedHashlistFile({ dataUrl: URL.createObjectURL(accFile), type, size: accFile.size }));
-            // eslint-disable-next-line react-hooks/exhaustive-deps
         },
         maxFiles: 1,
         accept: acceptedFiles,

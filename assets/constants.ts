@@ -13,4 +13,6 @@ export const hashcat_modes = HashtypePrototypes
 
 export const WPACaptureFileTypes = ['.cap', '.pcap', '.hccap', '.hccapx'];
 
+export type WPACaptureFileType = readonly ['cap', 'pcap', 'hccap', 'hccapx'];
+
 export const wpaGroups = options.find((p) => /wireless networks/i.test(p['name']));
