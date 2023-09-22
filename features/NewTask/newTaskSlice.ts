@@ -146,11 +146,6 @@ const newTask = createSlice({
             .addCase(verifyHashlist.fulfilled, (state) => {
                 state.verifyingHashlist = false;
                 state.hashlistVerified = true;
-                if (state.hashlistFile) {
-                    state.hashlistFileType = undefined;
-                    state.hashlistFileSize = undefined;
-                    URL.revokeObjectURL(state.hashlistFile);
-                }
             })
             .addCase(verifyHashlist.rejected, (state, action: PayloadAction<any>) => {
                 toast.error(action.payload);
