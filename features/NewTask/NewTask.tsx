@@ -95,7 +95,6 @@ export default function NewTask() {
                 if (hashlistFile) {
                     try {
                         const resp = await dispatch(verifyHashlist({ inputMethod: 'file' })).unwrap();
-                        console.log(resp);
                     } catch (err) {
                         console.error(err);
                     }
@@ -111,8 +110,7 @@ export default function NewTask() {
 
     function resetWizard(goToStep: (step: string) => void) {
         hashlistConsumer?.setHashlist('');
-        if (hashlistFile)
-        URL.revokeObjectURL(hashlistFile);
+        if (hashlistFile) URL.revokeObjectURL(hashlistFile);
         ResetSubmitted();
         dispatch(stepIdReached(1));
         dispatch(resettedWizard(2));
