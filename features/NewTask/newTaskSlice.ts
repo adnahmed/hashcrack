@@ -174,6 +174,7 @@ const newTask = createSlice({
 
 export default newTask;
 export const selectTaskData = (state: AppState) => state.newTask;
+export const selectWPAInfo = (state: AppState) => state.newTask.wpaInfo;
 export const createdTasks = (state: AppState) => state.newTask.createdTasks;
 export const selectSelectedHashType = (state: AppState) => state.newTask.selectedHashType;
 export const selectTermsAndConditions = (state: AppState) => state.newTask.acceptedTermsAndConditions;
@@ -181,6 +182,7 @@ export const selectPrivacyMode = (state: AppState) => state.newTask.privacyMode;
 export const selectResultEmail = (state: AppState) => state.newTask.resultEmail;
 export const selectHashlistVerified = (state: AppState) => state.newTask.hashlistVerified;
 export const selectHashlistFile = (state: AppState) => state.newTask.hashlistFile;
+export const selectHashlistFileType = (state: AppState) => state.newTask.hashlistFileType;
 export const selectVerifyingHashlist = (state: AppState) => state.newTask.verifyingHashlist;
 export const selectParsedHashlist = (state: AppState) => state.newTask.hashlist;
 export const selectRejectedHashlist = (state: AppState) => state.newTask.rejectedHashlist;
