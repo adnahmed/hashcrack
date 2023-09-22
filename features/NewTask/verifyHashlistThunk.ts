@@ -119,7 +119,7 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                             bssid: Buffer.from(record.macAp).toString('hex'),
                             stmac: Buffer.from(record.macStation).toString('hex'),
                             mic: Buffer.from(record.keymic).toString('hex'),
-                            authenticated: [3, 4].includes(record.messagePair),
+                            authenticated: [1, 2, 3, 4, 5].includes(record.messagePair),
                         }));
                         dispatch(setWpaInfo(wpaInfo));
                     }
