@@ -1,19 +1,19 @@
-import hashTypes from '@/assets/hash-types.json';
 import HashlistText from '@/components/HashlistText';
+import { getWpaGroup, isWPA_EAPOL, isWPA_PMKID } from '@/utils/wpa';
+import { useMemo } from 'react';
 import { HashInputInstructions, HashInputProps } from '../../HashInput';
 
 const WPAPMKIDHash: React.FunctionComponent<HashInputProps> = ({ hashType }) => {
-    const { options } = hashTypes;
-    const wirelessNetworkGroup = options.find((p) => /wireless networks/i.test(p['name']));
-    const isWireless = wirelessNetworkGroup?.items.find((p) => p['value'] === hashType);
-    const isEAPOL = isWireless && /EAPOL/i.test(isWireless['name']);
-    const isPMKID = isWireless && /PMKID/i.test(isWireless['name']);
-    return isWireless && !isEAPOL ? (
+    const wpaGroup = useMemo(() => getWpaGroup(hashType), [hashType]);
+    const isEAPOL = useMemo(() => isWPA_EAPOL(wpaGroup), [wpaGroup]);
+    const isPMKID = useMemo(() => isWPA_PMKID(wpaGroup), [wpaGroup]);
+    if (!wpaGroup || isEAPOL) return null;
+    return (
         <>
             <HashlistText wireless isPMKID={isPMKID} />
             <HashInputInstructions wireless={true} />
         </>
-    ) : null;
+    );
 };
 
 export default WPAPMKIDHash;

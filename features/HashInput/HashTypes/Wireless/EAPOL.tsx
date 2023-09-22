@@ -1,14 +1,13 @@
-import hashTypes from '@/assets/hash-types.json';
 import HashlistDnD from '@/components/HashlistDnD';
+import { getWpaGroup, isWPA_EAPOL } from '@/utils/wpa';
+import { useMemo } from 'react';
 import { HashInputInstructions, HashInputProps } from '../../HashInput';
-export const WPACaptureFileTypes = ['.cap', '.pcap', '.hccap', '.hccapx'];
 
 const EAPOLWirelessHash: React.FunctionComponent<HashInputProps> = ({ hashType }) => {
-    const { options } = hashTypes;
-    const wirelessNetworkGroup = options.find((p) => /wireless networks/i.test(p['name']));
-    const isWireless = wirelessNetworkGroup?.items.find((p) => p['value'] === hashType);
-    const isEAPOL = isWireless && /EAPOL/i.test(isWireless['name']);
-    return isEAPOL ? (
+    const wpaGroup = useMemo(() => getWpaGroup(hashType), [hashType]);
+    const isEAPOL = useMemo(() => isWPA_EAPOL(wpaGroup), [wpaGroup]);
+    if (!isEAPOL) return null;
+    return (
         <>
             <HashlistDnD wireless />
             <label htmlFor="essid" className="text-sm leading-7 text-gray-600">
@@ -21,7 +20,7 @@ const EAPOLWirelessHash: React.FunctionComponent<HashInputProps> = ({ hashType }
             </label>
             <HashInputInstructions wireless={true} />
         </>
-    ) : null;
+    );
 };
 
 export default EAPOLWirelessHash;
