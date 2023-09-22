@@ -1,3 +1,4 @@
+import { WPACaptureFileTypes } from '@/assets/constants';
 import { isErrorWithMessage } from '@/lib/error';
 import { AppState } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
@@ -5,7 +6,6 @@ import { HashType } from '@/nth/HashTypeObj';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import KataiStream from 'kaitai-struct/KaitaiStream';
 import toast from 'react-hot-toast';
-import { WPACaptureFileTypes } from '../HashInput/HashTypes/Wireless/EAPOL';
 import Hccapx from './Hccapx';
 import { failedParsingHash, hashlistVerificationChanged, parsedHash, setWpaInfo } from './newTaskSlice';
 interface HccapxRecord {

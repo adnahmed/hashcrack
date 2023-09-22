@@ -1,4 +1,4 @@
-import HashtypePrototypes from '@/assets/hashtype_prototypes.json';
+import { hashcat_modes } from '@/assets/constants';
 import { Configuration } from '@/features/NewTask/newTaskSlice';
 import applyCors from '@/lib/corsMiddleware';
 import requiresToken from '@/lib/requiresToken';
@@ -18,13 +18,6 @@ export interface SubmittedTask {
     created_at: Date;
     success: boolean;
 }
-const hashcat_modes = HashtypePrototypes
-    // Filter protos with null hashcat modes.
-    .filter(proto => proto.modes.find(d => d.hashcat !== null))
-    .map(proto => proto.modes.map(d => d.hashcat))
-    .reduce((prev, modes) => prev.concat(modes))
-    .filter(m => m !== null)
-    .map(m => m?.toString());
 
 class TaskValidateData implements TaskData {
     @IsBoolean()

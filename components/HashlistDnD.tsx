@@ -1,5 +1,5 @@
 import HashlistContext from '@/Context/HashlistContext';
-import { WPACaptureFileTypes } from '@/features/HashInput/HashTypes/Wireless/EAPOL';
+import { WPACaptureFileTypes } from '@/assets/constants';
 import { selectedHashlistFile } from '@/features/NewTask/newTaskSlice';
 import { useAppDispatch } from '@/lib/redux/store';
 import clsx from 'clsx';
@@ -15,16 +15,18 @@ const HashlistDnD = ({ wireless = false }: HashlistDnDProps) => {
     const [currentHashlistFile, setCurrentHashlistFile] = useState<FileWithPath | undefined>();
     const [currentLabel, setCurrentLabel] = useState<string | undefined>();
     const usingTextArea = hashlistConsumer !== null && hashlistConsumer.hashlist.length !== 0;
-    const acceptedFiles = wireless ? {
-        'application/octet-stream': WPACaptureFileTypes,
-    } : undefined;
+    const acceptedFiles = wireless
+        ? {
+              'application/octet-stream': WPACaptureFileTypes,
+          }
+        : undefined;
     const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
         onDrop: (acceptedFiles: FileWithPath[]) => {
             if (acceptedFiles.length === 0) return;
             const accFile = acceptedFiles[0];
             const type = accFile.path?.split('.')?.pop();
             if (!type) {
-                toast.error('Could not detect file type')
+                toast.error('Could not detect file type');
                 return;
             }
             setCurrentHashlistFile(accFile);
@@ -37,17 +39,16 @@ const HashlistDnD = ({ wireless = false }: HashlistDnDProps) => {
     });
     useEffect(() => {
         if (isDragActive) {
-            setCurrentLabel('Drop file here...')
+            setCurrentLabel('Drop file here...');
             return;
         }
         if (currentHashlistFile) {
             setCurrentLabel(currentHashlistFile.name);
             return;
         }
-        if (wireless)
-            setCurrentLabel('Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or click to browse')
-        setCurrentLabel('Drag here hashlist file or click to browse')
-    }, [currentHashlistFile, isDragActive, wireless])
+        if (wireless) setCurrentLabel('Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or click to browse');
+        setCurrentLabel('Drag here hashlist file or click to browse');
+    }, [currentHashlistFile, isDragActive, wireless]);
     return (
         <div {...getRootProps({ className: clsx({ dropzone: true, 'border-gray-500': true, 'bg-green-100': isDragReject, 'border-green-300': isDragReject, 'border-blue-500': isDragActive, 'bg-blue-100': isDragActive, 'bg-[var(--theme-bg)]': currentHashlistFile, 'border-[var(--theme)]': currentHashlistFile }) })}>
             <input name="hashlistFile" {...getInputProps()} />
