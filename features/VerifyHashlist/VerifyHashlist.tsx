@@ -1,3 +1,4 @@
+import { WPACaptureFileType } from '@/assets/constants';
 import { QuestionMark, Tick } from '@/components/Icons';
 import Loading from '@/components/ui/Loading';
 import { useAppSelector } from '@/lib/redux/store';
@@ -6,7 +7,8 @@ import { getWpaGroup } from '@/utils/wpa';
 import { Accordion } from 'flowbite-react';
 import NanoClamp from 'nanoclamp';
 import { useMemo } from 'react';
-import { selectParsedHashlist, selectRejectedHashlist, selectSelectedHashType, selectVerifyingHashlist } from '../NewTask/newTaskSlice';
+import { ValuesType } from 'utility-types';
+import { selectHashlistFileType, selectParsedHashlist, selectRejectedHashlist, selectSelectedHashType, selectVerifyingHashlist, selectWPAInfo } from '../NewTask/newTaskSlice';
 
 function VerifyHashlist() {
     const verifyingHashlist = useAppSelector(selectVerifyingHashlist);
@@ -16,6 +18,8 @@ function VerifyHashlist() {
     const showRejectedHashes = (parsedHashes.length === 0 && rejectedHashes.length > 0) || collapseAll;
     const hashtype = useAppSelector(selectSelectedHashType);
     const wpaGroup = useMemo(() => getWpaGroup(hashtype), [hashtype]);
+    const wpaInfo = useAppSelector(selectWPAInfo);
+    const hashlistFileType = useAppSelector(selectHashlistFileType);
     const showParsedHashes = (parsedHashes.length > 0 && rejectedHashes.length === 0) || collapseAll;
     if (verifyingHashlist)
         return (
@@ -24,7 +28,20 @@ function VerifyHashlist() {
                 <p className={'mt-fl-md-lg text-fl-sm'}>Verifying Hashes...</p>
             </>
         );
-    if (wpaGroup) return <div>Total Handshakes</div>;
+    if (wpaGroup) {
+        switch (hashlistFileType as ValuesType<WPACaptureFileType>) {
+            case 'hccapx':
+                return (
+                    <div className="max-w-2xl">
+                        <p className="flex min-w-full justify-between p-4 text-fl-sm font-medium ">
+                            <span>Total Handshakes</span>
+                            <span className="font-bold">{wpaInfo?.length}</span>
+                        </p>
+                        <div>{JSON.stringify(wpaInfo)}</div>
+                    </div>
+                );
+        }
+    }
     return (
         <div className="max-w-2xl">
             <p className="flex min-w-full justify-between p-4 text-fl-sm font-medium ">
