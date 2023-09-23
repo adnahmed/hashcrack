@@ -123,8 +123,7 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                         }));
                         dispatch(setWpaInfo(wpaInfo));
                     }
-                    // const data = new Hccapx(new KataiStream());
-                    thunkAPI.fulfillWithValue(true); // TODO: change true to data
+                    thunkAPI.fulfillWithValue(true); 
                 } else {
                     // We found another file type say text.
                     const hashes = getHashlist(text);
