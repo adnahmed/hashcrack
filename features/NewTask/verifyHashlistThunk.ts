@@ -7,7 +7,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import KataiStream from 'kaitai-struct/KaitaiStream';
 import toast from 'react-hot-toast';
 import Hccapx from './Hccapx';
-import { failedParsingHash, hashlistVerificationChanged, parsedHash, setWpaInfo } from './newTaskSlice';
+import { AccessPoint, failedParsingHash, hashlistVerificationChanged, parsedHash, setHandshakes } from './newTaskSlice';
 interface HccapxRecord {
     magic: Uint8Array;
     version: number;
@@ -114,6 +114,7 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                     const parsed = new Hccapx(new KataiStream(buffer));
                     if (parsed.records) {
                         const hccapxRecords = parsed.records as HccapxRecord[];
+
                         const wpaInfo = hccapxRecords.map(record => ({
                             essid: Buffer.from(record.essid).toString().replace('\x00', ''),
                             bssid: Buffer.from(record.macAp).toString('hex'),
@@ -121,9 +122,22 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                             mic: Buffer.from(record.keymic).toString('hex'),
                             authenticated: [1, 2, 3, 4, 5].includes(record.messagePair),
                         }));
-                        dispatch(setWpaInfo(wpaInfo));
+                        const handshakes = wpaInfo.reduce<AccessPoint[]>(
+                            (prev, curr, index) => {
+                                if (prev.length === 0) {
+                                    return [{ ...curr, mic: [curr.mic], authenticatedHandshakes: curr.authenticated ? 1 : 0 }];
+                                }
+                                if (!prev[0].mic.includes(curr.mic)) {
+                                    prev[0].mic.push(curr.mic);
+                                }
+                                if (index > 0 && curr.authenticated) prev[0].authenticatedHandshakes += 1;
+                                return prev;
+                            },
+                            []
+                        )
+                        dispatch(setHandshakes(handshakes));
                     }
-                    thunkAPI.fulfillWithValue(true); 
+                    thunkAPI.fulfillWithValue(true);
                 } else {
                     // We found another file type say text.
                     const hashes = getHashlist(text);
