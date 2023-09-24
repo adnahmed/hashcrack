@@ -9,17 +9,17 @@ export enum Configuration {
     BASIC,
 }
 
-interface WPAInfo {
+export interface AccessPoint {
     essid: string;
     bssid: string;
     stmac: string;
-    mic: string;
-    authenticated: boolean;
+    mic: string[];
+    authenticatedHandshakes: number;
 }
 type ConfigurationData = unknown;
 export interface TaskData {
     acceptedTermsAndConditions: boolean;
-    wpaInfo?: WPAInfo[];
+    handshakes?: AccessPoint[];
     selectedConfig?: Configuration;
     configData?: ConfigurationData;
     resultEmail: string;
@@ -44,7 +44,7 @@ const ResetWizard = (state: NewTaskState, action: PayloadAction<number>) => {
         return;
     }
     state.selectedHashType = '-1';
-    state.wpaInfo = undefined;
+    state.handshakes = undefined;
     state.privacyMode = false;
     state.resultEmail = '';
     state.hashlistFileType = undefined;
@@ -78,7 +78,7 @@ const newTask = createSlice({
         resultEmail: '',
         acceptedTermsAndConditions: false,
         privacyMode: false,
-        wpaInfo: undefined,
+        handshakes: undefined,
         attackConfigured: false,
         verifyingHashlist: false,
         hashlistVerified: false,
@@ -102,8 +102,8 @@ const newTask = createSlice({
         changedResultEmail: (state, action: PayloadAction<string>) => {
             state.resultEmail = action.payload;
         },
-        setWpaInfo: (state, action: PayloadAction<WPAInfo[]>) => {
-            state.wpaInfo = action.payload;
+        setHandshakes: (state, action: PayloadAction<AccessPoint[]>) => {
+            state.handshakes = action.payload;
         },
         selectedHashlistFile: (
             state,
@@ -169,7 +169,7 @@ const newTask = createSlice({
 
 export default newTask;
 export const selectTaskData = (state: AppState) => state.newTask;
-export const selectWPAInfo = (state: AppState) => state.newTask.wpaInfo;
+export const selectHandshakes = (state: AppState) => state.newTask.handshakes;
 export const createdTasks = (state: AppState) => state.newTask.createdTasks;
 export const selectSelectedHashType = (state: AppState) => state.newTask.selectedHashType;
 export const selectTermsAndConditions = (state: AppState) => state.newTask.acceptedTermsAndConditions;
@@ -183,5 +183,5 @@ export const selectParsedHashlist = (state: AppState) => state.newTask.hashlist;
 export const selectRejectedHashlist = (state: AppState) => state.newTask.rejectedHashlist;
 export const selectAttackConfigured = (state: AppState) => state.newTask.attackConfigured;
 export const selectSelectedConfig = (state: AppState) => state.newTask.selectedConfig;
-export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard, selectedConfig, changedPrivacyMode, changedResultEmail, changedTermsAndConditions, createdTask, setWpaInfo } = newTask.actions;
+export const { selectedHashType, parsedHash, failedParsingHash, hashlistVerificationChanged, selectedHashlistFile, resettedWizard, selectedConfig, changedPrivacyMode, changedResultEmail, changedTermsAndConditions, createdTask, setHandshakes } = newTask.actions;
 export const { useSubmitTaskMutation } = extendedApiSlice;
