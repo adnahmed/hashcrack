@@ -15,5 +15,9 @@ namespace NodeJS {
 
     /* Business Logic */
     NEXT_PUBLIC_Privacy_Mode_Price: string;
+
+    /* Vercel Serverless */
+    VERCEL_URL?: string;
+
   }
 }
