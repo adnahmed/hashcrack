@@ -9,7 +9,7 @@
     "build": "cross-env ANALYZE=true npm-run-all build:*",
     "build:tailwind": "npx tailwindcss -i ./styles/_common.css -o ./styles/dist/tailwind.css",
     "build:run": "next build",
-    "start": "next start",
+    "start": "NEXT_MANUAL_SIG_HANDLE=true next start",
     "story": "npx ladle serve",
     "lint": "STORY=true next lint",
     "test": "jest"
