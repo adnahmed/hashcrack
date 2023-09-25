@@ -1,0 +1,16 @@
+Ops
+===
+1.Docker Config
+{
+  "builder": {
+    "gc": {
+      "defaultKeepStorage": "20GB",
+      "enabled": true
+    }
+  },
+  "experimental": false,
+  "live-restore": true
+}
+2. https://github.com/CISOfy/lynis
+3. Healthcheck.
+4. GitOps with Waypoint. https://developer.hashicorp.com/waypoint/docs/use-cases/waypoint-gh-actions
