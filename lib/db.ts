@@ -1,7 +1,8 @@
 import { PrismaClient } from '@prisma/client';
-
+import { PrismockClient } from 'prismock';
 const prismaClientSingleton = () => {
-    return new PrismaClient();
+    /// Use in-memory db in CI.
+    return process.env.VERCEL_URL === undefined ? new PrismaClient() : new PrismockClient();
 }
 
 type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;
