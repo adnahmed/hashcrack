@@ -4,10 +4,33 @@ import { AppState } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
 import { HashType } from '@/nth/HashTypeObj';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import KataiStream from 'kaitai-struct/KaitaiStream';
+import { default as KaitaiStream, default as KataiStream } from 'kaitai-struct/KaitaiStream';
 import toast from 'react-hot-toast';
-import Hccapx from './Hccapx';
+import Hccap from './FormatGallery/Hccap';
+import Hccapx from './FormatGallery/Hccapx';
 import { AccessPoint, failedParsingHash, hashlistVerificationChanged, parsedHash, setHandshakes } from './newTaskSlice';
+
+interface WPAInfo {
+    essid: string;
+    bssid: string;
+    stmac: string;
+    mic: string;
+    authenticated?: boolean;
+    raw_data: Uint8Array;
+}
+
+interface HccapRecord {
+    essid: Uint8Array;
+    macAp: Uint8Array;
+    macStation: Uint8Array;
+    nonceStation: Uint8Array;
+    nonceAp: Uint8Array;
+    eapolBuffer: KaitaiStream<ArrayBuffer>;
+    lenEapol: number;
+    keyver: number;
+    keymic: Uint8Array;
+    _raw_eapolBuffer: Uint8Array;
+}
 interface HccapxRecord {
     magic: Uint8Array;
     version: number;
@@ -94,47 +117,46 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                     }
                     return result;
                 };
+                const toWPAInfo: (record: HccapxRecord | HccapRecord, index: number) => WPAInfo = (record, index) => ({
+                    essid: Buffer.from(record.essid).toString().replace(/\x00|\u0000/gm, ''),
+                    bssid: Buffer.from(record.macAp).toString('hex'),
+                    stmac: Buffer.from(record.macStation).toString('hex'),
+                    mic: Buffer.from(record.keymic).toString('hex'),
+                    authenticated: ('messagePair' in record) ? [1, 2, 3, 4, 5].includes(record.messagePair) : undefined,
+                    raw_data: new Uint8Array(buffer.slice(index * 393, (index * 393) + 392))
+                })
+                const toHandshake: (prev: AccessPoint[], curr: WPAInfo, index: number) => AccessPoint[] = (prev, curr, index) => {
+                    if (prev.length === 0) {
+                        return [{ ...curr, mic: [curr.mic], authenticatedHandshakes: curr.authenticated ? 1 : curr.authenticated === undefined ? curr.authenticated : 0 }];
+                    }
+                    if (!prev[0].mic.includes(curr.mic)) {
+                        prev[0].mic.push(curr.mic);
+                    }
+                    if (curr.authenticated !== undefined)
+                        if (index > 0 && curr.authenticated) {
+                            if (!prev[0].authenticatedHandshakes) prev[0].authenticatedHandshakes = 1;
+                            else prev[0].authenticatedHandshakes += 1;
+                        }
+                    return prev;
+                }
+
                 if (selectedHashType === '2500' && !WPACaptureFileTypes.includes(`.${type}`)) return thunkAPI.rejectWithValue(`Invalid File, expected ${WPACaptureFileTypes.join(', ')}, got ${type}`);
                 if (WPACaptureFileTypes.includes(`.${type}`)) {
-                    const essid = [], bssid = [], stmac = [], mic = [];
+                    let records;
                     if (text.substring(0, 4) == 'HCPX' && size % 393 == 0) {
-                        for (let i = 0; i < size / 393; i++) {
-                            const pos = i * 393;
-                            essid.push(text.substring(pos + 10, 35).replace('\x00', ''));
-                            bssid.push(macEncode(text.substring(pos + 59, 7)));
-                            stmac.push(macEncode(text.substring(pos + 97, 7)));
-                            mic.push(hexEncode(text.substring(pos + 43, 17)));
+                        const parsed = new Hccapx(new KataiStream(buffer));
+                        if (parsed.records) {
+                            records = parsed.records as HccapxRecord[];
                         }
                     } else if (size == 392) {
-                        essid.push(text.substring(0, 33).replace('\x00', ''));
-                        bssid.push(macEncode(text.substring(36, 7)));
-                        stmac.push(macEncode(text.substring(42, 7)));
-                        mic.push(hexEncode(text.substring(text.length - 15)));
+                        const parsed = new Hccap(new KaitaiStream(buffer));
+                        if (parsed.records) {
+                            records = parsed.records as HccapRecord[];
+                        }
                     }
-                    const parsed = new Hccapx(new KataiStream(buffer));
-                    if (parsed.records) {
-                        const hccapxRecords = parsed.records as HccapxRecord[];
-
-                        const wpaInfo = hccapxRecords.map(record => ({
-                            essid: Buffer.from(record.essid).toString().replace('\x00', ''),
-                            bssid: Buffer.from(record.macAp).toString('hex'),
-                            stmac: Buffer.from(record.macStation).toString('hex'),
-                            mic: Buffer.from(record.keymic).toString('hex'),
-                            authenticated: [1, 2, 3, 4, 5].includes(record.messagePair),
-                        }));
-                        const handshakes = wpaInfo.reduce<AccessPoint[]>(
-                            (prev, curr, index) => {
-                                if (prev.length === 0) {
-                                    return [{ ...curr, mic: [curr.mic], authenticatedHandshakes: curr.authenticated ? 1 : 0 }];
-                                }
-                                if (!prev[0].mic.includes(curr.mic)) {
-                                    prev[0].mic.push(curr.mic);
-                                }
-                                if (index > 0 && curr.authenticated) prev[0].authenticatedHandshakes += 1;
-                                return prev;
-                            },
-                            []
-                        )
+                    if (records) {
+                        const wpaInfo = records.map(toWPAInfo);
+                        const handshakes = wpaInfo.reduce(toHandshake, []);
                         dispatch(setHandshakes(handshakes));
                     }
                     thunkAPI.fulfillWithValue(true);
@@ -149,3 +171,4 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
         toast.error(`Error Occurred: ${err}`);
     }
 });
+
