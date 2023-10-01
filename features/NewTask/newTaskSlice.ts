@@ -14,7 +14,7 @@ export interface AccessPoint {
     bssid: string;
     stmac: string;
     mic: string[];
-    authenticatedHandshakes: number;
+    authenticatedHandshakes?: number;
 }
 type ConfigurationData = unknown;
 export interface TaskData {
@@ -170,6 +170,7 @@ const newTask = createSlice({
 export default newTask;
 export const selectTaskData = (state: AppState) => state.newTask;
 export const selectHandshakes = (state: AppState) => state.newTask.handshakes;
+export const selectNumAuthenticated = (state: AppState) => state.newTask.handshakes?.reduce((prev, curr) => prev !== undefined && curr.authenticatedHandshakes !== undefined ? (prev + curr.authenticatedHandshakes) : prev, state.newTask.handshakes[0]?.authenticatedHandshakes !== undefined ? 0 : state.newTask.handshakes[0]?.authenticatedHandshakes);
 export const createdTasks = (state: AppState) => state.newTask.createdTasks;
 export const selectSelectedHashType = (state: AppState) => state.newTask.selectedHashType;
 export const selectTermsAndConditions = (state: AppState) => state.newTask.acceptedTermsAndConditions;
