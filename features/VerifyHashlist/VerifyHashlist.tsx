@@ -8,7 +8,7 @@ import { Accordion } from 'flowbite-react';
 import NanoClamp from 'nanoclamp';
 import { useMemo } from 'react';
 import { ValuesType } from 'utility-types';
-import { selectHandshakes, selectHashlistFileType, selectParsedHashlist, selectRejectedHashlist, selectSelectedHashType, selectVerifyingHashlist } from '../NewTask/newTaskSlice';
+import { selectHandshakes, selectHashlistFileType, selectNumAuthenticated, selectParsedHashlist, selectRejectedHashlist, selectSelectedHashType, selectVerifyingHashlist } from '../NewTask/newTaskSlice';
 
 function VerifyHashlist() {
     const verifyingHashlist = useAppSelector(selectVerifyingHashlist);
@@ -19,6 +19,7 @@ function VerifyHashlist() {
     const hashtype = useAppSelector(selectSelectedHashType);
     const wpaGroup = useMemo(() => getWpaGroup(hashtype), [hashtype]);
     const handshakes = useAppSelector(selectHandshakes);
+    const numAuthenticated = useAppSelector(selectNumAuthenticated);
     const hashlistFileType = useAppSelector(selectHashlistFileType);
     const showParsedHashes = (parsedHashes.length > 0 && rejectedHashes.length === 0) || collapseAll;
     if (verifyingHashlist)
@@ -31,6 +32,7 @@ function VerifyHashlist() {
     if (wpaGroup) {
         switch (hashlistFileType as ValuesType<WPACaptureFileType>) {
             case 'hccapx':
+            case 'hccap':
                 return (
                     <div className="max-w-2xl">
                         <p className="flex min-w-full justify-between p-4 text-fl-sm font-medium ">
@@ -56,7 +58,8 @@ function VerifyHashlist() {
                                 ))}
                             </div>
                         ))}
-                        <div>Authenticated Handshakes: {handshakes?.reduce((prev, curr) => prev + curr.authenticatedHandshakes, 0)}</div>
+
+                        {numAuthenticated !== undefined ? <div>Authenticated Handshakes: {numAuthenticated}</div> : ''}
                     </div>
                 );
         }
