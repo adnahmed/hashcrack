@@ -98,25 +98,6 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                 const buffer = uintarray?.buffer;
                 if (!buffer) throw new EmptyHashlistFileError('Empty file submitted.');
                 const text = Buffer.from(buffer).toString();
-                const macEncode = function (value: string) {
-                    let hex, i;
-                    let result = '';
-                    for (i = 0; i < value.length; i++) {
-                        hex = value.charCodeAt(i).toString(16).toUpperCase();
-                        result += ('0000' + hex).slice(-2);
-                        if (i < value.length - 1) result += ':';
-                    }
-                    return result;
-                };
-                const hexEncode = function (value: string) {
-                    let hex, i;
-                    let result = '';
-                    for (i = 0; i < value.length; i++) {
-                        hex = value.charCodeAt(i).toString(16).toUpperCase();
-                        result += ('0000' + hex).slice(-2);
-                    }
-                    return result;
-                };
                 const toWPAInfo: (record: HccapxRecord | HccapRecord, index: number) => WPAInfo = (record, index) => ({
                     essid: Buffer.from(record.essid).toString().replace(/\x00|\u0000/gm, ''),
                     bssid: Buffer.from(record.macAp).toString('hex'),
