@@ -10,7 +10,7 @@ const CustomToaster = () => (
         }}
         gutter={24}
         toastOptions={{
-            className: '',
+            className: 'md:min-w-max',
             style: {
                 padding: '16px',
                 color: '#713200',
@@ -41,7 +41,7 @@ const CustomToaster = () => (
                 }}>
                 {({ icon, message }) => (
                     <>
-                        <div aria-label="Close Notification" style={{ cursor: 'pointer', top: '0px' }} onClick={() => toast.dismiss(t.id)}>
+                        <div className="" aria-label="Close Notification" style={{ cursor: 'pointer', top: '0px' }} onClick={() => toast.dismiss(t.id)}>
                             {icon}
                         </div>
                         {message}
