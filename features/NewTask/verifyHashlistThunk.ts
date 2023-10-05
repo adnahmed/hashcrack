@@ -1,10 +1,11 @@
 import { WPACaptureFileTypes } from '@/assets/constants';
-import { isErrorWithMessage } from '@/lib/error';
-import { AppState } from '@/lib/redux/store';
+import { AppDispatch, AppState } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
 import { HashType } from '@/nth/HashTypeObj';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { default as KaitaiStream, default as KataiStream } from 'kaitai-struct/KaitaiStream';
+import { ErrorWithMessage, isErrorWithMessage } from '../../lib/error';
+import { FetchError, isFetchError } from '../api/apiSlice';
 import CapFile from './FormatGallery/CapFile';
 import type { HccapRecord, HccapxRecord } from './FormatGallery/HashcatTypes';
 import Hccap from './FormatGallery/Hccap';
@@ -26,18 +27,22 @@ interface VerifyHashlistArgs {
     hashlist?: string[];
 }
 class InvalidHashlistFileError extends Error {
-    constructor(message: string) {
+    constructor(message = 'Invalid hashlist file') {
         super(message);
         this.name = 'InvalidHashlistFileError';
     }
 }
 class EmptyHashlistFileError extends Error {
-    constructor(message: string) {
+    constructor(message = 'Empty hashlist file') {
         super(message);
         this.name = 'EmptyHashlistFileError';
     }
 }
-export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('newTask/verifyHashlist', async ({ inputMethod, hashlist }, { dispatch, ...thunkAPI }) => {
+export const verifyHashlist = createAsyncThunk<boolean | undefined, VerifyHashlistArgs, {
+    dispatch: AppDispatch,
+    state: AppState,
+    rejectValue: FetchError | ErrorWithMessage | InvalidHashlistFileError | EmptyHashlistFileError | string
+}>('newTask/verifyHashlist', async ({ inputMethod, hashlist }, { dispatch, ...thunkAPI }) => {
     const {
         newTask: { selectedHashType, hashlistFile, hashlistFileType: type, hashlistFileSize: size },
     } = thunkAPI.getState() as AppState;
@@ -47,9 +52,6 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
             const isValid = hi.split(',').includes(selectedHashType);
             isValid ? dispatch(parsedHash(hash)) : dispatch(failedParsingHash(hash));
         } catch (err) {
-            if (isErrorWithMessage(err)) {
-                thunkAPI.rejectWithValue(err.message);
-            } else thunkAPI.rejectWithValue(err);
             // TODO: add suggestion type for rejected hashes
             dispatch(failedParsingHash(hash));
         }
@@ -60,15 +62,16 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                 if (!hashlist || selectedHashType === '-1') return thunkAPI.rejectWithValue('Unable to parse hashlist or hashlist is too long, Please try again.');
                 hashlist.forEach(validateHash);
                 dispatch(hashlistVerificationChanged(true));
+                return thunkAPI.fulfillWithValue(true);
             case 'file':
                 if (!hashlistFile || !size) return;
                 const resp = await fetch(hashlistFile);
                 const hf = resp.body;
-                if (!hf) throw new InvalidHashlistFileError('Invalid hashlist file');
+                if (!hf) throw new InvalidHashlistFileError();
                 const rb = await hf.getReader().read();
                 const uintarray = rb.value;
                 const buffer = uintarray?.buffer;
-                if (!buffer) throw new EmptyHashlistFileError('Empty file submitted.');
+                if (!buffer) throw new EmptyHashlistFileError();
                 const text = Buffer.from(buffer).toString();
                 const toWPAInfo: (record: HccapxRecord | HccapRecord, index: number) => WPAInfo = (record, index) => ({
                     essid: Buffer.from(record.essid).toString().replace(/\x00|\u0000/gm, ''),
@@ -128,10 +131,12 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                     const hashes = getHashlist(text);
                     hashes.forEach(validateHash);
                     dispatch(hashlistVerificationChanged(true));
+                    return thunkAPI.fulfillWithValue(true);
                 }
         }
     } catch (err) {
-        return thunkAPI.rejectWithValue(err);
+        if (typeof err === 'string' || isFetchError(err) || isErrorWithMessage(err))
+            return thunkAPI.rejectWithValue(err);
     }
 });
 
