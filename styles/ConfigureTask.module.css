@@ -22,7 +22,7 @@
 
 
 .attackButton {
-    border: 1px solid var(--theme-bg);
+    border: 1px solid var(--theme);
     padding: 10px 20px;
     align-items: center;
     border-radius: 4px;
@@ -36,7 +36,22 @@
     vertical-align: middle;
     white-space: nowrap;
     transition: color 0.2s cubic-bezier(0.4, 0, 0.6, 1);
+    --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+
 }
+
+@media screen and (width >=768px) {
+    .attackButton {
+        max-width: calc(20.88rem + 18.00 * var(--fluid-bp));
+    }
+}
+
+@media screen and (width <=768px) {
+    .attackButton {
+        min-height: calc(04.88rem + 18.00 * var(--fluid-bp));
+    }
 }
 
 .attackButtonSelected {
@@ -46,6 +61,7 @@
 
 .attackButton:hover {
     background-color: var(--theme-bg);
+    border-color: var(--theme-bg);
     color: var(--theme);
 }
 
@@ -63,15 +79,50 @@
     transition: 0.2s cubic-bezier(0.4, 0, 0.6, 1);
 }
 
+.introDivider {
+    margin-bottom: calc(1.31rem
+            /* 20.96px */
+            + 3.00 * var(--fluid-bp));
+    margin-top: calc(0.98rem
+            /* 15.68px */
+            + 2.25 * var(--fluid-bp));
+}
+
+.intro {
+    margin-bottom: calc(0.41rem
+            /* 20.96px */
+            + 3.00 * var(--fluid-bp));
+}
+
+.attack {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: calc(1.94rem
+            /* 63.04px */
+            + 9.00 * var(--fluid-bp));
+    gap: calc(0.34rem
+            /* 63.04px */
+            + 9.00 * var(--fluid-bp));
+}
+
 .attackContainer {
     display: flex;
     flex-direction: column;
-    margin: auto;
-    width: calc(37.88rem + 18.00 * var(--fluid-bp));
+    max-width: calc(42rem + 18.00 * var(--fluid-bp));
+    padding: calc(1.31rem
+            /* 20.96px */
+            + 3.00 * var(--fluid-bp));
 }
 
+@media (max-width: 768px) {
+    .attackContainer {
+        padding: calc(0.98rem
+                /* 15.68px */
+                + 2.25 * var(--fluid-bp));
+    }
+}
 
-@media screen and (width <=640px) {
+@media screen and (width <=768px) {
     .attackContainer {
         width: 100%;
     }

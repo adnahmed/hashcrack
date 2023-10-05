@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import styles from '@/styles/ConfigureTask.module.css';
 import rippleStyle from '@/styles/RippleEffect.module.scss';
-import { Accordion, AccordionContent, AccordionItem, Button, WizardContextConsumer } from '@patternfly/react-core';
+import { Accordion, AccordionContent, AccordionItem, Button, Divider, WizardContextConsumer } from '@patternfly/react-core';
 import React, { JSX, SVGProps, useEffect, useRef, useState } from 'react';
 import { Configuration, selectSelectedConfig, selectedConfig } from '../NewTask/newTaskSlice';
 import { stepIdReached } from '../Wizard/wizardSlice';
@@ -9,16 +9,23 @@ import { stepIdReached } from '../Wizard/wizardSlice';
 function ConfigureTask() {
     const currentConfig = useAppSelector(selectSelectedConfig);
     return (
-        <Accordion className={styles.attackContainer}>
+        <Accordion className={`${styles.attackContainer} p-fl-sm md:p-fl-xs`}>
+            <div className={styles.intro}>
+                {' '}
+                <span></span>Currently, the primary attack method is available, with more advanced options coming soon. Please select the available attack method.
+                <Divider className={styles.introDivider} />
+            </div>
             <AccordionItem>
-                <BasicHashAttack />
-                <AccordionContent isHidden={currentConfig !== Configuration.BASIC}>
-                    <p className="flex flex-col">
-                        <span>We will perform well-balanced basic search of commonly used hash passwords depending on your hash type.</span>
-                        <span>We will run basic search free of charge, but we will ask you to pay 0.0005BTC for the results in case of success.</span>
-                    </p>
-                    <ConfigurationCompleteButton />
-                </AccordionContent>
+                <div className={styles.attack}>
+                    <BasicHashAttack />
+                    <AccordionContent className="mb-fl-sm" isHidden={currentConfig !== Configuration.BASIC}>
+                        <p className="flex flex-col">
+                            <span>We will perform well-balanced basic search of commonly used hash passwords depending on your hash type.</span>
+                            <span>We will run basic search free of charge, but we will ask you to pay 0.0005BTC for the results in case of success.</span>
+                        </p>
+                        <ConfigurationCompleteButton />
+                    </AccordionContent>
+                </div>
             </AccordionItem>
             <ComingSoonAttacks />
         </Accordion>
