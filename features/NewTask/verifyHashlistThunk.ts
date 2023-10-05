@@ -5,7 +5,8 @@ import { getHashlist } from '@/lib/utils';
 import { HashType } from '@/nth/HashTypeObj';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { default as KaitaiStream, default as KataiStream } from 'kaitai-struct/KaitaiStream';
-import toast from 'react-hot-toast';
+import CapFile from './FormatGallery/CapFile';
+import type { HccapRecord, HccapxRecord } from './FormatGallery/HashcatTypes';
 import Hccap from './FormatGallery/Hccap';
 import Hccapx from './FormatGallery/Hccapx';
 import { AccessPoint, failedParsingHash, hashlistVerificationChanged, parsedHash, setHandshakes } from './newTaskSlice';
@@ -19,36 +20,7 @@ interface WPAInfo {
     raw_data: Uint8Array;
 }
 
-interface HccapRecord {
-    essid: Uint8Array;
-    macAp: Uint8Array;
-    macStation: Uint8Array;
-    nonceStation: Uint8Array;
-    nonceAp: Uint8Array;
-    eapolBuffer: KaitaiStream<ArrayBuffer>;
-    lenEapol: number;
-    keyver: number;
-    keymic: Uint8Array;
-    _raw_eapolBuffer: Uint8Array;
-}
-interface HccapxRecord {
-    magic: Uint8Array;
-    version: number;
-    ignoreReplayCounter: boolean;
-    messagePair: number;
-    lenEssid: number;
-    essid: Uint8Array;
-    padding1: Uint8Array;
-    keyver: number;
-    keymic: Uint8Array;
-    macAp: Uint8Array;
-    nonceAp: Uint8Array;
-    macStation: Uint8Array;
-    nonceStation: Uint8Array;
-    lenEapol: number;
-    eapol: Uint8Array;
-    padding2: Uint8Array;
-}
+
 interface VerifyHashlistArgs {
     inputMethod: 'textarea' | 'file';
     hashlist?: string[];
@@ -124,23 +96,33 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                 if (selectedHashType === '2500' && !WPACaptureFileTypes.includes(`.${type}`)) return thunkAPI.rejectWithValue(`Invalid File, expected ${WPACaptureFileTypes.join(', ')}, got ${type}`);
                 if (WPACaptureFileTypes.includes(`.${type}`)) {
                     let records;
-                    if (text.substring(0, 4) == 'HCPX' && size % 393 == 0) {
-                        const parsed = new Hccapx(new KataiStream(buffer));
-                        if (parsed.records) {
-                            records = parsed.records as HccapxRecord[];
-                        }
-                    } else if (size == 392) {
-                        const parsed = new Hccap(new KaitaiStream(buffer));
-                        if (parsed.records) {
-                            records = parsed.records as HccapRecord[];
-                        }
+                    switch (type) {
+                        case 'hccapx':
+                        case 'hccap':
+                            if (text.substring(0, 4) == 'HCPX' && size % 393 == 0) {
+                                const parsed = new Hccapx(new KataiStream(buffer));
+                                if (parsed.records) {
+                                    records = parsed.records as HccapxRecord[];
+                                }
+                            } else if (size == 392) {
+                                const parsed = new Hccap(new KaitaiStream(buffer));
+                                if (parsed.records) {
+                                    records = parsed.records as HccapRecord[];
+                                }
+                            }
+                            break;
+                        case 'cap':
+                        case 'pcap':
+                            const parsedCapFile = new CapFile(rb, undefined);
+                            console.log(parsedCapFile);
+                            break;
                     }
                     if (records) {
                         const wpaInfo = records.map(toWPAInfo);
                         const handshakes = wpaInfo.reduce(toHandshake, []);
                         dispatch(setHandshakes(handshakes));
                     }
-                    thunkAPI.fulfillWithValue(true);
+                    return thunkAPI.fulfillWithValue(true);
                 } else {
                     // We found another file type say text.
                     const hashes = getHashlist(text);
@@ -149,7 +131,7 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                 }
         }
     } catch (err) {
-        toast.error(`Error Occurred: ${err}`);
+        return thunkAPI.rejectWithValue(err);
     }
 });
 
