@@ -1,3 +1,4 @@
+import { ErrorWithMessage, isErrorWithMessage } from '@/lib/error';
 import { AppState } from '@/lib/redux/store';
 import { SubmittedTask } from '@/pages/api/task/submit';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
@@ -143,27 +144,25 @@ const newTask = createSlice({
 
     extraReducers: (builder) => {
         builder
-            .addCase(verifyHashlist.fulfilled, (state) => {
+            .addCase(activeTabChanged, ResetWizard)
+            .addMatcher(verifyHashlist.fulfilled.match, (state) => {
                 state.verifyingHashlist = false;
                 state.hashlistVerified = true;
             })
-            .addCase(verifyHashlist.rejected, (state, action: PayloadAction<any>) => {
-                toast.error(action.payload);
+            .addMatcher<ErrorWithMessage>(verifyHashlist.rejected.match, (state, action) => {
+                if (isErrorWithMessage(action.payload)) {
+                    // TODO: log error
+                }
+                toast.error('Something went wrong while verifying hashlist.', { duration: 5000 });
                 state.verifyingHashlist = false;
                 state.hashlistVerified = false;
-                if (state.hashlistFile) {
-                    state.hashlistFileType = undefined;
-                    state.hashlistFileSize = undefined;
-                    URL.revokeObjectURL(state.hashlistFile);
-                }
             })
-            .addCase(verifyHashlist.pending, (state) => {
+            .addMatcher(verifyHashlist.pending.match, (state) => {
                 state.verifyingHashlist = true;
                 state.hashlist = [];
                 state.rejectedHashlist = [];
                 state.hashlistVerified = false;
             })
-            .addCase(activeTabChanged, ResetWizard)
     },
 });
 
