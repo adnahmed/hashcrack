@@ -1,5 +1,7 @@
+import { isFetchError } from '@/features/api/apiSlice'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
-type ErrorWithMessage = {
+import toast from 'react-hot-toast'
+export type ErrorWithMessage = {
     message: string
 }
 /**
@@ -44,4 +46,14 @@ export function getErrorMessage(error: unknown) {
 export const reportError = ({ message }: { message: string }) => {
     console.warn(message)
     // send the error to our logging service...
+}
+
+export const showError = (err: unknown, defaultError = 'An error occurred') => {
+    if (isFetchError(err)) {
+        const errors = err.data.errors;
+        if (errors && errors.length > 0) {
+            errors.forEach((err) => toast.error(err));
+        }
+    } else if (isErrorWithMessage(err)) toast.error(err.message);
+    else toast.error(defaultError);
 }
