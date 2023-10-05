@@ -2,7 +2,7 @@ import HashlistContext from '@/Context/HashlistContext';
 import AddHashlist from '@/components/AddHashlist';
 import ExtraStep from '@/components/ExtraStep';
 import FinishStep from '@/components/FinishStep';
-import { isErrorWithMessage } from '@/lib/error';
+import { showError } from '@/lib/error';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
 import { Button, Modal, ModalVariant, Wizard, WizardContextConsumer, WizardFooter, WizardStep } from '@patternfly/react-core';
@@ -13,7 +13,6 @@ import { selectActiveTab } from '../../features/Navigation/navigationSlice';
 import ConfigureTask from '../ConfigureTask/ConfigureTask';
 import VerifyHashlist from '../VerifyHashlist/VerifyHashlist';
 import { selectWizardStepReached, stepIdReached } from '../Wizard/wizardSlice';
-import { isFetchError } from '../api/apiSlice';
 import { TaskData, createdTask, resettedWizard, selectParsedHashlist, selectTaskData, selectTermsAndConditions, useSubmitTaskMutation } from './newTaskSlice';
 import { verifyHashlist } from './verifyHashlistThunk';
 export default function NewTask() {
@@ -73,7 +72,7 @@ export default function NewTask() {
                 canJumpTo: wizardStepReached >= 4,
             },
         ],
-        [ConfigureStepDisabled, ExtrasStepDisabled, FinishStepDisabled, VerifyStepDisabled, hashlistVerified, verifyingHashlist, wizardStepReached]
+        [ConfigureStepDisabled, ExtrasStepDisabled, FinishStepDisabled, VerifyStepDisabled, hashlistVerified, isSubmittingTask, submittedTask, verifyingHashlist, wizardStepReached]
     );
 
     const closeWizard = () => {
@@ -81,29 +80,24 @@ export default function NewTask() {
         console.log('try me');
     };
 
-    const onNext = async ({ id }: WizardStep) => {
+    const onNext = async ({ id }: WizardStep, goToStep: (step: string) => void) => {
         if (id) {
             if (typeof id === 'string') {
                 id = parseInt(id);
             }
             const nextStep = (id: number) => dispatch(stepIdReached(wizardStepReached < id ? id : wizardStepReached));
-            if (id === 2) {
+            if (id === 1) {
+                let resp;
                 if (usingTextArea) {
                     const hashlist = getHashlist(hashlistConsumer.hashlist);
-                    dispatch(verifyHashlist({ inputMethod: 'textarea', hashlist }));
+                    resp = await dispatch(verifyHashlist({ inputMethod: 'textarea', hashlist })).unwrap();
                 }
                 if (hashlistFile) {
-                    try {
-                        const resp = await dispatch(verifyHashlist({ inputMethod: 'file' })).unwrap();
-                    } catch (err) {
-                        console.error(err);
-                    }
+                    resp = await dispatch(verifyHashlist({ inputMethod: 'file' })).unwrap();
                 }
-                if (usingTextArea || hashlistFile) {
-                    nextStep(id);
-                }
+                if ((usingTextArea || hashlistFile) && resp) nextStep(id + 1);
             } else {
-                nextStep(id);
+                nextStep(id + 1);
             }
         }
     };
@@ -141,23 +135,25 @@ export default function NewTask() {
         } catch (err) {
             //TODO: Log the error
             const defaultError = `Error occurred while submitting task, Please try again.`;
-            if (isFetchError(err)) {
-                const errors = err.data.errors;
-                if (errors && errors.length > 0) {
-                    errors.forEach((err) => toast.error(err));
-                }
-            } else if (isErrorWithMessage(err)) toast.error(err.message);
-            else toast.error(defaultError);
+            showError(err, defaultError);
         }
     };
     const CustomFooter = (
         <WizardFooter>
             <WizardContextConsumer>
-                {({ activeStep, goToStepByName, onNext, onBack, onClose, goToStepById: goToStep }) => {
+                {({ activeStep, goToStepByName, onNext: _onNext, onBack, onClose, goToStepById: goToStep }) => {
                     return (
                         <>
                             {NoHashFound(activeStep.id) || ['4', '3', '5'].includes(activeStep.id as string) ? undefined : (
-                                <Button variant="primary" className={NextStepDisabled && parsedHashes.length === 0 ? 'pf-m-disabled' : ''} type="submit" onClick={onNext}>
+                                <Button
+                                    variant="primary"
+                                    className={NextStepDisabled && parsedHashes.length === 0 ? 'pf-m-disabled' : ''}
+                                    type="submit"
+                                    onClick={() => {
+                                        onNext(activeStep, goToStep)
+                                            .then(() => _onNext())
+                                            .catch((err) => showError(err, 'Failed to verify hashlist.'));
+                                    }}>
                                     {rejectedHashes.length > 0 && activeStep.id === '2' ? '⚠️ Continue' : 'Next'}
                                 </Button>
                             )}
@@ -206,7 +202,6 @@ export default function NewTask() {
             hideClose={true}
             cancelButtonText=""
             title=""
-            onNext={onNext}
             footer={CustomFooter}
             onClose={closeWizard}
             onSubmit={function (data: unknown): Promise<void> {
