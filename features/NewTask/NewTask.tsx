@@ -149,10 +149,13 @@ export default function NewTask() {
                                     variant="primary"
                                     className={NextStepDisabled && parsedHashes.length === 0 ? 'pf-m-disabled' : ''}
                                     type="submit"
-                                    onClick={() => {
-                                        onNext(activeStep, goToStep)
-                                            .then(() => _onNext())
-                                            .catch((err) => showError(err, 'Failed to verify hashlist.'));
+                                    onClick={async () => {
+                                        try {
+                                            await onNext(activeStep, goToStep);
+                                            _onNext();
+                                        } catch (err) {
+                                            showError(err, 'Failed to verify hashlist.');
+                                        }
                                     }}>
                                     {rejectedHashes.length > 0 && activeStep.id === '2' ? '⚠️ Continue' : 'Next'}
                                 </Button>
