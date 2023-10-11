@@ -11,8 +11,8 @@ export const hashcat_modes = HashtypePrototypes
     .filter(m => m !== null)
     .map(m => m?.toString());
 
-export const WPACaptureFileTypes = ['.cap', '.pcap', '.hccap', '.hccapx'];
+export const WPACaptureFileTypes = ['.cap', '.pcap', '.hccap', '.hccapx', '.pcapng'];
 
-export type WPACaptureFileType = readonly ['cap', 'pcap', 'hccap', 'hccapx'];
+export type WPACaptureFileType = 'cap' | 'pcap' | 'hccap' | 'hccapx' | 'pcapng'
 
 export const wpaGroups = options.find((p) => /wireless networks/i.test(p['name']));
