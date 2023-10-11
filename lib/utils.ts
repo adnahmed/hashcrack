@@ -38,3 +38,31 @@ export function condenseWhitespace(string: string) {
 export function getHashlist(text: string) {
     return condenseWhitespace(trimNewLines(text)).split(' ');
 }
+
+export const encodeToUtf16 = (uint8array: Uint8Array): string => {
+    let extra = 0;
+    const output = [];
+    const { length } = uint8array;
+    const len = Math.ceil(length / 2);
+    for (let j = 0, i = 0; i < len; i++)
+        output.push(
+            String.fromCharCode(
+                (uint8array[j++] << 8) +
+                (j < length ? uint8array[j++] : extra++)
+            )
+        );
+    output.push(String.fromCharCode(extra));
+    return output.join('');
+};
+
+export const decodeUtf16 = (chars: string): Uint8Array => {
+    const codes = [];
+    const length = chars.length - 1;
+    for (let i = 0; i < length; i++) {
+        const c = chars.charCodeAt(i);
+        codes.push(c >> 8, c & 0xFF);
+    }
+    if (chars.charCodeAt(length))
+        codes.pop();
+    return Uint8Array.from(codes);
+};
