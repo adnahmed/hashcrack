@@ -49,6 +49,9 @@ export const reportError = ({ message }: { message: string }) => {
 }
 
 export const showError = (err: unknown, defaultError = 'An error occurred') => {
+    if (process.env.NODE_ENV === 'development') {
+        console.error(err);
+    }
     if (isFetchError(err)) {
         const errors = err.data.errors;
         if (errors && errors.length > 0) {
