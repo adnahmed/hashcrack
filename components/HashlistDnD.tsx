@@ -45,7 +45,7 @@ const HashlistDnD = ({ wireless = false }: HashlistDnDProps) => {
             setCurrentLabel(currentHashlistFile.name);
             return;
         }
-        if (wireless) setCurrentLabel('Drag here .hccap, .hccapx, .cap, .pcap with WPA handshake or click to browse');
+        if (wireless) setCurrentLabel('Drag here .hccap, .hccapx, .cap, .pcap or .pcapng with WPA handshake or click to browse');
         setCurrentLabel('Drag here hashlist file or click to browse');
     }, [currentHashlistFile, isDragActive, wireless]);
     return (
