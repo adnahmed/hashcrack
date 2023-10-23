@@ -46,3 +46,6 @@ export const apiSlice = createApi({
 export const {
   util: { getRunningQueriesThunk },
 } = apiSlice;
+
+export const isTypeError = (err: unknown): err is TypeError =>
+  ((err as TypeError).message !== undefined && typeof (err) === 'string')
