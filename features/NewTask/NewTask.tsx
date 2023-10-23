@@ -81,6 +81,7 @@ export default function NewTask() {
     };
 
     const onNext = async ({ id }: WizardStep, goToStep: (step: string) => void) => {
+        toast.dismiss();
         if (id) {
             if (typeof id === 'string') {
                 id = parseInt(id);
