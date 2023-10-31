@@ -14,3 +14,5 @@ Ops
 2. https://github.com/CISOfy/lynis
 3. Healthcheck.
 4. GitOps with Waypoint. https://developer.hashicorp.com/waypoint/docs/use-cases/waypoint-gh-actions
+5. https://github.com/wal-g/wal-g
+6. https://goaccess.io/features
