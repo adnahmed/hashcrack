@@ -1,0 +1,74 @@
+TODO
+====
+1. Extract hashlist from wallet. Bitcoin/Litecoin (.dat), Ethereum (.json), Exodus (.seco), 
+			MetaMask (.json), Electrum (.json), MetaMask (.zip containing LevelDB files)
+2. Extract Hashlist from file. MS_OFFICE, PDF, 7z, RAR and ZIP.
+3. validate hashes server side by creating decorator.
+
+
+Up to 10% of every task payment will be automatically converted into 
+task priority points
+Example. 
+	=> Advanced WPA Search <= would have default priority: 5
+	=> Pro WPA Search <= priority 10
+	and so on...
+	Max Priority Points: 10 
+	But you can further boost your task if needed.
+
+Payments 
+======== 
+	
+	? Coinbase?
+Bitcoin	(BTC)
+Litecoin (LTC)
+DASH
+Zcash (ZEC)
+
+Default:- New Task will have Bitcoin (BTC) payment bound by default but 
+You can manually change it to other accepted cryptocurrency. As long as your "task balance" is zero.
+
+
+As soon as we detect first transaction the task payment address will 
+be permanenty locked
+	
+	? Ephemeral Wallet(s) (Addresses)?
+
+Desired time per workunit (seconds per job) * priority * workload profile 
+	? Priority Queue?
+
+TIME LIMITS
+===========
+
+-> Each Search includes previous one.
+
+Search			  Time			  		Wordlists/Keyspace
+------			 -------					------------------
+
+BASIC Search 		|  	1 Hr 	  | Common and Default Passwords
+						   	    WPA: Common WPA wordlist, full 8-digits keyspace and known ISP default passwords
+Advanced Search	| 	1-3 Hrs	  | Automatically Select Suitable Wordlists Keyspaces 
+						   	    maximize your chances to win the lottery
+Pro Search 		|  	2-4 Hrs 	  | Even more wordlists and keyspaces
+			WPA:  	3-6 Hrs 	    9-10 digits and 8 HEX uppercase and lowercase keyspaces
+			  
+Manual Select 	| Until Exhaust | You select wordlist/keyspace
+			WPA:					Wireless Router and Other Wordlists.*
+
+Basic Search Free to run but pay for password. 
+
+Pricing/Priority
+=================
+
+	Search		Price			  		Notes							Priority			Boostable
+	------		------					-----							--------			---------
+ 
+ Basic Search	   	0.0005BTC  		    	Pay when password is found.					1				No
+ Advanced Search 	0.0025BTC GPU_TIME/hr  applies to certain hashes, free password		5				Yes
+ Pro Search 		0.005BTC GPU_TIME/hr 	free password								10				Yes
+		 	WPA: 0.005BTC GPU_TIME/hr 	
+ 
+TABLE Contents
+--------------
+TYPE 		Description
+----			-----------
+WPA			ESSID
