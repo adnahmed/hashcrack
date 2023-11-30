@@ -1,0 +1,8 @@
+{
+	"version": 3,
+	"file": "multiprocessing.js",
+	"sources": [
+		"multiprocessing.py"
+	],
+	"mappings": "AAAA;AAeA;AAfA;AAAA;AAAA;AACA;AACA;AACA;AAAA;AAEA;AACA;AAAA;AAEA;AACA;AAAA;AAAA;AAIA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AACA;AAAA;AACA"
+}

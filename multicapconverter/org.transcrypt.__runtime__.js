@@ -1,4 +1,4 @@
-// Transcrypt'ed from Python, 2023-06-23 19:21:08
+// Transcrypt'ed from Python, 2023-11-03 13:14:21
 var __name__ = 'org.transcrypt.__runtime__';
 export var __envir__ = {};
 __envir__.interpreter_name = 'python';
@@ -364,8 +364,21 @@ export function float (any) {
 };
 float.__name__ = 'float';
 float.__bases__ = [object];
-export function int (any) {
-    return float (any) | 0
+export function int (any, radix) {
+    if (any === false) {
+        return 0;
+    } else if (any === true) {
+        return 1;
+    } else {
+        var number = parseInt(any, radix);
+        if (isNaN (number)) {
+            if (radix == undefined) {
+                radix = 10;
+            }
+            throw ValueError('invalid literal for int() with base ' + radix + ': ' + any, new Error());
+        }
+        return number;
+    }
 };
 int.__name__ = 'int';
 int.__bases__ = [object];
@@ -705,6 +718,28 @@ Array.prototype.__class__ = list;
 list.__name__ = 'list';
 list.__bases__ = [object];
 Array.prototype.__iter__ = function () {return new __PyIterator__ (this);};
+Uint8Array.prototype.__getslice__ = function (start, stop, step) {
+    if (start < 0) {
+        start = this.length + start;
+    }
+    if (stop == null) {
+        stop = this.length;
+    }
+    else if (stop < 0) {
+        stop = this.length + stop;
+    }
+    else if (stop > this.length) {
+        stop = this.length;
+    }
+    if (step == 1) {
+        return Uint8Array.prototype.slice.call(this, start, stop);
+    }
+    let result = list ([]);
+    for (let index = start; index < stop; index += step) {
+        result.push (this [index]);
+    }
+    return result;
+};
 Array.prototype.__getslice__ = function (start, stop, step) {
     if (start < 0) {
         start = this.length + start;

@@ -1,11 +1,29 @@
 import { isErrorWithMessage } from '@/lib/error';
 import { AppState } from '@/lib/redux/store';
 import { getHashlist } from '@/lib/utils';
+import { main, outputs } from '@/multicapconverter/multicapconverter';
 import { HashType } from '@/nth/HashTypeObj';
+import File from '@/utils/File';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { default as KaitaiStream, default as KataiStream } from 'kaitai-struct/KaitaiStream';
 import toast from 'react-hot-toast';
-import { WPACaptureFileTypes } from '../HashInput/HashTypes/Wireless/EAPOL';
-import { failedParsingHash, hashlistVerificationChanged, parsedHash } from './newTaskSlice';
+import { ErrorWithMessage, isErrorWithMessage } from '../../lib/error';
+import { FetchError, isFetchError, isTypeError } from '../api/apiSlice';
+import type { HccapRecord, HccapxRecord } from './FormatGallery/HashcatTypes';
+import Hccap from './FormatGallery/Hccap';
+import Hccapx from './FormatGallery/Hccapx';
+import { AccessPoint, failedParsingHash, hashlistVerificationChanged, parsedHash, setHandshakes } from './newTaskSlice';
+
+interface WPAInfo {
+    essid: string;
+    bssid: string;
+    stmac: string;
+    mic: string;
+    authenticated?: boolean;
+    raw_data: Uint8Array;
+}
+
+
 interface VerifyHashlistArgs {
     inputMethod: 'textarea' | 'file';
     hashlist?: string[];
@@ -52,15 +70,19 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                 const rb = await hf.getReader().read();
                 const uintarray = rb.value;
                 const buffer = uintarray?.buffer;
-                if (!buffer) throw new EmptyHashlistFileError('Empty file submitted.');
-                const text = Buffer.from(buffer).toString();
-                const macEncode = function (value: string) {
-                    let hex, i;
-                    let result = '';
-                    for (i = 0; i < value.length; i++) {
-                        hex = value.charCodeAt(i).toString(16).toUpperCase();
-                        result += ('0000' + hex).slice(-2);
-                        if (i < value.length - 1) result += ':';
+                if (!buffer) throw new EmptyHashlistFileError();
+                const text = Array.from(uintarray).map(c => String.fromCodePoint(c)).join('');
+                const toWPAInfo: (record: HccapxRecord | HccapRecord, index: number) => WPAInfo = (record, index) => ({
+                    essid: Buffer.from(record.essid).toString().replace(/\x00|\u0000/gm, ''),
+                    bssid: Buffer.from(record.macAp).toString('hex'),
+                    stmac: Buffer.from(record.macStation).toString('hex'),
+                    mic: Buffer.from(record.keymic).toString('hex'),
+                    authenticated: ('messagePair' in record) ? [1, 2, 3, 4, 5].includes(record.messagePair) : undefined,
+                    raw_data: new Uint8Array(buffer.slice(index * 393, (index * 393) + 392))
+                })
+                const toHandshake: (prev: AccessPoint[], curr: WPAInfo, index: number) => AccessPoint[] = (prev, curr, index) => {
+                    if (prev.length === 0) {
+                        return [{ ...curr, mic: [curr.mic], authenticatedHandshakes: curr.authenticated ? 1 : curr.authenticated === undefined ? curr.authenticated : 0 }];
                     }
                     return result;
                 };
@@ -86,15 +108,22 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                                 const stmac = macEncode(text.substring(pos + 97, 7));
                                 const mic = hexEncode(text.substring(pos + 43, 17));
                             }
-                        } else if (size == 392) {
-                            const essid = text.substring(0, 33).replace('\x00', '');
-                            const bssid = macEncode(text.substring(36, 7));
-                            const stmac = macEncode(text.substring(42, 7));
-                            const mic = hexEncode(text.substring(text.length - 15));
-                        }
-                        // const data = new Hccapx(new KataiStream());
-                        thunkAPI.fulfillWithValue(true); // TODO: change true to data
-                    };
+                            break;
+                        case 'cap':
+                        case 'pcap':
+                        case 'pcapng':
+                            main({ export: 'hccapx', input: `.${type}` }, new File(uintarray), size);
+                            console.log(outputs)
+                            // const parsed = new Pcap(new KaitaiStream(buffer));
+                            // const parsedCapFile = new CapFile(text, true);
+                            break;
+                    }
+                    if (records) {
+                        const wpaInfo = records.map(toWPAInfo);
+                        const handshakes = wpaInfo.reduce(toHandshake, []);
+                        dispatch(setHandshakes(handshakes));
+                    }
+                    return thunkAPI.fulfillWithValue(true);
                 } else {
                     // We found another file type say text.
                     const hashes = getHashlist(text);
@@ -103,12 +132,20 @@ export const verifyHashlist = createAsyncThunk<undefined, VerifyHashlistArgs>('n
                 }
         }
     } catch (err) {
-        toast.error(`Error Occurred: ${err}`);
+        if (isTypeError(err)) {
+            if (process.env.NODE_ENV === 'development') {
+                toast.error(err.message)
+                console.error(err.message)
+            }
+            // TODO: message telemetry.
+            thunkAPI.rejectWithValue(`Something didn't work as expected`);
+        }
+        if (isFetchError(err))
+            thunkAPI.rejectWithValue(err.data.message || 'Something went wrong.');
+        if (isErrorWithMessage(err))
+            thunkAPI.rejectWithValue(err.message);
+        if (typeof err === 'string')
+            thunkAPI.rejectWithValue(err);
+        throw err;
     }
-    // parse and update count of parsed hashes
-
-    // also update the amount of read lines
-    // after completion,
-    // if errors then report them to the user with a modal.
-    // else update allowVerificationPage state to true
 });
